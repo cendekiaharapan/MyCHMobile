@@ -5,10 +5,15 @@ import FrameScreen from "./pages/FrameScreen";
 import LoginScreen from "./pages/Login"; 
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { View, Text, Pressable, TouchableOpacity } from "react-native";
-
+//Payment CH Dollars
+import PaymentCHDAccount from "./pages/PaymentCHDAccount";
+import PaymentHistory from "./pages/PaymentHistory";
+import PaymentTopup from "./pages/PaymentTopup";
+import Toast from "react-native-toast-message";
+//end of Payment CH Dollars
 
 const App = () => {
-  const [hideSplashScreen, setHideSplashScreen] = React.useState(false);
+  const [hideSplashScreen, setHideSplashScreen] = React.useState(true);
   const [fontsLoaded, error] = useFonts({
     "Poppins-Light": require("./assets/fonts/Poppins-Light.ttf"),
     "Poppins-Regular": require("./assets/fonts/Poppins-Regular.ttf"),
@@ -27,6 +32,45 @@ const App = () => {
         <Stack.Screen name="Login" component={LoginScreen} />
       </Stack.Navigator>
     </NavigationContainer>
+
+    //Payment CH Dollars
+    <>
+    <NavigationContainer>
+      {hideSplashScreen ? (
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+          <Stack.Screen
+            name="PaymentCHDAccount"
+            component={PaymentCHDAccount}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="PaymentHistory"
+            component={PaymentHistory}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="PaymentTopup"
+            component={PaymentTopup}
+            options={{ headerShown: false }}
+          />
+        </Stack.Navigator>
+      ) : null}
+    </NavigationContainer>
+
+    <Toast ref={(ref) => Toast.setRef(ref)} />
+
+    {/* Your Toast component */}
+    <Toast
+      ref={(ref) => Toast.setRef(ref)}
+      text1=""
+      text1Style={{ fontSize: 15 }}
+      text2Style={{ fontSize: 13 }}
+    />
+ 
+  </>
+  //end of Payment CH Dollars
+
+
   );
 
 };
