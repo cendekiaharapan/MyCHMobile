@@ -9,7 +9,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { View, Text, Pressable, TouchableOpacity } from "react-native";
 import Toast from "react-native-toast-message"; 
 
-const Stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator(); 
 
 const App = () => {
   const [hideSplashScreen, setHideSplashScreen] = React.useState(false);
@@ -53,13 +53,6 @@ const App = () => {
 
       <Toast ref={(ref) => Toast.setRef(ref)} />
 
-      {/* Your Toast component */}
-      <Toast
-        ref={(ref) => Toast.setRef(ref)}
-        text1="Successfully, call your child!"
-        text1Style={{ fontSize: 15 }}
-        text2Style={{ fontSize: 13 }}
-      />
     </>
   );
 };

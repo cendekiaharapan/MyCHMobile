@@ -97,8 +97,8 @@ const CallMyChild = forwardRef(({ navigation }, ref) => {
     // Tampilkan toast di sini
     Toast.show({
       type: "success",
-      text1: "SUCCESSFULLY!",
-      text2: "Successfully Call Your Child!",
+      text1: "SUCCESS!",
+      text2: "Successfully Called Your Child!",
       visibilityTime: 2000, // Waktu toast ditampilkan (ms)
       autoHide: true, // Otomatis sembunyikan toast setelah waktu tertentu
       topOffset: 30, // Jarak dari bagian atas layar (px)
