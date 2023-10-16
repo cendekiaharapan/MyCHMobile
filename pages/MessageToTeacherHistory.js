@@ -4,7 +4,7 @@ import { StyleSheet, View, Text, SafeAreaView } from "react-native";
 import { NativeBaseProvider, StatusBar, ScrollView } from "native-base";
 import { Padding, Color, FontSize, FontFamily, Border } from "../GlobalStyles";
 import HeroContent from "../components/MessageToTeacherHistory/HeroContent";
-import MessageHistory from "../components/MessageToTeacherHistory/MessageHistory";
+import MessageHistory from "../components/MessageToTeacherHistory/HeroContentMessToTeachHist";
 const MessageToTeacherHistory = () => {
   return (
     <NativeBaseProvider>

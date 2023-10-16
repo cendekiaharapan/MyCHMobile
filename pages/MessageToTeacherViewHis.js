@@ -4,7 +4,7 @@ import { Input, NativeBaseProvider, FormControl, TextArea } from "native-base";
 import { Image } from "expo-image";
 
 import { Color, FontFamily, FontSize, Padding, Border } from "../GlobalStyles";
-import HeroContent from "../components/MessageToTeacherViewHis/HeroContent";
+import HeroContent from "../components/MessageToTeacherViewHis/HeroContentMessToTeachViewHis";
 const MessageToTeacherViewHis = () => {
   return (
     <NativeBaseProvider>
