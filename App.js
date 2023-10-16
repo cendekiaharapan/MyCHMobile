@@ -2,10 +2,15 @@ import * as React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import FrameScreen from "./pages/FrameScreen";
-import LoginScreen from "./pages/Login"; 
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import LoginScreen from "./pages/Login";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { View, Text, Pressable, TouchableOpacity } from "react-native";
-
+import Report from "./pages/Report";
+import DetailNew from "./pages/DetailNew";
+import ListOfSubjectAssessment from "./pages/ListOfSubjectAssessment";
+import Assessment from "./pages/Assessment";
+import DetailNew1 from "./pages/DetailNew1";
+import ListOfReport from "./pages/ListOfReport";
 
 const App = () => {
   const [hideSplashScreen, setHideSplashScreen] = React.useState(false);
@@ -25,15 +30,45 @@ const App = () => {
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="FrameScreen" component={FrameScreen} />
         <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen
+          name="Report"
+          component={Report}
+          options={{ headerShown: false }}
+        />
+
+        <Stack.Screen
+          name="Assessment"
+          component={Assessment}
+          options={{ headerShown: false }}
+        />
+
+        <Stack.Screen
+          name="ListOfReport"
+          component={ListOfReport}
+          options={{ headerShown: false }}
+        />
+
+        <Stack.Screen
+          name="DetailNew1"
+          component={DetailNew1}
+          options={{ headerShown: false }}
+        />
+
+        <Stack.Screen
+          name="ListOfSubjectAssessment"
+          component={ListOfSubjectAssessment}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="DetailNew"
+          component={DetailNew}
+          options={{ headerShown: false }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
-
 };
-
 
 const Stack = createNativeStackNavigator();
 
-
 export default App;
-
