@@ -6,10 +6,10 @@ import LoginScreen from "./pages/Login";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { View, Text, Pressable, TouchableOpacity } from "react-native";
 import Report from "./pages/Report";
-import DetailNew from "./pages/DetailNew";
+import DetailOfSubjectAssesment from "./pages/DetailOfSubjectAssesment";
 import ListOfSubjectAssessment from "./pages/ListOfSubjectAssessment";
 import Assessment from "./pages/Assessment";
-import DetailNew1 from "./pages/DetailNew1";
+import DetailReport from "./pages/DetailReport";
 import ListOfReport from "./pages/ListOfReport";
 
 const App = () => {
@@ -49,8 +49,8 @@ const App = () => {
         />
 
         <Stack.Screen
-          name="DetailNew1"
-          component={DetailNew1}
+          name="DetailReport"
+          component={DetailReport}
           options={{ headerShown: false }}
         />
 
@@ -60,8 +60,8 @@ const App = () => {
           options={{ headerShown: false }}
         />
         <Stack.Screen
-          name="DetailNew"
-          component={DetailNew}
+          name="DetailOfSubjectAssesment"
+          component={DetailOfSubjectAssesment}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

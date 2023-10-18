@@ -4,7 +4,7 @@ import { StyleSheet, Pressable, Text, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Color, FontFamily, FontSize, Border, Padding } from "../GlobalStyles";
 
-const DetailNew1 = () => {
+const DetailReport = () => {
   const navigation = useNavigation();
 
   return (
@@ -462,4 +462,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DetailNew1;
+export default DetailReport;

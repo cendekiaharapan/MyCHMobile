@@ -70,7 +70,7 @@ const ListOfReport = () => {
                 <View style={[styles.frame, styles.frameShadowBox]}>
                   <Pressable
                     style={styles.cardShadowBox}
-                    onPress={() => navigation.navigate("DetailNew1")}
+                    onPress={() => navigation.navigate("DetailReport")}
                   />
                   <Text style={[styles.studentCanExplain, styles.oct2023Typo]}>
                     Student can explain the different of them

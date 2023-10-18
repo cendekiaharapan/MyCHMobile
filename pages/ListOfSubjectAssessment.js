@@ -108,7 +108,9 @@ const ListOfReport = () => {
                   <View style={[styles.frame, styles.frameShadowBox]}>
                     <Pressable
                       style={styles.cardShadowBox}
-                      onPress={() => navigation.navigate("DetailNew")}
+                      onPress={() =>
+                        navigation.navigate("DetailOfSubjectAssesment")
+                      }
                     />
                     <Text
                       style={[styles.studentCanExplain, styles.oct2023Typo]}

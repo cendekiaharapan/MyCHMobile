@@ -5,7 +5,7 @@ import { useNavigation } from "@react-navigation/native";
 import { Color, FontFamily, FontSize, Border, Padding } from "../GlobalStyles";
 import { ScrollView, NativeBaseProvider } from "native-base";
 
-const DetailNew = () => {
+const DetailOfSubjectAssesment = () => {
   const navigation = useNavigation();
 
   return (
@@ -689,4 +689,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DetailNew;
+export default DetailOfSubjectAssesment;
