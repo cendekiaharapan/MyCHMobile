@@ -1,12 +1,14 @@
 import * as React from 'react';
-import { Image, Linking } from 'react-native'; // Import Linking
+import { Image, Linking } from 'react-native';
 import { StyleSheet, Text, View } from 'react-native';
-import { Button, NativeBaseProvider } from 'native-base';
+import { Button, NativeBaseProvider, Box, Select, Center } from 'native-base';
 import { LinearGradient } from 'expo-linear-gradient';
 import { FontFamily, Color, FontSize, Padding, Border } from '../GlobalStyles';
 
 const ReportCard = () => {
   const reportCardUrl = 'https://example.com/report-card-url'; // Replace with your desired URL
+  const [selectedSession, setSelectedSession] = React.useState("Academic Year 2023/2024");
+  const [selectedSemester, setSelectedSemester] = React.useState("Semester 1");
 
   const handleViewReportCard = () => {
     Linking.openURL(reportCardUrl); // Use Linking here
@@ -20,7 +22,7 @@ const ReportCard = () => {
             <Image
               style={styles.frameIcon}
               contentFit="cover"
-              source={require('../assets/images/frame.png')}
+              source={require('../assets/frame.png')}
             />
             <View style={styles.reportCardWrapper}>
               <Text style={styles.reportCard1}>Report Card</Text>
@@ -36,37 +38,41 @@ const ReportCard = () => {
             <View style={styles.frame3}>
               <View style={styles.selectSessionParent}>
                 <Text style={styles.selectSession}>Select Session</Text>
-                <View style={styles.frame4}>
-                  <View style={styles.input}>
-                    <Text style={styles.academicYear20232024}>
-                      Academic Year 2023/2024
-                    </Text>
-                  </View>
-                  <Image
-                    style={styles.bxsdownArrowIcon}
-                    contentFit="cover"
-                    source={require('../assets/images/bxsdownarrow.png')}
-                  />
-                </View>
+                <Center> {/* Center the Select in Session */}
+                  <Select
+                    selectedValue={selectedSession}
+                    minWidth="275"
+                    accessibilityLabel="Choose Session"
+                    placeholder="Choose Session"
+                    onValueChange={(itemValue) => setSelectedSession(itemValue)}
+                  >
+                    <Select.Item label="Academic Year 2023/2024" value="Academic Year 2023/2024" />
+                    <Select.Item label="Academic Year 2024/2025" value="Academic Year 2024/2025" />
+                    {/* Add other session options here */}
+                  </Select>
+                </Center>
               </View>
               <Image
                 style={styles.frameChild}
                 contentFit="cover"
-                source={require('../assets/images/vector-8.png')}
+                source={require('../assets/vector-8.png')}
               />
             </View>
             <View style={styles.selectSemesterParent}>
               <Text style={styles.selectSession}>Select Semester</Text>
-              <View style={styles.inputParent}>
-                <View style={styles.input}>
-                  <Text style={styles.academicYear20232024}>Semester 1</Text>
-                </View>
-                <Image
-                  style={styles.bxsdownArrowIcon}
-                  contentFit="cover"
-                  source={require('../assets/images/bxsdownarrow1.png')}
-                />
-              </View>
+              <Center> {/* Center the Select in Semester */}
+                <Select
+                  selectedValue={selectedSemester}
+                  minWidth="275"
+                  accessibilityLabel="Choose Semester"
+                  placeholder="Choose Semester"
+                  onValueChange={(itemValue) => setSelectedSemester(itemValue)}
+                >
+                  <Select.Item label="Semester 1" value="Semester 1" />
+                  <Select.Item label="Semester 2" value="Semester 2" />
+                  {/* Add other semester options here */}
+                </Select>
+              </Center>
             </View>
             <View style={styles.buttonCariTiket}>
               <View style={{ alignItems: 'center', justifyContent: 'center' }}>
@@ -181,6 +187,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
+    marginTop: 13,
   },
   frameChild: {
     position: "relative",
@@ -209,7 +216,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 16,
+    marginTop: 13,
   },
   viewReportCard: {
     position: "relative",

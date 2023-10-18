@@ -1,27 +1,13 @@
 import React, { useState, useCallback } from "react";
-import {
-  Text,
-  StyleSheet,
-  View,
-  Dimensions,
-  Pressable,
-  Modal,
-} from "react-native";
+import { Text, StyleSheet, View, Dimensions, Pressable, Modal } from "react-native";
 import { Image } from "expo-image";
+import CarouselCards from "../components/CarouselCards";
 import Carousel from "react-native-reanimated-carousel";
-import Frame2 from "../components/Frame2";
-import Frame1 from "../components/Frame1";
-import Frame from "../components/Frame";
 import Attendance from "../components/Attendance";
 import AverageDailyScore from "../components/AverageDailyScore";
 import { Color, FontFamily, FontSize, Border, Padding } from "../GlobalStyles";
 
 const HomeStudent = () => {
-  const [carouselMainItems, setCarouselMainItems] = useState([
-    <Frame2 />,
-    <Frame1 />,
-    <Frame />,
-  ]);
   const [mensahContainerVisible, setMensahContainerVisible] = useState(false);
   const [mensahContainer1Visible, setMensahContainer1Visible] = useState(false);
 
@@ -41,6 +27,7 @@ const HomeStudent = () => {
     setMensahContainer1Visible(false);
   }, []);
 
+
   return (
     <>
       <View style={[styles.homeStudent, styles.homeStudentLayout]}>
@@ -55,27 +42,17 @@ const HomeStudent = () => {
               <Image
                 style={styles.emailIcon}
                 contentFit="cover"
-                source={require("../assets/images/email1.png")}
+                source={require("../assets//email1.png")}
               />
               <Image
                 style={styles.bellIcon}
                 contentFit="cover"
-                source={require("../assets/images/bell1.png")}
+                source={require("../assets//bell1.png")}
               />
             </View>
           </View>
-          <View style={[styles.caraousel, styles.frameFlexBox1]}>
-            <View style={styles.carouselMainWrapper}>
-              <View style={[styles.carouselMain, styles.parentFlexBox]}>
-                <Carousel
-                  style={styles.carousel}
-                  width={342}
-                  mode="normal"
-                  data={carouselMainItems}
-                  renderItem={({ item }) => item}
-                />
-              </View>
-            </View>
+          <View style={[styles.carouselFrame, styles.frameFlexBox1]}>
+            <CarouselCards />
           </View>
           <View style={[styles.frame2, styles.frameFlexBox1]}>
             <View style={[styles.frameReport1, styles.frameFlexBox]}>
@@ -87,7 +64,7 @@ const HomeStudent = () => {
                   <Image
                     style={styles.frameChild}
                     contentFit="cover"
-                    source={require("../assets/images/ellipse-92.png")}
+                    source={require("../assets//ellipse-92.png")}
                   />
                   <Text style={[styles.text, styles.textTypo3]}>100%</Text>
                 </View>
@@ -100,7 +77,7 @@ const HomeStudent = () => {
                 <Image
                   style={[styles.mensahChild, styles.homeStudentLayout]}
                   contentFit="cover"
-                  source={require("../assets/images/frame-8741.png")}
+                  source={require("../assets//frame-8741.png")}
                 />
                 <Text style={styles.mintaDonor}>AVERAGE DAILY SCORE</Text>
               </Pressable>
@@ -111,7 +88,7 @@ const HomeStudent = () => {
                   <Image
                     style={styles.frameItem}
                     contentFit="cover"
-                    source={require("../assets/images/frame-8941.png")}
+                    source={require("../assets//frame-8941.png")}
                   />
                   <Text style={[styles.text1, styles.text1Clr]}>10</Text>
                 </View>
@@ -148,61 +125,61 @@ const HomeStudent = () => {
                   <Image
                     style={[styles.progressInner, styles.progressChildLayout]}
                     contentFit="cover"
-                    source={require("../assets/images/ellipse-101.png")}
+                    source={require("../assets//ellipse-101.png")}
                   />
                   <Text style={[styles.text3, styles.textTypo1]}>1</Text>
                   <Image
                     style={[styles.ellipseIcon, styles.progressChildLayout]}
                     contentFit="cover"
-                    source={require("../assets/images/ellipse-101.png")}
+                    source={require("../assets//ellipse-101.png")}
                   />
                   <Text style={[styles.text4, styles.textTypo]}>2</Text>
                   <Image
                     style={[styles.progressChild1, styles.progressChildLayout]}
                     contentFit="cover"
-                    source={require("../assets/images/ellipse-101.png")}
+                    source={require("../assets//ellipse-101.png")}
                   />
                   <Text style={[styles.text5, styles.textTypo1]}>10</Text>
                   <Image
                     style={[styles.progressChild2, styles.progressChildLayout]}
                     contentFit="cover"
-                    source={require("../assets/images/ellipse-101.png")}
+                    source={require("../assets//ellipse-101.png")}
                   />
                   <Text style={[styles.text6, styles.textTypo]}>9</Text>
                   <Image
                     style={[styles.progressChild3, styles.progressChildLayout]}
                     contentFit="cover"
-                    source={require("../assets/images/ellipse-101.png")}
+                    source={require("../assets//ellipse-101.png")}
                   />
                   <Text style={[styles.text7, styles.textTypo]}>8</Text>
                   <Image
                     style={[styles.progressChild4, styles.progressChildLayout]}
                     contentFit="cover"
-                    source={require("../assets/images/ellipse-101.png")}
+                    source={require("../assets//ellipse-101.png")}
                   />
                   <Text style={[styles.text8, styles.textTypo1]}>7</Text>
                   <Image
                     style={[styles.progressChild5, styles.progressChildLayout]}
                     contentFit="cover"
-                    source={require("../assets/images/ellipse-101.png")}
+                    source={require("../assets//ellipse-101.png")}
                   />
                   <Text style={[styles.text9, styles.textTypo]}>6</Text>
                   <Image
                     style={[styles.progressChild6, styles.progressChildLayout]}
                     contentFit="cover"
-                    source={require("../assets/images/ellipse-101.png")}
+                    source={require("../assets//ellipse-101.png")}
                   />
                   <Text style={[styles.text10, styles.textTypo]}>5</Text>
                   <Image
                     style={[styles.progressChild7, styles.progressChildLayout]}
                     contentFit="cover"
-                    source={require("../assets/images/ellipse-101.png")}
+                    source={require("../assets//ellipse-101.png")}
                   />
                   <Text style={[styles.text11, styles.textTypo1]}>4</Text>
                   <Image
                     style={[styles.progressChild8, styles.progressChildLayout]}
                     contentFit="cover"
-                    source={require("../assets/images/ellipse-101.png")}
+                    source={require("../assets//ellipse-101.png")}
                   />
                   <Text style={[styles.text12, styles.textTypo]}>3</Text>
                 </View>
@@ -213,7 +190,7 @@ const HomeStudent = () => {
                 <Image
                   style={styles.iconLayout}
                   contentFit="cover"
-                  source={require("../assets/images/home1.png")}
+                  source={require("../assets//home1.png")}
                 />
                 <Text style={styles.home}>Home</Text>
               </View>
@@ -223,7 +200,7 @@ const HomeStudent = () => {
                 <Image
                   style={[styles.ionbookOutlineIcon, styles.iconLayout]}
                   contentFit="cover"
-                  source={require("../assets/images/ionbookoutline.png")}
+                  source={require("../assets//ionbookoutline.png")}
                 />
               </View>
               <View
@@ -232,7 +209,7 @@ const HomeStudent = () => {
                 <Image
                   style={[styles.ionbookOutlineIcon, styles.iconLayout]}
                   contentFit="cover"
-                  source={require("../assets/images/biuichecksgrid1.png")}
+                  source={require("../assets//biuichecksgrid1.png")}
                 />
               </View>
               <View
@@ -241,7 +218,7 @@ const HomeStudent = () => {
                 <Image
                   style={styles.iconLayout}
                   contentFit="cover"
-                  source={require("../assets/images/vuesaxlinearprofile2.png")}
+                  source={require("../assets//vuesaxlinearprofile2.png")}
                 />
               </View>
             </View>
@@ -435,7 +412,7 @@ const styles = StyleSheet.create({
     width: 329,
     justifyContent: "center",
   },
-  caraousel: {
+  carouselFrame: {
     flexDirection: "row",
     width: 329,
   },
