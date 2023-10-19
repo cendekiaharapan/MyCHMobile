@@ -50,11 +50,11 @@ const HomeParent = () => {
               />
             </View>
           </View>
-          <View style={[styles.carouselFrame, styles.frameFlexBox1]}>
-            <CarouselCards />
+          <View style={[styles.caraousel, styles.frameFlexBox1]}>
+                <CarouselCards />
           </View>
           <View style={[styles.frame1, styles.frameFlexBox1]}>
-            <Text style={[styles.childText, styles.textTypo2]}>
+            <Text style={[styles.rufusStewart, styles.textTypo2]}>
               Rufus Stewart
             </Text>
             <Image
@@ -105,8 +105,8 @@ const HomeParent = () => {
               </View>
               <View style={[styles.mensah3, styles.mensahShadowBox]}>
                 <View style={[styles.wed29Parent, styles.parentFlexBox]}>
+                <Text style={styles.wedTypo}>{`Wed`}</Text>
                   <Text style={styles.text1Clr}>
-                    <Text style={styles.wedTypo}>{`Wed`}</Text>
                     <Text style={[styles.text2, styles.textTypo2]}>29</Text>
                   </Text>
                   <Text style={[styles.independenceDay, styles.wedTypo]}>
@@ -429,11 +429,11 @@ const styles = StyleSheet.create({
     width: 329,
     justifyContent: "center",
   },
-  carouselFrame: {
+  caraousel: {
     flexDirection: "row",
     width: 329,
   },
-  childText: {
+  rufusStewart: {
     color: Color.colorDarkslateblue,
     fontSize: FontSize.size_sm,
     textAlign: "center",

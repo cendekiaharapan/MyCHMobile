@@ -96,9 +96,8 @@ const HomeStudent = () => {
               </View>
               <View style={[styles.mensah3, styles.mensahShadowBox]}>
                 <View style={[styles.wed29Parent, styles.parentFlexBox]}>
+                <Text style={styles.wedTypo}>{`Wed`}</Text>
                   <Text style={styles.text1Clr}>
-                    <Text style={styles.wedTypo}>{`Wed
-`}</Text>
                     <Text style={[styles.text2, styles.textTypo2]}>29</Text>
                   </Text>
                   <Text style={[styles.independenceDay, styles.wedTypo]}>

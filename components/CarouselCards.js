@@ -10,15 +10,13 @@ const CarouselCards = () => {
   return (
     <View>
       <Carousel
-        layout="tinder"
+        layout="default"
         layoutCardOffset={9}
         ref={isCarousel}
         data={data}
         renderItem={CarouselCardItem}
         sliderWidth={SLIDER_WIDTH}
         itemWidth={ITEM_WIDTH}
-        enableSnap={false}
-        scrollEnabled={true} // Allow user to scroll left and right
       />
     </View>
   );
