@@ -1,13 +1,15 @@
 import * as React from "react";
-import { Image } from "expo-image";
+import { Image } from "react-native";
 import { StyleSheet, Pressable, Text, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { FontFamily, Color, FontSize, Border, Padding } from "../GlobalStyles";
+import { NativeBaseProvider } from "native-base";
+
 
 const AllPost = () => {
   const navigation = useNavigation();
   return (
-    <NativeBaseProvider theme={theme}>
+    
     <View style={[styles.allPost, styles.allFlexBox1]}>
       <View style={[styles.content, styles.allFlexBox1]}>
         <View style={[styles.hero, styles.allFlexBox1]}>
@@ -123,7 +125,7 @@ const AllPost = () => {
         </View>
       </View>
     </View>
-    </NativeBaseProvider>
+   
   );
 };
 
