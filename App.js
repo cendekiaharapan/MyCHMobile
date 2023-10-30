@@ -1,13 +1,11 @@
 import * as React from "react";
 import { forwardRef } from "react";
 import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useFonts } from "expo-font";
 import Onboard from "./pages/Onboard";
 import SignInScreen from "./pages/SignIn"; 
 import CallMyChild from "./pages/CallMyChild";
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-
-const Stack = createNativeStackNavigator(); 
 
 const App = () => {
   const [hideSplashScreen, setHideSplashScreen] = React.useState(false);
@@ -35,6 +33,7 @@ const App = () => {
         <Stack.Screen name="CallMyChild" component={CallMyChild} />
       </Stack.Navigator>
     </NavigationContainer>
+
 
     </>
   );
