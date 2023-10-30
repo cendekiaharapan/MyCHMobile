@@ -13,7 +13,6 @@ import Toast from "react-native-toast-message";
 
 
 const CallMyChild = forwardRef(({ navigation }, ref) => {
-
   const { width } = Dimensions.get("window");
   const isSmallScreen = width <= 375; 
 

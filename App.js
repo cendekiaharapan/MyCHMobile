@@ -2,12 +2,10 @@ import * as React from "react";
 import { forwardRef } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { useFonts } from "expo-font";
-import FrameScreen from "./pages/FrameScreen";
-import LoginScreen from "./pages/Login"; 
+import Onboard from "./pages/Onboard";
+import SignInScreen from "./pages/SignIn"; 
 import CallMyChild from "./pages/CallMyChild";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { View, Text, Pressable, TouchableOpacity } from "react-native";
-import Toast from "react-native-toast-message"; 
 
 const Stack = createNativeStackNavigator(); 
 
@@ -32,8 +30,8 @@ const App = () => {
     <>
       <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="FrameScreen" component={FrameScreen} />
-        <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="Onboard" component={Onboard} />
+        <Stack.Screen name="SignIn" component={SignInScreen} />
         <Stack.Screen name="CallMyChild" component={CallMyChild} />
       </Stack.Navigator>
     </NavigationContainer>
