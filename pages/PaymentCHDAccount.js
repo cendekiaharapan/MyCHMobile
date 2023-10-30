@@ -15,13 +15,13 @@ const PaymentCHDAccount = () => {
         backButtonPosition="unset"
         backButtonTop="unset"
         backButtonLeft="unset"
-        iNVOICESAlignItems="flex-start"
-        iNVOICESWidth="unset"
+        invoicesAlignItems="flex-start"
+        invoicesWidth="unset"
         onBackButtonPress={() => navigation.navigate("PageStart")}
       />
       <View style={styles.chdAccountArea}>
-        <CHDAccountCard student_name="Tiffany janice" chd_balance="450" />
-        <CHDAccountCard student_name="Timothy Jacob" chd_balance="250" />
+        <CHDAccountCard studentName="Tiffany janice" chdBalance="450" />
+        <CHDAccountCard studentName="Timothy Jacob" chdBalance="250" />
       </View>
     </View>
   );

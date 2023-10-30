@@ -3,7 +3,7 @@ import React from "react";
 import { Text, StyleSheet, View, Pressable } from "react-native";
 import { FontSize, FontFamily, Color, Border } from "../GlobalStyles";
 
-const Button = ({ ButtonType, actionButtonText, propMarginTop, onButtonPress }) => {
+const Button = ({ buttonType, actionButtonText, propMarginTop, onButtonPress }) => {
   const getStyleValue = (key, value) => {
     if (value === undefined) return;
     return { [key]: value === "unset" ? undefined : value };
@@ -25,10 +25,10 @@ const Button = ({ ButtonType, actionButtonText, propMarginTop, onButtonPress }) 
 
   return (
     <Pressable
-      style={[buttonStyles[ButtonType], buttonContainerStyles]}
+      style={[buttonStyles[buttonType], buttonContainerStyles]}
       onPress={onButtonPress}
     >
-      <Text style={textStyle[ButtonType]}>{actionButtonText}</Text>
+      <Text style={textStyle[buttonType]}>{actionButtonText}</Text>
     </Pressable>
   );
 };

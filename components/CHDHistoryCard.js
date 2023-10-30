@@ -3,8 +3,8 @@ import { Text, StyleSheet, View } from "react-native";
 import { Image } from "expo-image";
 import { Color, FontFamily, FontSize, Padding, Border } from "../GlobalStyles";
 
-const CHDHistoryCard = ({ ChdCardHistoryType }) => {
-  const isChdIn = ChdCardHistoryType === 1;
+const CHDHistoryCard = ({ type }) => {
+  const isChdIn = type === 1;
 
   return (
     <View style={isChdIn ? styles.cardChdIn : styles.cardChdOut}>

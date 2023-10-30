@@ -18,7 +18,7 @@ const PaymentInvoice = () => {
       />
       <View style={styles.invoicelistarea}>
         <InvoiceLists
-          InvoiceListType={2}
+          invoiceListType={2}
           onPressNavigation="PaymentInvoiceDetails"
           studentName="Tiffany Janice"
           description="Invoice for textbooks"
@@ -26,7 +26,7 @@ const PaymentInvoice = () => {
           totalRate="2,500,000"
         />
         <InvoiceLists
-          InvoiceListType={2}
+          invoiceListType={2}
           onPressNavigation="PaymentInvoiceDetails"
           studentName="Timothy Jacob"
           description="Invoice for school supplies"
@@ -35,7 +35,7 @@ const PaymentInvoice = () => {
         />
       </View>
       <View style={[styles.footer, styles.footerFlexBox]}>
-      <Button ButtonType={2} actionButtonText="HISTORY" 
+      <Button buttonType={2} actionButtonText="HISTORY" 
       onButtonPress={() => navigation.navigate("PaidInvoiceHistory")} />
 
        

@@ -15,12 +15,12 @@ const PaidInvoiceHistory = () => {
         backButtonPosition="unset"
         backButtonTop="unset"
         backButtonLeft="unset"
-        iNVOICESAlignItems="flex-start"
-        iNVOICESWidth="unset"
+        invoicesAlignItems="flex-start"
+        invoicesWidth="unset"
         onBackButtonPress={() => navigation.navigate("PaymentInvoice")}
       />
       <InvoiceLists
-          InvoiceListType={1}
+          invoiceListType={1}
           onPressNavigation="PaidInvoiceDetails"
           studentName="Timothy Jacob"
           description="Invoice for textbooks"

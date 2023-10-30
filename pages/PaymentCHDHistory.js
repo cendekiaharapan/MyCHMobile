@@ -16,16 +16,16 @@ const PaymentCHDHistory = () => {
         backButtonPosition="unset"
         backButtonTop="unset"
         backButtonLeft="unset"
-        iNVOICESAlignItems="flex-start"
-        iNVOICESWidth="unset"
+        invoicesAlignItems="flex-start"
+        invoicesWidth="unset"
         onBackButtonPress={() => navigation.navigate("PaymentTopup")}
       />
       
       
-      {/* First Component with ChdCardHistoryType set to 1 */}
-      <CHDHistoryCard ChdCardHistoryType={1} />
-      <CHDHistoryCard ChdCardHistoryType={0} />
-      <CHDHistoryCard ChdCardHistoryType={1} />
+      {/* First Component with type set to 1 */}
+      <CHDHistoryCard type={1} />
+      <CHDHistoryCard type={0} />
+      <CHDHistoryCard type={1} />
     </View>
   );
 };

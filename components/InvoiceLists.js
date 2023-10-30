@@ -4,7 +4,7 @@ import { Text, StyleSheet, View, Pressable } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Padding, Color, FontSize, FontFamily, Border } from "../GlobalStyles";
 
-const InvoiceLists = ({ InvoiceListType, onPressNavigation, studentName, description, paidDate, dueDate, totalRate }) => {
+const InvoiceLists = ({ invoiceListType, onPressNavigation, studentName, description, paidDate, dueDate, totalRate }) => {
   const navigation = useNavigation();
 
   return (
@@ -12,7 +12,7 @@ const InvoiceLists = ({ InvoiceListType, onPressNavigation, studentName, descrip
       style={styles.invoiceList}
       onPress={() => navigation.navigate(onPressNavigation)}
     >
-      {InvoiceListType === 1 && (
+      {invoiceListType === 1 && (
         <>
           <View style={[styles.textStudentNameWrapper, styles.dueWrapperSpaceBlock]}>
             <Text style={styles.textStudentName}>{studentName}</Text>
@@ -29,7 +29,7 @@ const InvoiceLists = ({ InvoiceListType, onPressNavigation, studentName, descrip
           </View>
         </>
       )}
-      {InvoiceListType === 2 && (
+      {invoiceListType === 2 && (
         <>
           <View style={[styles.textStudentNameWrapper, styles.dueWrapperSpaceBlock]}>
             <Text style={[styles.textStudentName, styles.unpaidTypo]}>{studentName}</Text>

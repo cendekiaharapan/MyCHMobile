@@ -16,8 +16,8 @@ const PaidInvoiceDetails = () => {
         backButtonPosition="absolute"
         backButtonTop={0}
         backButtonLeft={0}
-        iNVOICESAlignItems="flex-start"
-        iNVOICESWidth="unset"
+        invoicesAlignItems="flex-start"
+        invoicesWidth="unset"
         onBackButtonPress={() => navigation.navigate("PaidInvoiceHistory")}
       />
       <View style={[styles.studentName, styles.dateLayout]}>
@@ -25,7 +25,7 @@ const PaidInvoiceDetails = () => {
           Student Name
         </Text>
         <Text style={[styles.textStudentName, styles.totalFlexBox]}>
-          Text_student_name
+          Text_studentName
         </Text>
       </View>
       <View style={[styles.description, styles.dateLayout]}>
@@ -60,7 +60,7 @@ const PaidInvoiceDetails = () => {
       <InvoiceDetailItems itemName="Item 3" rate="500.000" qty="1" />
       
       <View style={[styles.footer, styles.footerFlexBox]}>
-        <Button ButtonType={3} actionButtonText="PAID"/>
+        <Button buttonType={3} actionButtonText="PAID"/>
       </View>
       
       <View style={[styles.totalAmounts, styles.footerFlexBox]}>

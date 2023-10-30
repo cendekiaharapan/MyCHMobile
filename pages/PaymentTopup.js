@@ -18,8 +18,8 @@ const PaymentTopup = () => {
         backButtonPosition="unset"
         backButtonTop="unset"
         backButtonLeft="unset"
-        iNVOICESAlignItems="flex-start"
-        iNVOICESWidth="unset"
+        invoicesAlignItems="flex-start"
+        invoicesWidth="unset"
         onBackButtonPress={() => navigation.navigate("PaymentCHDAccount")}
       />
       <View style={styles.chdDetails}>
@@ -29,8 +29,8 @@ const PaymentTopup = () => {
       </View>
       <View style={[styles.footer, styles.footerFlexBox]}>
        
-      <Button ButtonType={1} actionButtonText="TOP UP" onButtonPress={() => navigation.navigate("")}/>
-      <Button ButtonType={2} actionButtonText="HISTORY" onButtonPress={() => navigation.navigate("PaymentCHDHistory")} />
+      <Button buttonType={1} actionButtonText="TOP UP" onButtonPress={() => navigation.navigate("")}/>
+      <Button buttonType={2} actionButtonText="HISTORY" onButtonPress={() => navigation.navigate("PaymentCHDHistory")} />
         
         
       </View>

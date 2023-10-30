@@ -12,8 +12,8 @@ const Header = ({
   backButtonPosition,
   backButtonTop,
   backButtonLeft,
-  iNVOICESAlignItems,
-  iNVOICESWidth,
+  invoicesAlignItems,
+  invoicesWidth,
   onBackButtonPress,
 }) => {
   const headerStyle = useMemo(() => {
@@ -26,10 +26,10 @@ const Header = ({
 
   const pageTitleStyle = useMemo(() => {
     return {
-      ...getStyleValue("alignItems", iNVOICESAlignItems),
-      ...getStyleValue("width", iNVOICESWidth),
+      ...getStyleValue("alignItems", invoicesAlignItems),
+      ...getStyleValue("width", invoicesWidth),
     };
-  }, [iNVOICESAlignItems, iNVOICESWidth]);
+  }, [invoicesAlignItems, invoicesWidth]);
 
   return (
     <View style={[styles.header, headerStyle]}>

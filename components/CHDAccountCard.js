@@ -9,7 +9,7 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { Color, FontFamily, FontSize, Border, Padding } from "../GlobalStyles";
 
-const CHDCard = ({ student_name, chd_balance }) => {
+const CHDCard = ({ studentName, chdBalance }) => {
   const navigation = useNavigation();
 
   return (
@@ -22,9 +22,9 @@ const CHDCard = ({ student_name, chd_balance }) => {
         resizeMode="cover"
         source={require("../assets/chdcard.png")}
       >
-        <Text style={styles.textStudentName}>{student_name}</Text>
+        <Text style={styles.textStudentName}>{studentName}</Text>
         <View style={styles.frame}>
-          <Text style={styles.chdValueTypo}>{chd_balance} </Text>
+          <Text style={styles.chdValueTypo}>{chdBalance} </Text>
           <Text style={[styles.currrentBalance, styles.chdValueTypo]}>
             CHD  | Current Balance
           </Text>

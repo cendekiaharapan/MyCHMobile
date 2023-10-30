@@ -17,8 +17,8 @@ const PaymentInvoiceDetails = () => {
         backButtonPosition="unset"
         backButtonTop="unset"
         backButtonLeft="unset"
-        iNVOICESAlignItems="flex-start"
-        iNVOICESWidth="unset"
+        invoicesAlignItems="flex-start"
+        invoicesWidth="unset"
         onBackButtonPress={() => navigation.navigate("PaymentInvoice")}
       />
     </View>
@@ -27,7 +27,7 @@ const PaymentInvoiceDetails = () => {
           Student Name
         </Text>
         <Text style={[styles.textStudentName, styles.totalFlexBox]}>
-          Text_student_name
+          Text_studentName
         </Text>
       </View>
       <View style={[styles.description, styles.dateLayout]}>
@@ -69,7 +69,7 @@ const PaymentInvoiceDetails = () => {
         </Text>
       </View>
       <View style={[styles.footer, styles.footerFlexBox]}>
-      <Button ButtonType={1} actionButtonText="PAY NOW" onButtonPress={() => navigation.navigate("")} />
+      <Button buttonType={1} actionButtonText="PAY NOW" onButtonPress={() => navigation.navigate("")} />
 
       </View>
     </View>
