@@ -1,5 +1,5 @@
 import * as React from "react";
-import React, { forwardRef } from "react";
+import { forwardRef } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import FrameScreen from "./pages/FrameScreen";
@@ -31,27 +31,12 @@ const App = () => {
   return (
     <>
       <NavigationContainer>
-        <Stack.Navigator
-          initialRouteName="CallMyChild"
-          screenOptions={{ headerShown: false }}
-        >
-      
-          <Stack.Screen
-            name="CallMyChild"
-            component={CallMyChild}
-            options={{ headerShown: false }}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
-
-      <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="FrameScreen" component={FrameScreen} />
         <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="CallMyChild" component={CallMyChild} />
       </Stack.Navigator>
     </NavigationContainer>
-
-      <Toast ref={(ref) => Toast.setRef(ref)} />
 
     </>
   );
