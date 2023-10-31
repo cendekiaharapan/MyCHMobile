@@ -2,8 +2,10 @@ import * as React from "react";
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import { Image } from "expo-image";
 import { Color, FontFamily } from "../../GlobalStyles";
+import { useNavigation } from "@react-navigation/native";
 
-const ContactList = () => {
+const ContactList = ({ name = "Patrick Lay" }) => {
+  const navigation = useNavigation();
   return (
     <View style={styles.frameChildLayout}>
       <View style={[styles.frameChild, styles.frameChildLayout]} />
@@ -14,11 +16,13 @@ const ContactList = () => {
           source={require("../../assets/rectangle-5.png")}
         />
         <View style={styles.ibuSekarParent}>
-          <Text style={styles.ibuSekar}>Ibu Sekar</Text>
+          <Text style={styles.ibuSekar}>{name}</Text>
           <Text style={styles.grade1Mat}>
             Grade 1 Mat, AKM Computing, AKM Math
           </Text>
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => navigation.navigate("MessageToTeacherSendMes")}
+          >
             <Image
               style={styles.bxsmessageIcon}
               contentFit="cover"
