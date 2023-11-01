@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Text, StyleSheet, View } from "react-native";
-import { Image } from "expo-image";
+import * as ImagePicker from 'expo-image-picker';
 import { Color, FontFamily, FontSize, Padding, Border } from "../GlobalStyles";
 
 const CHDHistoryCard = ({ type }) => {

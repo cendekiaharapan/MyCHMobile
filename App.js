@@ -17,6 +17,7 @@ import PaymentInvoice from "./pages/PaymentInvoice";
 import PaymentTopup from "./pages/PaymentTopup";
 import PaymentCHDHistory from "./pages/PaymentCHDHistory";
 import PaymentCHDAccount from "./pages/PaymentCHDAccount";
+import ReportCard from "./pages/ReportCard";
 
 const App = () => {
   const [hideSplashScreen, setHideSplashScreen] = React.useState(false);
@@ -34,64 +35,12 @@ const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="FrameScreen" component={FrameScreen} />
-        <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name="Onboard" component={Onboard} options={{ headerShown: false }} />
-        <Stack.Screen name="SignIn" component={SignIn} options={{ headerShown: false }} />
-        <Stack.Screen name="PostDetails" component={PostDetails} options={{ headerShown: false }} />
-        <Stack.Screen name="AllPost" component={AllPost} options={{ headerShown: false }} />
-        <Stack.Screen name="Password" component={Password} options={{ headerShown: false }} />
+        <Stack.Screen name="ReportCard" component={ReportCard} />
+       
       </Stack.Navigator>
     </NavigationContainer>
 
-<>
-<NavigationContainer>
-  {hideSplashScreen ? (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen
-        name="PageStart"
-        component={PageStart}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="PaidInvoiceDetails"
-        component={PaidInvoiceDetails}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="PaymentInvoiceDetails"
-        component={PaymentInvoiceDetails}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="PaidInvoiceHistory"
-        component={PaidInvoiceHistory}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="PaymentInvoice"
-        component={PaymentInvoice}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="PaymentTopup"
-        component={PaymentTopup}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="PaymentCHDHistory"
-        component={PaymentCHDHistory}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="PaymentCHDAccount"
-        component={PaymentCHDAccount}
-        options={{ headerShown: false }}
-      />
-    </Stack.Navigator>
-  ) : null}
-</NavigationContainer>
-</>
+
 
   );
 

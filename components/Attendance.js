@@ -1,6 +1,6 @@
 import * as React from "react";
 import { View, StyleSheet, Text } from "react-native";
-import { Image } from "expo-image";
+import * as ImagePicker from 'expo-image-picker';
 import { FontSize, FontFamily, Color, Border } from "../GlobalStyles";
 
 const Attendance = ({ onClose }) => {

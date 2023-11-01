@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { Image } from "expo-image";
+import * as ImagePicker from 'expo-image-picker';
 import { StyleSheet, Pressable, Text, View } from "react-native";
 import { FontSize, FontFamily, Color, Padding } from "../GlobalStyles";
 

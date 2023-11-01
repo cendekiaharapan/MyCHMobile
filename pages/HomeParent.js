@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from "react";
 import { Text, StyleSheet, View, Dimensions, Pressable, Modal } from "react-native";
-import { Image } from "expo-image";
+import * as ImagePicker from 'expo-image-picker';
 import CarouselCards from "../components/CarouselCards";
 import Carousel from "react-native-reanimated-carousel";
 import Attendance from "../components/Attendance";
