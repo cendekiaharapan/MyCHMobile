@@ -1,133 +1,50 @@
 import * as React from "react";
 import { Image } from "expo-image";
-import {
-  StyleSheet,
-  Pressable,
-  Text,
-  View,
-  NativeBaseProvider,
-} from "react-native";
+import { StyleSheet, Pressable, Text, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { FontFamily, Color, FontSize, Border, Padding } from "../GlobalStyles";
+import PostH from "../components/PostH";
+import Post1 from "../components/Post1";
+import { VStack } from "native-base";
 
 const AllPost = () => {
   const navigation = useNavigation();
   return (
-    <View style={[styles.allPost, styles.allFlexBox1]}>
-      <View style={[styles.content, styles.allFlexBox1]}>
-        <View style={[styles.hero, styles.allFlexBox1]}>
-          <View style={[styles.backiconParent, styles.allFlexBox1]}>
-            <Pressable
-              style={styles.backicon}
-              onPress={() => navigation.navigate("SignIn")}
-            >
-              <Image
-                style={[styles.icon, styles.iconLayout1]}
-                contentFit="cover"
-                source={require("../assets/images/backicon2.png")}
-              />
-            </Pressable>
-            <View style={[styles.postWrapper, styles.allFlexBox1]}>
-              <Text style={[styles.post, styles.postTypo]}>Post</Text>
-            </View>
-          </View>
-          <Pressable
-            style={styles.allFlexBox}
-            onPress={() => navigation.navigate("PostDetails")}
-          >
-            <Image
-              style={styles.posthimgIcon}
-              contentFit="cover"
-              source={require("../assets/images/posthimg.png")}
-            />
-            <Text style={[styles.posthtime, styles.posthtimePosition]}>
-              28, Sep 2023 at 12:21 pm
-            </Text>
-            <Text style={[styles.posthtittle, styles.posthtittleTypo]}>
-              Massa tortor nibh nulla condimentum imperdiet scelerisque...
-            </Text>
-          </Pressable>
-        </View>
-        <View style={styles.allFlexBox}>
-          <View style={[styles.all1, styles.allFlexBox1]}>
-            <Text style={[styles.latestpost, styles.postTypo]}>
-              Latest Post
-            </Text>
-            <View style={[styles.allframes, styles.allframesFlexBox]}>
-              <View style={[styles.frameParent, styles.allframesFlexBox]}>
-                <View style={styles.post1Parent}>
-                  <Pressable
-                    style={styles.post1}
-                    onPress={() => navigation.navigate("PostDetails")}
-                  >
-                    <Text style={[styles.post1time, styles.post1timeTypo]}>
-                      28, Sep 2023 at 12:21 pm
-                    </Text>
-                    <Text style={[styles.post1tittle, styles.post1tittleTypo]}>
-                      News Title Lorems Ipsum Dolor Sit Amet
-                    </Text>
-                    <Image
-                      style={[styles.post1imgIcon, styles.iconLayout]}
-                      contentFit="cover"
-                      source={require("../assets/images/post1img.png")}
-                    />
-                  </Pressable>
-                  <View style={styles.post2}>
-                    <Text style={[styles.post2time, styles.post1timeTypo]}>
-                      28, Sep 2023 at 12:21 pm
-                    </Text>
-                    <Text style={[styles.post2tittle, styles.post1tittleTypo]}>
-                      News Title Lorem Ipsum Dolor Sit Amet
-                    </Text>
-                    <Image
-                      style={[styles.post2imgIcon, styles.iconLayout]}
-                      contentFit="cover"
-                      source={require("../assets/images/post2img.png")}
-                    />
-                  </View>
-                </View>
-                <View style={styles.post3Parent}>
-                  <View>
-                    <Image
-                      style={[styles.post3imgIcon, styles.iconLayout]}
-                      contentFit="cover"
-                      source={require("../assets/images/post3img.png")}
-                    />
-                    <Text
-                      style={[styles.post3tittle, styles.post3timeSpaceBlock]}
-                    >
-                      News Title Lorem Ipsum Dolor Sit Amet
-                    </Text>
-                    <Text
-                      style={[styles.post3time, styles.post3timeSpaceBlock]}
-                    >
-                      28, Sep 2023 at 12:21 pm
-                    </Text>
-                  </View>
-                  <View style={styles.post4}>
-                    <Image
-                      style={[styles.post4imgIcon, styles.iconLayout]}
-                      contentFit="cover"
-                      source={require("../assets/images/post4img.png")}
-                    />
-                    <Text
-                      style={[styles.post4tittle, styles.post3timeSpaceBlock]}
-                    >
-                      News Title Lorem Ipsum Dolor Sit Amet
-                    </Text>
-                    <Text
-                      style={[styles.post4time, styles.post3timeSpaceBlock]}
-                    >
-                      28, Sep 2023 at 12:21 pm
-                    </Text>
-                  </View>
-                </View>
+    <NativeBaseProvider theme={theme}>
+      <View style={[styles.allPost, styles.allFlexBox1]}>
+        <View style={[styles.content, styles.allFlexBox1]}>
+          <View style={[styles.hero, styles.allFlexBox1]}>
+            <View style={[styles.backiconParent, styles.allFlexBox1]}>
+              <Pressable
+                style={styles.backicon}
+                onPress={() => navigation.navigate("SignIn")}
+              >
+                <Image
+                  style={[styles.icon, styles.iconLayout1]}
+                  contentFit="cover"
+                  source={require("../assets/images/backicon2.png")}
+                />
+              </Pressable>
+              <View style={[styles.postWrapper, styles.allFlexBox1]}>
+                <Text style={[styles.post, styles.postTypo]}>Post</Text>
               </View>
             </View>
+            <View>
+              <PostH />
+            </View>
+            <VStack space={4} alignItems="center">
+              <View>
+                <Post1 />
+                <Post1 />
+                <Post1 />
+                <Post1 />
+              </View>
+            </VStack>
+            ;
           </View>
         </View>
       </View>
-    </View>
+    </NativeBaseProvider>
   );
 };
 

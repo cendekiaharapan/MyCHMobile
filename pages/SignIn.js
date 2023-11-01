@@ -1,11 +1,101 @@
 import * as React from "react";
+import { useState } from "react";
 import { Text, StyleSheet, View, Pressable, TextInput } from "react-native";
 import { Image } from "expo-image";
 import { useNavigation } from "@react-navigation/native";
 import { Border, Color, FontFamily, FontSize, Padding } from "../GlobalStyles";
+import axios from "axios";
+import * as SecureStore from "expo-secure-store";
+import Config from "react-native-config";
+import { APP_TOKEN, APP_SECRET } from "@env";
 
 const SignIn = () => {
+  const saveTokenToSecureStore = async (token) => {
+    try {
+      await SecureStore.setItemAsync("api_token", token);
+      console.log("api_token Saved!");
+    } catch (error) {
+      console.error("Error saving token:", error);
+    }
+  };
+
+  const getTokenFromSecureStore = async () => {
+    try {
+      return await SecureStore.getItemAsync("api_token");
+    } catch (error) {
+      console.error("Error retrieving token:", error);
+      return null;
+    }
+  };
+
+  const sendLoginRequest = async () => {
+    try {
+      const response = await axios.post(
+        "https://www.balichildrenshouse.com/myCHStaging/api/login",
+        {
+          email: email,
+          password: password,
+          app_secret: APP_SECRET,
+          app_token: APP_TOKEN,
+
+          // Additional data if required (app_token, app_secret, etc.)
+        }
+      );
+
+      if (response.status === 200) {
+        // Handle a successful login response here
+        console.log("Login successful", response.data);
+
+        const token = response.data.success.token;
+        console.log("Token before saving:", token);
+        saveTokenToSecureStore(token);
+
+        const savedToken = await getTokenFromSecureStore();
+        console.log("Token after retrieval:", savedToken);
+        // You can navigate to another screen after successful login
+        navigation.navigate("AllPost");
+      }
+    } catch (error) {
+      // Check if the error message contains information about invalid email or password
+      if (error.response && error.response.status === 401) {
+        if (error.response.data.error === "email not found") {
+          console.error("Email not found");
+          // Show an error message to the user that email is not found
+        } else if (
+          error.response.data.error === "email and password do not match"
+        ) {
+          console.error("Email and password do not match");
+          // Show an error message to the user that email and password do not match
+        } else {
+          console.error("Login Error", error);
+          // Show a generic error message
+        }
+      } else {
+        console.error("Login Error", error);
+        // Show a generic error message
+      }
+    }
+  };
+
   const navigation = useNavigation();
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  // Step 3: Define an onChangeText function
+  const handlePasswordChange = (text) => {
+    // Step 3: Update the state variable
+    setPassword(text);
+  };
+
+  const handleButtonClick = () => {
+    sendLoginRequest();
+  };
+
+  const handleEmailChange = (text) => {
+    setEmail(text);
+  };
+
   return (
     <View style={[styles.signIn, styles.signInFlexBox]}>
       <View style={styles.signInFlexBox}>
@@ -13,32 +103,37 @@ const SignIn = () => {
         <Image
           style={styles.loginimgIcon}
           contentFit="cover"
-          source={require("../assets/loginimg.png")}
+          source={require("../assets/images/loginimg.png")}
         />
         <View style={[styles.ifemail, styles.ifemailShadowBox]}>
-        <Image
+          <Image
             style={styles.emailimgIcon}
             contentFit="cover"
-            source={require("../assets/emailimg.png")}
+            source={require("../assets/images/emailimg.png")}
           />
           <TextInput
-            style={[styles.emailInput, styles.textTypo]} 
-            placeholder="Emaill" 
-            placeholderTextColor="#888" 
-            keyboardType="email-address"/>
+            style={[styles.emailInput, styles.textTypo]}
+            placeholder="Email"
+            placeholderTextColor="#888"
+            keyboardType="email-address"
+            value={email}
+            onChangeText={handleEmailChange}
+          />
         </View>
         <View style={[styles.ifpassword, styles.ifemailShadowBox]}>
-        <Image
-          style={styles.emailimgIcon}
-          contentFit="cover"
-          source={require("../assets/pass.png")}
-        />
-        <TextInput
-          style={[styles.passwordInput, styles.textTypo]}
-          placeholder="Type your password" 
-          placeholderTextColor="#888" 
-          secureTextEntry={true} 
-        />
+          <Image
+            style={styles.emailimgIcon}
+            contentFit="cover"
+            source={require("../assets/images/pass.png")}
+          />
+          <TextInput
+            style={[styles.passwordInput, styles.textTypo]}
+            placeholder="Type your password"
+            placeholderTextColor="#888"
+            secureTextEntry={true}
+            value={password}
+            onChangeText={handlePasswordChange}
+          />
         </View>
         <Pressable
           style={styles.forgetPasswordClickContainer}
@@ -49,10 +144,7 @@ const SignIn = () => {
             <Text style={styles.clickHere}>Click Here</Text>
           </Text>
         </Pressable>
-        <Pressable
-          style={styles.btnprimary}
-          onPress={() => navigation.navigate("AllPost")}
-        >
+        <Pressable style={styles.btnprimary} onPress={handleButtonClick}>
           <Text style={[styles.login1, styles.text1Typo]}>LOGIN</Text>
         </Pressable>
       </View>
@@ -61,6 +153,12 @@ const SignIn = () => {
 };
 
 const styles = StyleSheet.create({
+  passwordInput: {
+    flex: 1,
+  },
+  emailInput: {
+    flex: 1,
+  },
   signInFlexBox: {
     justifyContent: "center",
     alignItems: "center",
