@@ -56,10 +56,12 @@ const ReportCard = () => {
                     minWidth="275"
                     accessibilityLabel="Choose Session"
                     placeholder="Choose Session"
-                    onValueChange={(itemValue) => setSelectedSession(itemValue)}
+                    onValueChange={(itemValue) => {setSelectedSession(itemValue)
+                    console.log('Selected Session:', itemValue);}}
+                    
                   >
                     {academicSessions.map(session => (
-                      <Select.Item key={session.id} label={session.name} value={session.name} />
+                      <Select.Item key={session.id} label={session.name} value={session.id} />
                 ))}
               </Select>
                 </Center>
@@ -80,8 +82,10 @@ const ReportCard = () => {
                   placeholder="Choose Semester"
                   onValueChange={(itemValue) => setSelectedSemester(itemValue)}
                 >
-                  <Select.Item label="Semester 1" value="Semester 1" />
-                  <Select.Item label="Semester 2" value="Semester 2" />
+                  <Select.Item label="Mid Semester 1" value="3" />
+                  <Select.Item label="Semester 1" value="1" />
+                  <Select.Item label="Mid Semester 2" value="4" />
+                  <Select.Item label="Semester 2" value="2" />
                   {/* Add other semester options here */}
                 </Select>
               </Center>
