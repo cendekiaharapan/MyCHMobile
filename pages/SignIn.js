@@ -28,6 +28,58 @@ const SignIn = () => {
     }
   };
 
+  const saveRespDataSecureStore = async (responseData) => {
+    try {
+      const responseDataString = JSON.stringify(responseData);
+      await SecureStore.setItemAsync("resp_data", responseDataString);
+      console.log("Response data saved!");
+    } catch (error) {
+      console.error("Error saving response data:", error);
+    }
+  };
+
+  const getRespDataFromSecureStore = async () => {
+    try {
+      const responseDataString = await SecureStore.getItemAsync("resp_data");
+      if (responseDataString) {
+        const responseData = JSON.parse(responseDataString);
+        return responseData;
+      } else {
+        console.log("No response data found in SecureStore.");
+        return null;
+      }
+    } catch (error) {
+      console.error("Error retrieving response data:", error);
+      return null;
+    }
+  };
+
+  const saveChildDataSecureStore = async (responseData) => {
+    try {
+      const responseDataString = JSON.stringify(responseData);
+      await SecureStore.setItemAsync("child_data", responseDataString);
+      console.log("Child data saved!");
+    } catch (error) {
+      console.error("Error saving response data:", error);
+    }
+  };
+
+  const getChildDataFromSecureStore = async () => {
+    try {
+      const responseDataString = await SecureStore.getItemAsync("child_data");
+      if (responseDataString) {
+        const responseData = JSON.parse(responseDataString);
+        return responseData;
+      } else {
+        console.log("No response data found in SecureStore.");
+        return null;
+      }
+    } catch (error) {
+      console.error("Error retrieving response data:", error);
+      return null;
+    }
+  };
+
   const sendLoginRequest = async () => {
     try {
       const response = await axios.post(
@@ -47,11 +99,40 @@ const SignIn = () => {
         console.log("Login successful", response.data);
 
         const token = response.data.success.token;
-        console.log("Token before saving:", token);
         saveTokenToSecureStore(token);
 
-        const savedToken = await getTokenFromSecureStore();
-        console.log("Token after retrieval:", savedToken);
+        const response_data = response.data;
+        saveRespDataSecureStore(response_data);
+
+        resp = await getRespDataFromSecureStore();
+
+        if (resp.user.role === "parent") {
+          const parentId = response.data.user.id; // parent id
+
+          const parentStudentsResponse = await axios.get(
+            `https://www.balichildrenshouse.com/myCHStaging/api/parent-students/${parentId}`
+          );
+
+          if (parentStudentsResponse.status === 200) {
+            // Handle the parent-students response data here
+
+            saveChildDataSecureStore(parentStudentsResponse.data);
+
+            // You can navigate to another screen after successful login
+          } else {
+            // Handle cases where there is no student data
+            if (parentStudentsResponse.status === 401) {
+              console.log("No student found");
+              // You can take additional actions or show a message to the user as needed
+            } else {
+              console.error("Error while fetching parent-students data");
+              // Handle other errors
+            }
+          }
+        }
+        // Fetching the student id by parent id
+        child_data = await getChildDataFromSecureStore();
+        console.log("child object : ", child_data);
         // You can navigate to another screen after successful login
         navigation.navigate("AllPost");
       }
