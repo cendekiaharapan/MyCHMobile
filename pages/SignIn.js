@@ -8,6 +8,7 @@ import axios from "axios";
 import * as SecureStore from "expo-secure-store";
 import Config from "react-native-config";
 import { APP_TOKEN, APP_SECRET } from "@env";
+import * as SQLite from "expo-sqlite";
 
 const SignIn = () => {
   const saveTokenToSecureStore = async (token) => {
@@ -80,6 +81,41 @@ const SignIn = () => {
     }
   };
 
+  const db = SQLite.openDatabase("login.db");
+
+  const saveChildDataSQLite = (responseData) => {
+    try {
+      db.transaction((tx) => {
+        tx.executeSql(
+          "CREATE TABLE IF NOT EXISTS child_data (id INTEGER PRIMARY KEY AUTOINCREMENT, data TEXT)",
+          []
+        );
+        tx.executeSql("INSERT INTO child_data (data) VALUES (?)", [
+          JSON.stringify(responseData),
+        ]);
+      });
+      console.log("Child data saved to SQLite!");
+    } catch (error) {
+      console.error("Error saving response data:", error);
+    }
+  };
+
+  const getChildDataFromSQLite = (callback) => {
+    db.transaction((tx) => {
+      tx.executeSql("SELECT data FROM child_data", [], (tx, results) => {
+        const len = results.rows.length;
+        if (len > 0) {
+          const responseDataString = results.rows.item(0).data;
+          const responseData = JSON.parse(responseDataString);
+          callback(responseData);
+        } else {
+          console.log("No response data found in SQLite.");
+          callback(null);
+        }
+      });
+    });
+  };
+
   const sendLoginRequest = async () => {
     try {
       const response = await axios.post(
@@ -115,8 +151,7 @@ const SignIn = () => {
 
           if (parentStudentsResponse.status === 200) {
             // Handle the parent-students response data here
-
-            saveChildDataSecureStore(parentStudentsResponse.data);
+            saveChildDataSQLite(parentStudentsResponse.data);
 
             // You can navigate to another screen after successful login
           } else {
@@ -131,8 +166,20 @@ const SignIn = () => {
           }
         }
         // Fetching the student id by parent id
-        child_data = await getChildDataFromSecureStore();
-        console.log("child object : ", child_data);
+        getChildDataFromSQLite((data) => {
+          if (data) {
+            // Use the retrieved data
+            const student_id = data.map((child) => child.id);
+
+            console.log("student id :", student_id);
+
+            // Any processing of the data should be done here
+          } else {
+            // Handle the case when no data is found
+            console.log("No data found in SQLite.");
+          }
+        });
+
         // You can navigate to another screen after successful login
         navigation.navigate("AllPost");
       }
