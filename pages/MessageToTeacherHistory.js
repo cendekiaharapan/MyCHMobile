@@ -3,8 +3,8 @@ import { Image } from "expo-image";
 import { StyleSheet, View, Text, SafeAreaView } from "react-native";
 import { NativeBaseProvider, StatusBar, ScrollView } from "native-base";
 import { Padding, Color, FontSize, FontFamily, Border } from "../GlobalStyles";
-import HeroContent from "../components/MessageToTeacherHistory/HeroContent";
-import MessageHistory from "../components/MessageToTeacherHistory/HeroContentMessToTeachHist";
+import HeroContent from "../components/MessageToTeacherHistory/HeroContentMessageToTeacherHis";
+import MessageHistory from "../components/MessageToTeacherHistory/MessageHistory";
 const MessageToTeacherHistory = () => {
   return (
     <NativeBaseProvider>

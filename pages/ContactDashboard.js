@@ -52,9 +52,9 @@ const Contact = () => {
           </View>
           <View style={[styles.bodycontainer, styles.herocontainerLayout]}>
             <ScrollView contentContainerStyle={styles.bodycontainerInner}>
-              <ContactList />
-              <ContactList />
-              <ContactList />
+              <ContactList name="Andrew Zefanya" />
+              <ContactList name="Eveline Kurnia" />
+              <ContactList image='{require("../../assets/Male.png")}' />
               <ContactList />
               <ContactList />
               <ContactList />

@@ -15,9 +15,103 @@ import { Color, Padding, FontFamily, FontSize, Border } from "../GlobalStyles";
 import PermissionHistory from "../components/PermissionHistory";
 import { useNavigation } from "@react-navigation/native";
 import AddButton from "../components/AddButton";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 const ChildPermissionHistorys = () => {
   const navigation = useNavigation();
+
+  useEffect(() => {
+    console.log("use Effect actived!");
+    fetchMultipleStudentsData();
+  }, []);
+
+  const fetchChildPermissionData = async (studentId) => {
+    try {
+      const response = await axios.get(
+        `https://www.balichildrenshouse.com/myCHStaging/api/get-leave-by-student-id/${studentId}`
+      );
+
+      // Handle the response data
+      const data = response.data;
+      console.log(`Data for student ${studentId}:`, data);
+
+      return data; // Return the data for this student
+    } catch (error) {
+      // Handle errors
+      console.error(`Error for student ${studentId}:`, error);
+      return null; // Return null for this student's data
+    }
+  };
+
+  const fetchMultipleStudentsData = async () => {
+    const studentIds = [1029, 1396]; // Replace with the IDs of the students you want to fetch data for
+    const studentName = ["Timothy Jacob", "Tiffany Janice"];
+    try {
+      // Use Promise.all to fetch data for multiple students concurrently
+      const studentDataPromises = studentIds.map((studentId) =>
+        fetchChildPermissionData(studentId)
+      );
+      const studentData = await Promise.all(studentDataPromises);
+
+      const flattenedLeaves = studentData.reduce((accumulator, student) => {
+        return accumulator.concat(student.leaves);
+      }, []);
+
+      console.log("Flattened Before Sorted : ", flattenedLeaves);
+
+      flattenedLeaves.sort((leaveA, leaveB) => {
+        const dateA = new Date(leaveA.created_at);
+        const dateB = new Date(leaveB.created_at);
+
+        return dateB - dateA;
+      });
+
+      console.log("Flattened After Sorted : ", flattenedLeaves);
+
+      setStudentData(flattenedLeaves);
+
+      // // Now you have an array of data for multiple students
+      // console.log("All Student Data:", studentData);
+
+      // studentData.forEach((student) => {
+      //   // 'student' represents data for one student
+      //   const leaves = student.leaves; // Access the array of leaves for the student
+
+      //   // You can iterate through the leaves for this student
+      //   leaves.forEach((leave, index) => {
+      //     const applyType = leave.apply_type; // Access apply_type
+      //     const createdAt = leave.created_at; // Access created_at
+
+      //     if (leave.student_id === 1029) {
+      //       const child_name = studentName[0];
+      //       console.log(`Student ${child_name}, History ${index}:`);
+      //     } else {
+      //       const child_name = studentName[1];
+      //       console.log(`Student ${child_name}, History ${index}:`);
+      //     }
+
+      //     // Now, you can use 'applyType' and 'createdAt' to do whatever you need with this leave data
+
+      //     console.log(`Apply Type: ${applyType}`);
+      //     console.log(`Created At: ${createdAt}`);
+      //     console.log("------------------");
+      //   });
+      // });
+
+      // You can set the data to your state or do any necessary processing
+    } catch (error) {
+      // Handle errors if any of the requests fail
+      console.error("Error:", error);
+    }
+  };
+
+  const [studentData, setStudentData] = useState([]);
+  const [studentName, setStudentName] = useState([
+    "Timothy Jacob",
+    "Tiffany Janice",
+  ]);
+
   return (
     <NativeBaseProvider>
       <View style={styles.contact}>
@@ -53,53 +147,23 @@ const ChildPermissionHistorys = () => {
             <View style={[styles.frameGroup, styles.frameGroupLayout]}>
               <View style={[styles.bodycontainer, styles.herocontainerLayout]}>
                 <ScrollView contentContainerStyle={styles.bodycontainerInner}>
-                  {/* History Content */}
+                  {studentData.map((leave, index) => {
+                    const studentName = ["Timothy Jacob", "Tiffany Janice"];
+                    const studentIds = [1029, 1396];
+                    const studentId_index = studentIds.indexOf(
+                      leave.student_id
+                    );
 
-                  <PermissionHistory
-                    name="Patrick Lay"
-                    type="Excused"
-                    time="29 Maret 2023, 10:40 AM"
-                  />
-                  <PermissionHistory
-                    name="Patrick Lay"
-                    type="Excused"
-                    time="29 Maret 2023, 10:40 AM"
-                  />
-                  <PermissionHistory
-                    name="Patrick Lay"
-                    type="Excused"
-                    time="29 Maret 2023, 10:40 AM"
-                  />
-                  <PermissionHistory
-                    name="Patrick Lay"
-                    type="Excused"
-                    time="29 Maret 2023, 10:40 AM"
-                  />
-                  <PermissionHistory
-                    name="Patrick Lay"
-                    type="Excused"
-                    time="29 Maret 2023, 10:40 AM"
-                  />
-                  <PermissionHistory
-                    name="Patrick Lay"
-                    type="Excused"
-                    time="29 Maret 2023, 10:40 AM"
-                  />
-                  <PermissionHistory
-                    name="Patrick Lay"
-                    type="Excused"
-                    time="29 Maret 2023, 10:40 AM"
-                  />
-                  <PermissionHistory
-                    name="Patrick Lay"
-                    type="Excused"
-                    time="29 Maret 2023, 10:40 AM"
-                  />
-                  <PermissionHistory
-                    name="Patrick Lay"
-                    type="Excused"
-                    time="29 Maret 2023, 10:40 AM"
-                  />
+                    return (
+                      <PermissionHistory
+                        name={studentName[studentId_index]}
+                        type={
+                          leave.apply_type === "sick_leave" ? "Sick" : "Excused"
+                        }
+                        time={leave.created_at}
+                      />
+                    );
+                  })}
 
                   {/* EndHistory Content */}
                 </ScrollView>

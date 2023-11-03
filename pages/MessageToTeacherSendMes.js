@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { Image } from "expo-image";
 import { Color, FontFamily, FontSize, Border, Padding } from "../GlobalStyles";
-import HeroContent from "../components/MessageToTeacherSendMes/HeroContentMessToTeachSendMes";
+import HeroContent from "../components/MessageToTeacherSendMes/heroContentMessageToTeacherSend";
 import {
   Button,
   NativeBaseProvider,

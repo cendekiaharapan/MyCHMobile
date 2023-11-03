@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.poppinsSemiBold,
     color: Color.colorGray_300,
     height: 18,
-    width: 87,
+    width: 240,
     fontSize: FontSize.textRegularXs12_size,
     textAlign: "left",
   },

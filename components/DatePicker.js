@@ -3,7 +3,7 @@ import { TouchableOpacity, Text, StyleSheet, Platform } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { FontFamily, FontSize } from "../GlobalStyles";
 
-const DatePickerComponent = () => {
+const DatePickerComponent = ({ onDateChange }) => {
   const [selectedDate, setSelectedDate] = useState(null); // Initialize to null
   const [showDatePicker, setShowDatePicker] = useState(false);
 
@@ -12,6 +12,7 @@ const DatePickerComponent = () => {
     if (selected !== undefined) {
       setSelectedDate(selected);
       setShowDatePicker(Platform.OS === "ios"); // Close the picker on iOS
+      onDateChange(selected);
     }
   };
 
