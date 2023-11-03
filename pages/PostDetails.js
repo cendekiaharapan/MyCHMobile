@@ -6,7 +6,7 @@ import {
   ImageBackground,
   Pressable,
 } from "react-native";
-import { Image } from "expo-image";
+import * as ImagePicker from 'expo-image-picker';
 import { useNavigation } from "@react-navigation/native";
 import { FontFamily, Color, Border, Padding } from "../GlobalStyles";
 
