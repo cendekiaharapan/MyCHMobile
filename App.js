@@ -1,105 +1,116 @@
+const Stack = createNativeStackNavigator();
 import * as React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { useFonts } from "expo-font";
-import PostDetails from "./pages/PostDetails";
-import AllPost from "./pages/AllPost";
-import Password from "./pages/Password";
-import Onboard from "./pages/Onboard";
-import SignIn from "./pages/SignIn";
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { View, Text, Pressable, TouchableOpacity } from "react-native";
-import PageStart from "./pages/PageStart";
-import TopUpForm from "./components/TopUpForm";
-import PaidInvoiceDetails from "./pages/PaidInvoiceDetails";
-import PaymentInvoiceDetails from "./pages/PaymentInvoiceDetails";
-import PaidInvoiceHistory from "./pages/PaidInvoiceHistory";
-import PaymentInvoice from "./pages/PaymentInvoice";
-import PaymentTopup from "./pages/PaymentTopup";
-import PaymentCHDHistory from "./pages/PaymentCHDHistory";
-import PaymentCHDAccount from "./pages/PaymentCHDAccount";
+import ChildPermissionAddPermis from "./screens/ChildPermissionAddPermis";
+0;
+import MessageToTeacherHistory from "./screens/MessageToTeacherHistory";
+import MessageToTeacherViewHis from "./screens/MessageToTeacherViewHis";
+import MessageToTeacherSendMes from "./screens/MessageToTeacherSendMes";
+import ChildPermissionViewHisto from "./screens/ChildPermissionViewHisto";
+import ChildPermissionHistorys from "./screens/ChildPermissionHistorys";
+0;
+import ContactDashboard from "./screens/ContactDashboard";
+import MIcon from "react-native-vector-icons/MaterialCommunityIcons";
+import { IconRegistry, ApplicationProvider } from "@ui-kitten/components";
+import * as eva from "@eva-design/eva";
+
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import {
+  View,
+  Text,
+  Pressable,
+  TouchableOpacity,
+  StyleSheet,
+} from "react-native";
 
 const App = () => {
-  const [hideSplashScreen, setHideSplashScreen] = React.useState(false);
+  const [hideSplashScreen, setHideSplashScreen] = React.useState(true);
   const [fontsLoaded, error] = useFonts({
     "Poppins-Light": require("./assets/fonts/Poppins-Light.ttf"),
     "Poppins-Regular": require("./assets/fonts/Poppins-Regular.ttf"),
     "Poppins-Medium": require("./assets/fonts/Poppins-Medium.ttf"),
     "Poppins-SemiBold": require("./assets/fonts/Poppins-SemiBold.ttf"),
     "Poppins-Bold": require("./assets/fonts/Poppins-Bold.ttf"),
-    "Poppins-Black": require("./assets/fonts/Poppins-Black.ttf"),
-    "Roboto-Medium": require("./assets/fonts/Roboto-Medium.ttf"),
-    "SpaceGrotesk-Regular": require("./assets/fonts/SpaceGrotesk-Regular.ttf"),
   });
 
+  function MaterialIcon({ name, style }) {
+    const { height, tintColor, ...iconStyle } = StyleSheet.flatten(style);
+    return (
+      <MIcon name={name} size={height} color={tintColor} style={iconStyle} />
+    );
+  }
+
+  const IconProvider = (name) => ({
+    toReactElement: (props) => MaterialIcon({ name, ...props }),
+  });
+
+  function createIconsMap() {
+    return new Proxy(
+      {},
+      {
+        get(target, name) {
+          return IconProvider(name);
+        },
+      }
+    );
+  }
+  const MaterialIconsPack = {
+    name: "material",
+    icons: createIconsMap(),
+  };
+
+  if (!fontsLoaded && !error) {
+    return null;
+  }
+
   return (
-    <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="FrameScreen" component={FrameScreen} />
-        <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name="Onboard" component={Onboard} options={{ headerShown: false }} />
-        <Stack.Screen name="SignIn" component={SignIn} options={{ headerShown: false }} />
-        <Stack.Screen name="PostDetails" component={PostDetails} options={{ headerShown: false }} />
-        <Stack.Screen name="AllPost" component={AllPost} options={{ headerShown: false }} />
-        <Stack.Screen name="Password" component={Password} options={{ headerShown: false }} />
-      </Stack.Navigator>
-    </NavigationContainer>
-
-<>
-<NavigationContainer>
-  {hideSplashScreen ? (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen
-        name="PageStart"
-        component={PageStart}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="PaidInvoiceDetails"
-        component={PaidInvoiceDetails}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="PaymentInvoiceDetails"
-        component={PaymentInvoiceDetails}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="PaidInvoiceHistory"
-        component={PaidInvoiceHistory}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="PaymentInvoice"
-        component={PaymentInvoice}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="PaymentTopup"
-        component={PaymentTopup}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="PaymentCHDHistory"
-        component={PaymentCHDHistory}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="PaymentCHDAccount"
-        component={PaymentCHDAccount}
-        options={{ headerShown: false }}
-      />
-    </Stack.Navigator>
-  ) : null}
-</NavigationContainer>
-</>
-
+    <>
+      <IconRegistry icons={[MaterialIconsPack]} />
+      <ApplicationProvider {...eva} theme={eva.light}>
+        <NavigationContainer>
+          {hideSplashScreen ? (
+            <Stack.Navigator screenOptions={{ headerShown: false }}>
+              <Stack.Screen
+                name="ChildPermissionHistorys"
+                component={ChildPermissionHistorys}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="ChildPermissionAddPermis"
+                component={ChildPermissionAddPermis}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="ChildPermissionViewHisto"
+                component={ChildPermissionViewHisto}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="ContactDashboard"
+                component={ContactDashboard}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="MessageToTeacherSendMes"
+                component={MessageToTeacherSendMes}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="MessageToTeacherViewHis"
+                component={MessageToTeacherViewHis}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="MessageToTeacherHistory"
+                component={MessageToTeacherHistory}
+                options={{ headerShown: false }}
+              />
+            </Stack.Navigator>
+          ) : null}
+        </NavigationContainer>
+      </ApplicationProvider>
+    </>
   );
-
 };
-
-
-const Stack = createNativeStackNavigator();
-
-
 export default App;
-
