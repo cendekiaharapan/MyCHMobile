@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as ImagePicker from 'expo-image-picker';
-import { StyleSheet, View, Pressable, Text, TextInput } from "react-native";
+import { StyleSheet, View, Pressable, Text, TextInput, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { FontSize, Color, FontFamily, Border, Padding } from "../GlobalStyles";
 

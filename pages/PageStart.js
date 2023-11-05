@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as ImagePicker from 'expo-image-picker';
-import { StyleSheet, Pressable, View } from "react-native";
+import { StyleSheet, Pressable, View, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Header from "../components/Header";
 import { Color } from "../GlobalStyles";
