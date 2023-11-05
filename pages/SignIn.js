@@ -134,7 +134,7 @@ const SignIn = () => {
         child_data = await getChildDataFromSecureStore();
         console.log("child object : ", child_data);
         // You can navigate to another screen after successful login
-        navigation.navigate("AllPost");
+        navigation.navigate("ChildPermissionAddPermis");
       }
     } catch (error) {
       // Check if the error message contains information about invalid email or password
