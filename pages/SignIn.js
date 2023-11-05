@@ -11,6 +11,7 @@ import { APP_TOKEN, APP_SECRET } from "@env";
 import * as SQLite from "expo-sqlite";
 
 const SignIn = () => {
+  const [childData, setChildData] = useState(null);
   const saveTokenToSecureStore = async (token) => {
     try {
       await SecureStore.setItemAsync("api_token", token);
@@ -90,9 +91,21 @@ const SignIn = () => {
           "CREATE TABLE IF NOT EXISTS child_data (id INTEGER PRIMARY KEY AUTOINCREMENT, data TEXT)",
           []
         );
-        tx.executeSql("INSERT INTO child_data (data) VALUES (?)", [
-          JSON.stringify(responseData),
-        ]);
+
+        // Check if a record already exists in the table
+        const existingData = fetchChildDataFromSQLite(); // Implement this function to fetch data
+
+        if (existingData) {
+          // If a record exists, update the existing record with the provided data
+          tx.executeSql("UPDATE child_data SET data = ? WHERE id = 1", [
+            JSON.stringify(responseData),
+          ]);
+        } else {
+          // If no record exists, insert a new record
+          tx.executeSql("INSERT INTO child_data (data) VALUES (?)", [
+            JSON.stringify(responseData),
+          ]);
+        }
       });
       console.log("Child data saved to SQLite!");
     } catch (error) {
@@ -116,6 +129,24 @@ const SignIn = () => {
     });
   };
 
+  const fetchChildDataFromSQLite = () => {
+    return new Promise((resolve, reject) => {
+      db.transaction((tx) => {
+        tx.executeSql("SELECT data FROM child_data", [], (tx, results) => {
+          const len = results.rows.length;
+          if (len > 0) {
+            const responseDataString = results.rows.item(0).data;
+            const responseData = JSON.parse(responseDataString);
+            resolve(responseData);
+          } else {
+            console.log("No response data found in SQLite.");
+            resolve(null);
+          }
+        });
+      });
+    });
+  };
+
   const sendLoginRequest = async () => {
     try {
       const response = await axios.post(
@@ -132,7 +163,7 @@ const SignIn = () => {
 
       if (response.status === 200) {
         // Handle a successful login response here
-        console.log("Login successful", response.data);
+        console.log("Login successful");
 
         const token = response.data.success.token;
         saveTokenToSecureStore(token);
@@ -166,19 +197,26 @@ const SignIn = () => {
           }
         }
         // Fetching the student id by parent id
-        getChildDataFromSQLite((data) => {
-          if (data) {
-            // Use the retrieved data
-            const student_id = data.map((child) => child.id);
+        fetchChildDataFromSQLite()
+          .then((data) => {
+            if (data) {
+              // Use the retrieved data
+              const student_ids = data.map((item) => item.id);
+              const student_name = data.map((item) => item.name);
+              console.log("Student id : ", student_ids);
+              console.log("Student Name : ", student_name);
 
-            console.log("student id :", student_id);
-
-            // Any processing of the data should be done here
-          } else {
-            // Handle the case when no data is found
-            console.log("No data found in SQLite.");
-          }
-        });
+              // Update your component state or data source with the new data
+              // For example, if you're using state in a functional component:
+              setChildData(data);
+            } else {
+              // Handle the case when no data is found
+              console.log("No data found in SQLite.");
+            }
+          })
+          .catch((error) => {
+            console.error("Error fetching response data from SQLite:", error);
+          });
 
         // You can navigate to another screen after successful login
         navigation.navigate("AllPost");
