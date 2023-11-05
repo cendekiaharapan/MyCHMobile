@@ -1,14 +1,24 @@
 import * as React from "react";
-import * as ImagePicker from 'expo-image-picker';
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, Image } from "react-native";
 import { Color, FontSize, FontFamily, Padding } from "../GlobalStyles";
 
 const Onboard = ({ navigation }) => {
   const [timePassed, setTimePassed] = React.useState(false);
 
-  setTimeout(function () {
-    setTimePassed(true);
-  }, 3000);
+  React.useEffect(() => {
+    const timeoutId = setTimeout(function () {
+      setTimePassed(true);
+    }, 3000);
+
+    // Clean up the timeout when the component unmounts
+    return () => clearTimeout(timeoutId);
+  }, []);
+
+  React.useEffect(() => {
+    if (timePassed) {
+      navigation.navigate("ReportCard");
+    }
+  }, [timePassed, navigation]);
 
   if (!timePassed) {
     return (
@@ -30,7 +40,7 @@ const Onboard = ({ navigation }) => {
     );
   }
 
-  navigation.navigate("SignIn");
+  // You can remove the navigation.navigate("SignIn") here, as it's handled in the useEffect.
   return null;
 };
 

@@ -1,12 +1,10 @@
 import * as React from "react";
 import { useState } from "react";
-import { Text, StyleSheet, View, Pressable, TextInput } from "react-native";
-import * as ImagePicker from 'expo-image-picker';
+import { Text, StyleSheet, View, Pressable, TextInput, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Border, Color, FontFamily, FontSize, Padding } from "../GlobalStyles";
 import axios from "axios";
 import * as SecureStore from "expo-secure-store";
-import Config from "react-native-config";
 import { APP_TOKEN, APP_SECRET } from "@env";
 
 const SignIn = () => {

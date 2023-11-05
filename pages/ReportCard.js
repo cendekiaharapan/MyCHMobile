@@ -1,22 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import { Image, Linking } from 'react-native';
 import { StyleSheet, Text, View } from 'react-native';
-import { Button, NativeBaseProvider, Box, Select, Center } from 'native-base';
+import { Button, NativeBaseProvider, Select, Center } from 'native-base';
 import { LinearGradient } from 'expo-linear-gradient';
-import axios from 'axios'; // Import Axios
+import axios from 'axios'; 
 import { FontFamily, Color, FontSize, Padding, Border } from '../GlobalStyles';
 
 const ReportCard = () => {
   const [academicSessions, setAcademicSessions] = useState([]);
-  const reportCardUrl = 'https://example.com/report-card-url'; // Replace with your desired URL
+  const [termSessions, setTermSessions] = useState([]);
+  const reportCardUrl = 'https://example.com/report-card-url'; 
   const [selectedSession, setSelectedSession] = useState("Academic Year 2023/2024");
   const [selectedSemester, setSelectedSemester] = useState("Semester 1");
 
   useEffect(() => {
-    // Fetch academic sessions from your API
-    axios.get('https://www.balichildrenshouse.com/myCH/api/get-academic-sessions')
-      .then(response => {
+    Promise.all([
+      axios.get('https://www.balichildrenshouse.com/myCH/api/get-academic-sessions'),
+      axios.get('https://www.balichildrenshouse.com/myCH/api/get_session_terms/14'),
+    ])
+      .then(([response, termsResponse]) => {
         setAcademicSessions(response.data);
+        setTermSessions(termsResponse.data);
       })
       .catch(error => {
         console.error('Error fetching academic sessions: ', error);
@@ -24,7 +28,7 @@ const ReportCard = () => {
   }, []);
 
   const handleViewReportCard = () => {
-    Linking.openURL(reportCardUrl); // Use Linking here
+    Linking.openURL(reportCardUrl); 
   };
   return (
     <NativeBaseProvider>
@@ -50,7 +54,7 @@ const ReportCard = () => {
             <View style={styles.frame3}>
               <View style={styles.selectSessionParent}>
                 <Text style={styles.selectSession}>Select Session</Text>
-                <Center> {/* Center the Select in Session */}
+                <Center> 
                 <Select
                     selectedValue={selectedSession}
                     minWidth="275"
@@ -74,20 +78,20 @@ const ReportCard = () => {
             </View>
             <View style={styles.selectSemesterParent}>
               <Text style={styles.selectSession}>Select Semester</Text>
-              <Center> {/* Center the Select in Semester */}
-                <Select
-                  selectedValue={selectedSemester}
-                  minWidth="275"
-                  accessibilityLabel="Choose Semester"
-                  placeholder="Choose Semester"
-                  onValueChange={(itemValue) => setSelectedSemester(itemValue)}
-                >
-                  <Select.Item label="Mid Semester 1" value="3" />
-                  <Select.Item label="Semester 1" value="1" />
-                  <Select.Item label="Mid Semester 2" value="4" />
-                  <Select.Item label="Semester 2" value="2" />
-                  {/* Add other semester options here */}
-                </Select>
+              <Center> 
+              <Select
+                    selectedValue={selectedSemester}
+                    minWidth="275"
+                    accessibilityLabel="Choose Semester"
+                    placeholder="Choose Semester"
+                    onValueChange={(itemValue) => {setSelectedSemester(itemValue)
+                    console.log('Selected Semester:', itemValue);}}
+                    
+                  >
+                    {academicSessions.map(session => (
+                      <Select.Item key={session.id} label={session.name} value={session.id} />
+                ))}
+              </Select>
               </Center>
             </View>
             <View style={styles.buttonCariTiket}>

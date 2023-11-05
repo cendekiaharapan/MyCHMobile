@@ -11,10 +11,9 @@ import AverageDailyScore from "./components/AverageDailyScore";
 import PostDetails from "./pages/PostDetails";
 import AllPost from "./pages/AllPost";
 import Password from "./pages/Password";
-import Coba from "./components/Coba";
+import ReportCard from "./pages/ReportCard";
 
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { View, Text, Pressable, TouchableOpacity } from "react-native";
 
 const App = () => {
   const [hideSplashScreen, setHideSplashScreen] = React.useState(false);
@@ -45,6 +44,11 @@ const App = () => {
             <Stack.Screen
               name="Onboard"
               component={Onboard}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="ReportCard"
+              component={ReportCard}
               options={{ headerShown: false }}
             />
             <Stack.Screen
