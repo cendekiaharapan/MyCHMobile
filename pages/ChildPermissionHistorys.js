@@ -56,8 +56,8 @@ const ChildPermissionHistorys = () => {
                   {/* History Content */}
 
                   <PermissionHistory
-                    name="Patrick Lay"
-                    type="Excused"
+                    name="Sabrina"
+                    type="Sick"
                     time="29 Maret 2023, 10:40 AM"
                   />
                   <PermissionHistory

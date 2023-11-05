@@ -12,6 +12,14 @@ import PostDetails from "./pages/PostDetails";
 import AllPost from "./pages/AllPost";
 import Password from "./pages/Password";
 import Coba from "./components/Coba";
+import ChildPermissionAddPermis from "./pages/ChildPermissionAddPermis";
+import ChildPermissionHistory from "./pages/ChildPermissionHistorys";
+import ChildPermissionViewHisto from "./pages/ChildPermissionViewHisto";
+
+import MessageToTeacherHistory from "./pages/MessageToTeacherHistory";
+import MessageToTeacherSendMes from "./pages/MessageToTeacherSendMes";
+import MessageToTeacherViewHis from "./pages/MessageToTeacherViewHis";
+
 
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { View, Text, Pressable, TouchableOpacity } from "react-native";
@@ -42,6 +50,7 @@ const App = () => {
       <NavigationContainer>
         {hideSplashScreen ? (
           <Stack.Navigator screenOptions={{ headerShown: false }}>
+            
             <Stack.Screen
               name="Onboard"
               component={Onboard}
@@ -87,6 +96,40 @@ const App = () => {
               component={Password}
               options={{ headerShown: false }}
             />
+
+            <Stack.Screen
+              name="MessageToTeacherHistory"
+              component={MessageToTeacherHistory}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="MessageToTeacherSendMes"
+              component={MessageToTeacherSendMes}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="MessageToTeacherViewHis"
+              component={MessageToTeacherViewHis}
+              options={{ headerShown: false }}
+            />
+            
+            
+            <Stack.Screen
+              name="ChildPermissionAddPermis"
+              component={ChildPermissionAddPermis}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="ChildPermissionHistory"
+              component={ChildPermissionHistory}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="ChildPermissionViewHisto"
+              component={Onboard}
+              options={{ headerShown: false }}
+            />
+
           </Stack.Navigator>
         ) : (
           <Onboard />

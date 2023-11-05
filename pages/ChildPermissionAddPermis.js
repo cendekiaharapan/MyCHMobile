@@ -28,7 +28,6 @@ import {
 } from "native-base";
 import { useNavigation } from "@react-navigation/native"; // Import useNavigation
 import DateTimePicker from "@react-native-community/datetimepicker"; //date time picker
-import PopOver2 from "../components/PopOver2"; // Import submit sucessfull popup
 import DatePickerComponent from "../components/DatePicker"; // date picker
 import DocumentPick from "../components/DocumentPick"; // document pick
 import DropDown from "../components/DropDown";
@@ -65,7 +64,7 @@ const ChildPermissionAddPermis = () => {
             <Image
               style={styles.backicon}
               contentFit="cover"
-              source={require("../assets/backicon1.png")}
+              source={require("../assets/vector5.png")}
             />
             <View style={styles.permission}>
               <Text style={styles.permission1}>Permission</Text>
