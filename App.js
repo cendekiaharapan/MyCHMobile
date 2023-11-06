@@ -6,9 +6,8 @@ import AllPost from "./pages/AllPost";
 import Password from "./pages/Password";
 import Onboard from "./pages/Onboard";
 import SignIn from "./pages/SignIn";
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { View, Text, Pressable, TouchableOpacity } from "react-native";
-
 
 const App = () => {
   const [hideSplashScreen, setHideSplashScreen] = React.useState(false);
@@ -26,22 +25,36 @@ const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="FrameScreen" component={FrameScreen} />
-        <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name="Onboard" component={Onboard} options={{ headerShown: false }} />
-        <Stack.Screen name="SignIn" component={SignIn} options={{ headerShown: false }} />
-        <Stack.Screen name="PostDetails" component={PostDetails} options={{ headerShown: false }} />
-        <Stack.Screen name="AllPost" component={AllPost} options={{ headerShown: false }} />
-        <Stack.Screen name="Password" component={Password} options={{ headerShown: false }} />
+        <Stack.Screen
+          name="Onboard"
+          component={Onboard}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="SignIn"
+          component={SignIn}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="PostDetails"
+          component={PostDetails}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="AllPost"
+          component={AllPost}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Password"
+          component={Password}
+          options={{ headerShown: false }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
-
 };
-
 
 const Stack = createNativeStackNavigator();
 
-
 export default App;
-

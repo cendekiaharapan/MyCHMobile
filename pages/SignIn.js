@@ -1,6 +1,12 @@
-import * as React from "react";
-import { Text, StyleSheet, View, Pressable, TextInput } from "react-native";
-import { Image } from "expo-image";
+import React, { useState, useEffect } from "react";
+import {
+  Text,
+  StyleSheet,
+  View,
+  Pressable,
+  TextInput,
+  Image,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Border, Color, FontFamily, FontSize, Padding } from "../GlobalStyles";
 
@@ -16,29 +22,30 @@ const SignIn = () => {
           source={require("../assets/loginimg.png")}
         />
         <View style={[styles.ifemail, styles.ifemailShadowBox]}>
-        <Image
+          <Image
             style={styles.emailimgIcon}
             contentFit="cover"
             source={require("../assets/emailimg.png")}
           />
           <TextInput
-            style={[styles.emailInput, styles.textTypo]} 
-            placeholder="Emaill" 
-            placeholderTextColor="#888" 
-            keyboardType="email-address"/>
+            style={[styles.emailInput, styles.textTypo]}
+            placeholder="Emaill"
+            placeholderTextColor="#888"
+            keyboardType="email-address"
+          />
         </View>
         <View style={[styles.ifpassword, styles.ifemailShadowBox]}>
-        <Image
-          style={styles.emailimgIcon}
-          contentFit="cover"
-          source={require("../assets/pass.png")}
-        />
-        <TextInput
-          style={[styles.passwordInput, styles.textTypo]}
-          placeholder="Type your password" 
-          placeholderTextColor="#888" 
-          secureTextEntry={true} 
-        />
+          <Image
+            style={styles.emailimgIcon}
+            contentFit="cover"
+            source={require("../assets/pass.png")}
+          />
+          <TextInput
+            style={[styles.passwordInput, styles.textTypo]}
+            placeholder="Type your password"
+            placeholderTextColor="#888"
+            secureTextEntry={true}
+          />
         </View>
         <Pressable
           style={styles.forgetPasswordClickContainer}

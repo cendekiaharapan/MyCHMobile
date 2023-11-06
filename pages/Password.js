@@ -1,6 +1,12 @@
 import * as React from "react";
-import { Image } from "expo-image";
-import { StyleSheet, View, Pressable, Text, TextInput } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Pressable,
+  Text,
+  TextInput,
+  Image,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { FontSize, Color, FontFamily, Border, Padding } from "../GlobalStyles";
 
@@ -23,21 +29,22 @@ const Password = () => {
           <Text style={styles.resetPassword}>Reset Password</Text>
           <Text
             style={[styles.forgotYourPassword, styles.resetTypo]}
->{`Forgot your password?
+          >{`Forgot your password?
 Please enter your email address.
 You will receive a link to create a new
 password via email.`}</Text>
-        <View style={[styles.ifemail, styles.ifemailShadowBox]}>
-        <Image
-            style={styles.emailimgIcon}
-            contentFit="cover"
-            source={require("../assets/emailimg.png")}
-          />
-          <TextInput
-            style={[styles.emailInput, styles.textTypo]} 
-            placeholder="Emaill" 
-            placeholderTextColor="#888" 
-            keyboardType="email-address"/>
+          <View style={[styles.ifemail, styles.ifemailShadowBox]}>
+            <Image
+              style={styles.emailimgIcon}
+              contentFit="cover"
+              source={require("../assets/emailimg.png")}
+            />
+            <TextInput
+              style={[styles.emailInput, styles.textTypo]}
+              placeholder="Emaill"
+              placeholderTextColor="#888"
+              keyboardType="email-address"
+            />
           </View>
           <Pressable
             style={styles.btnprimary}
