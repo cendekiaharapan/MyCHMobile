@@ -10,21 +10,108 @@ import { FontFamily, Color } from "../GlobalStyles";
 import { TouchableOpacity } from "react-native";
 import { Picker } from "@react-native-picker/picker"; // Import the Picker component
 import Toast from "react-native-toast-message";
+import axios from "axios"; // Import Axios
+import { Button, NativeBaseProvider, Box, Select, Center } from 'native-base';
 
-
-const CallMyChild = forwardRef(({ navigation }, ref) => {
+const CallMyChild = () => {
   const { width } = Dimensions.get("window");
   const isSmallScreen = width <= 375; 
 
-  const [selectedChild, setSelectedChild] = React.useState("Ezra Gunawan");
-  const [selectedLanguage, setSelectedLanguage] = React.useState("English");
-  const [selectedPlace, setSelectedPlace] = React.useState("Jineng");
+const [selectedChild, setSelectedChild] = useState(null);
 
-  const children = ["Ezra Gunawan", "Andrew Zefanya", "Eveline Kurnia"];
-  const languages = ["English", "Bahasa Indonesia"];
-  const places = ["Jineng", "Parent Lounge", "Parking Lot"];
+
+const handleChildSelection = (itemValue) => {
+  setSelectedChild(itemValue);
+  console.log('Selected Child:', itemValue);
+};
+
+  const [selectedLanguage, setSelectedLanguage] = React.useState("en" => "English");
+  const [selectedPlace, setSelectedPlace] = React.useState("Jineng");
+  const languages = [
+    "af" => "Afrikaans",
+        "ar" => "Arabic",
+        "bg" => "Bulgarian",
+        "bn" => "Bengali",
+        "bs" => "Bosnian",
+        "ca" => "Catalan",
+        "cs" => "Czech",
+        "da" => "Danish",
+        "de" => "German",
+        "el" => "Greek",
+        "en" => "English",
+        "es" => "Spanish",
+        "et" => "Estonian",
+        "fi" => "Finnish",
+        "fr" => "French",
+        "gu" => "Gujarati",
+        "hi" => "Hindi",
+        "hr" => "Croatian",
+        "hu" => "Hungarian",
+        "id" => "Indonesian",
+        "is" => "Icelandic",
+        "it" => "Italian",
+        "iw" => "Hebrew",
+        "ja" => "Japanese",
+        "jw" => "Javanese",
+        "km" => "Khmer",
+        "kn" => "Kannada",
+        "ko" => "Korean",
+        "la" => "Latin",
+        "lv" => "Latvian",
+        "ml" => "Malayalam",
+        "mr" => "Marathi",
+        "ms" => "Malay",
+        "my" => "Myanmar (Burmese)",
+        "ne" => "Nepali",
+        "nl" => "Dutch",
+        "no" => "Norwegian",
+        "pl" => "Polish",
+        "pt" => "Portuguese",
+        "ro" => "Romanian",
+        "ru" => "Russian",
+        "si" => "Sinhala",
+        "sk" => "Slovak",
+        "sq" => "Albanian",
+        "sr" => "Serbian",
+        "su" => "Sundanese",
+        "sv" => "Swedish",
+        "sw" => "Swahili",
+        "ta" => "Tamil",
+        "te" => "Telugu",
+        "th" => "Thai",
+        "tl" => "Filipino",
+        "tr" => "Turkish",
+        "uk" => "Ukrainian",
+        "ur" => "Urdu",
+        "vi" => "Vietnamese",
+        "zh-CN" => "Chinese (Simplified)",
+        "zh-TW" => "Chinese (Traditional)"
+];
+  const places = ["Jineng", "Parents Lounge", "Parking Lot"];
+
+  const fetchApiData = async () => {
+    console.log("Fetching API data");
+    try {
+      const response = await axios.get('https://www.balichildrenshouse.com/myCH/api/parent-students/1773', {
+      });
+      console.log("API data response:", response);
+      const { students, languageCodes } = response.data;
+      console.log("Students data:", students);
+      console.log("Language codes data:", languageCodes);
+      setStudents(students);
+      setLanguageCodes(languageCodes);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+  
+  // Call the API data fetching function when the component mounts
+  React.useEffect(() => {
+    fetchApiData();
+  }, []);
 
   return (
+    <NativeBaseProvider>
     <View style={[styles.callMyChild, styles.callMyChildFlexBox, styles.container]}>
       <View style={styles.ictwotoneArrowBackParent}>
         <Image
@@ -48,14 +135,17 @@ const CallMyChild = forwardRef(({ navigation }, ref) => {
               </View>
             </View>
             <View style={[styles.dropdown, styles.dropdownShadowBox]}>
-              <Picker
-                selectedValue={selectedChild}
-                onValueChange={(itemValue, itemIndex) => setSelectedChild(itemValue)}
-              >
-                {children.map((child, index) => (
-                  <Picker.Item key={index} label={child} value={child} />
-                ))}
-              </Picker>
+            <Select
+              selectedValue={selectedChild}
+              minWidth="275"
+              accessibilityLabel="Choose your child to call"
+              placeholder="Choose your child to call"
+              onValueChange={handleChildSelection}
+            >
+              {students.map((student) => (
+                <Select.Item key={student.id} label={student.name} value={student.id} />
+              ))}
+            </Select>
             </View>
             <View style={styles.titleSubtitleContainer}>
               <View style={[styles.titleSubtitle, styles.callMyChildFlexBox]}>
@@ -63,14 +153,17 @@ const CallMyChild = forwardRef(({ navigation }, ref) => {
               </View>
             </View>
             <View style={[styles.dropdown1, styles.dropdownShadowBox]}>
-              <Picker
+              <Select
                 selectedValue={selectedLanguage}
-                onValueChange={(itemValue, itemIndex) => setSelectedLanguage(itemValue)}
+                minWidth="275"
+                accessibilityLabel="Choose your language"
+                placeholder="Choose your language"
+                onValueChange={(itemValue) => setSelectedLanguage(itemValue)}
               >
                 {languages.map((language, index) => (
-                  <Picker.Item key={index} label={language} value={language} />
+                  <Select.Item key={index} label={language.name} value={language.code} />
                 ))}
-              </Picker>
+              </Select>
             </View>
             <View style={styles.titleSubtitleContainer}>
               <View style={[styles.titleSubtitle, styles.callMyChildFlexBox]}>
@@ -78,50 +171,36 @@ const CallMyChild = forwardRef(({ navigation }, ref) => {
               </View>
             </View>
             <View style={[styles.dropdown2, styles.dropdownShadowBox]}>
-              <Picker
-                selectedValue={selectedPlace}
-                onValueChange={(itemValue, itemIndex) => setSelectedPlace(itemValue)}
-              >
-                {places.map((place, index) => (
-                  <Picker.Item key={index} label={place} value={place} />
-                ))}
-              </Picker>
+            <Select
+              selectedValue={selectedPlace}
+              minWidth="275"
+              accessibilityLabel="Choose your place"
+              placeholder="Choose your place"
+              onValueChange={(itemValue) => setSelectedPlace(itemValue)}
+            >
+              {places.map((place, index) => (
+                <Select.Item key={index} label={place} value={place} />
+              ))}
+            </Select>
             </View>
           </View>
         </View>
-        <TouchableOpacity
-        ref={ref}
-  style={styles.btnprimary}
-  onPress={() => {
-    // Tampilkan toast di sini
-    Toast.show({
-      type: "success",
-      text1: "SUCCESS!",
-      text2: "Successfully Called Your Child!",
-      visibilityTime: 2000, // Waktu toast ditampilkan (ms)
-      autoHide: true, // Otomatis sembunyikan toast setelah waktu tertentu
-      topOffset: 30, // Jarak dari bagian atas layar (px)
-      position: "top", // Posisi toast ("top" atau "bottom")
-      backgroundColor: "green", // Warna latar belakang toast
-      textStyle: { color: "white", fontSize: 15 }, // Gaya teks
-      onShow: () => {
-        // Callback ketika toast ditampilkan
-        console.log("Toast shown");
-      },
-      onHide: () => {
-        // Callback ketika toast disembunyikan
-        console.log("Toast hidden");
-      },
-    });
-  }}
->
-  <Text style={[styles.call, styles.callTypo]}>CALL</Text>
-</TouchableOpacity>
-
+        <Button
+          style={{
+            ...styles.call, styles.callTypo
+            backgroundColor: Color.colorTomato,
+            width: 200,
+            height: 40,
+          }}
+          onPress={}
+          >
+          <Text style={{ color: Color.colorWhite }}>Call</Text>
+        </Button>
       </View>
     </View>
+    </NativeBaseProvider>
   );
-});
+};
 
 const styles = StyleSheet.create({
   callMyChildFlexBox: {

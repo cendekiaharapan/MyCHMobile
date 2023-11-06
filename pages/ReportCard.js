@@ -1,19 +1,31 @@
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Image, Linking } from 'react-native';
 import { StyleSheet, Text, View } from 'react-native';
 import { Button, NativeBaseProvider, Box, Select, Center } from 'native-base';
 import { LinearGradient } from 'expo-linear-gradient';
+import axios from 'axios'; // Import Axios
 import { FontFamily, Color, FontSize, Padding, Border } from '../GlobalStyles';
 
 const ReportCard = () => {
+  const [academicSessions, setAcademicSessions] = useState([]);
   const reportCardUrl = 'https://example.com/report-card-url'; // Replace with your desired URL
-  const [selectedSession, setSelectedSession] = React.useState("Academic Year 2023/2024");
-  const [selectedSemester, setSelectedSemester] = React.useState("Semester 1");
+  const [selectedSession, setSelectedSession] = useState("Academic Year 2023/2024");
+  const [selectedSemester, setSelectedSemester] = useState("Semester 1");
+
+  useEffect(() => {
+    // Fetch academic sessions from your API
+    axios.get('https://www.balichildrenshouse.com/myCH/api/get-academic-sessions')
+      .then(response => {
+        setAcademicSessions(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching academic sessions: ', error);
+      });
+  }, []);
 
   const handleViewReportCard = () => {
     Linking.openURL(reportCardUrl); // Use Linking here
   };
-
   return (
     <NativeBaseProvider>
       <View style={styles.reportCard}>
@@ -39,17 +51,19 @@ const ReportCard = () => {
               <View style={styles.selectSessionParent}>
                 <Text style={styles.selectSession}>Select Session</Text>
                 <Center> {/* Center the Select in Session */}
-                  <Select
+                <Select
                     selectedValue={selectedSession}
                     minWidth="275"
                     accessibilityLabel="Choose Session"
                     placeholder="Choose Session"
-                    onValueChange={(itemValue) => setSelectedSession(itemValue)}
+                    onValueChange={(itemValue) => {setSelectedSession(itemValue)
+                    console.log('Selected Session:', itemValue);}}
+                    
                   >
-                    <Select.Item label="Academic Year 2023/2024" value="Academic Year 2023/2024" />
-                    <Select.Item label="Academic Year 2024/2025" value="Academic Year 2024/2025" />
-                    {/* Add other session options here */}
-                  </Select>
+                    {academicSessions.map(session => (
+                      <Select.Item key={session.id} label={session.name} value={session.id} />
+                ))}
+              </Select>
                 </Center>
               </View>
               <Image
@@ -68,8 +82,10 @@ const ReportCard = () => {
                   placeholder="Choose Semester"
                   onValueChange={(itemValue) => setSelectedSemester(itemValue)}
                 >
-                  <Select.Item label="Semester 1" value="Semester 1" />
-                  <Select.Item label="Semester 2" value="Semester 2" />
+                  <Select.Item label="Mid Semester 1" value="3" />
+                  <Select.Item label="Semester 1" value="1" />
+                  <Select.Item label="Mid Semester 2" value="4" />
+                  <Select.Item label="Semester 2" value="2" />
                   {/* Add other semester options here */}
                 </Select>
               </Center>

@@ -35,10 +35,10 @@ const App = () => {
     
       <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="CallMyChild" component={CallMyChild} />
         <Stack.Screen name="Onboard" component={Onboard} />
         <Stack.Screen name="SignIn" component={SignInScreen} />
         <Stack.Screen name="AllPost" component={AllPost} />
-        <Stack.Screen name="CallMyChild" component={CallMyChild} />
       </Stack.Navigator>
     </NavigationContainer>
     
