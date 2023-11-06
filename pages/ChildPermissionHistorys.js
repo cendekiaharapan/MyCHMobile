@@ -24,8 +24,8 @@ const ChildPermissionHistorys = () => {
   const db = SQLite.openDatabase("login.db");
   const [studentId, setStudentId] = useState(null);
   const [childId, setChildId] = useState(null);
-  const [studentData, setStudentData] = useState([]);
   const [studentName, setStudentName] = useState(null);
+  const [studentData, setStudentData] = useState([]);
 
   useEffect(() => {
     console.log("use Effect actived!");
@@ -44,7 +44,7 @@ const ChildPermissionHistorys = () => {
           setChildId(student_ids);
           setStudentName(student_name);
 
-          fetchMultipleStudentsData();
+          fetchMultipleStudentsData(student_ids);
         } else {
           // Handle the case when no data is found
           console.log("No data found in SQLite.");
@@ -91,11 +91,11 @@ const ChildPermissionHistorys = () => {
     }
   };
 
-  const fetchMultipleStudentsData = async () => {
+  const fetchMultipleStudentsData = async (student_ids) => {
     console.log("inside fetch multiple 2:");
     console.log("student id : ", childId);
     console.log("student name :", studentName);
-    const studentIds = childId; // Replace with the IDs of the students you want to fetch data for
+    const studentIds = student_ids; // Replace with the IDs of the students you want to fetch data for
 
     try {
       // Use Promise.all to fetch data for multiple students concurrently
@@ -117,37 +117,7 @@ const ChildPermissionHistorys = () => {
         return dateB - dateA;
       });
 
-      // console.log("Flattened After Sorted : ", flattenedLeaves);
-
       setStudentData(flattenedLeaves);
-
-      // // Now you have an array of data for multiple students
-      // console.log("All Student Data:", studentData);
-
-      // studentData.forEach((student) => {
-      //   // 'student' represents data for one student
-      //   const leaves = student.leaves; // Access the array of leaves for the student
-
-      //   // You can iterate through the leaves for this student
-      //   leaves.forEach((leave, index) => {
-      //     const applyType = leave.apply_type; // Access apply_type
-      //     const createdAt = leave.created_at; // Access created_at
-
-      //     if (leave.student_id === 1029) {
-      //       const child_name = studentName[0];
-      //       console.log(`Student ${child_name}, History ${index}:`);
-      //     } else {
-      //       const child_name = studentName[1];
-      //       console.log(`Student ${child_name}, History ${index}:`);
-      //     }
-
-      //     // Now, you can use 'applyType' and 'createdAt' to do whatever you need with this leave data
-
-      //     console.log(`Apply Type: ${applyType}`);
-      //     console.log(`Created At: ${createdAt}`);
-      //     console.log("------------------");
-      //   });
-      // });
 
       // You can set the data to your state or do any necessary processing
     } catch (error) {
@@ -191,22 +161,28 @@ const ChildPermissionHistorys = () => {
             <View style={[styles.frameGroup, styles.frameGroupLayout]}>
               <View style={[styles.bodycontainer, styles.herocontainerLayout]}>
                 <ScrollView contentContainerStyle={styles.bodycontainerInner}>
-                  {studentData.map((leave, index) => {
-                    const studentIds = childId;
-                    const studentId_index = studentIds.indexOf(
-                      leave.student_id
-                    );
+                  {childId && studentName && studentData ? (
+                    studentData.map((leave, index) => {
+                      const studentIds = childId;
+                      const studentId_index = studentIds.indexOf(
+                        leave.student_id
+                      );
 
-                    return (
-                      <PermissionHistory
-                        name={studentName[studentId_index]}
-                        type={
-                          leave.apply_type === "sick_leave" ? "Sick" : "Excused"
-                        }
-                        time={leave.created_at}
-                      />
-                    );
-                  })}
+                      return (
+                        <PermissionHistory
+                          name={studentName[studentId_index]}
+                          type={
+                            leave.apply_type === "sick_leave"
+                              ? "Sick"
+                              : "Excused"
+                          }
+                          time={leave.created_at}
+                        />
+                      );
+                    })
+                  ) : (
+                    <Text>Loading...</Text> // Or any other loading indicator
+                  )}
 
                   {/* EndHistory Content */}
                 </ScrollView>

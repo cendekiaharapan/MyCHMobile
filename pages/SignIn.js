@@ -219,7 +219,7 @@ const SignIn = () => {
           });
 
         // You can navigate to another screen after successful login
-        navigation.navigate("MessageToTeacherHistory");
+        navigation.navigate("ChildPermissionHistorys");
       }
     } catch (error) {
       // Check if the error message contains information about invalid email or password
