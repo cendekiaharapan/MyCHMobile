@@ -13,6 +13,14 @@ import AllPost from "./pages/AllPost";
 import Password from "./pages/Password";
 import Coba from "./components/Coba";
 
+// permission history
+import ChildPermissionAddPermis from "./pages/ChildPermissionAddPermis";
+import MessageToTeacherHistory from "./pages/MessageToTeacherHistory";
+import MessageToTeacherViewHis from "./pages/MessageToTeacherViewHis";
+import MessageToTeacherSendMes from "./pages/MessageToTeacherSendMes";
+import ChildPermissionViewHisto from "./pages/ChildPermissionViewHisto";
+import ChildPermissionHistorys from "./pages/ChildPermissionHistorys";
+
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { View, Text, Pressable, TouchableOpacity } from "react-native";
 
@@ -85,6 +93,36 @@ const App = () => {
             <Stack.Screen
               name="Password"
               component={Password}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="ChildPermissionHistorys"
+              component={ChildPermissionHistorys}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="ChildPermissionAddPermis"
+              component={ChildPermissionAddPermis}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="ChildPermissionViewHisto"
+              component={ChildPermissionViewHisto}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="MessageToTeacherSendMes"
+              component={MessageToTeacherSendMes}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="MessageToTeacherViewHis"
+              component={MessageToTeacherViewHis}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="MessageToTeacherHistory"
+              component={MessageToTeacherHistory}
               options={{ headerShown: false }}
             />
           </Stack.Navigator>

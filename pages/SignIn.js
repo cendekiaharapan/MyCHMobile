@@ -172,7 +172,7 @@ const SignIn = () => {
         saveRespDataSecureStore(response_data);
 
         resp = await getRespDataFromSecureStore();
-
+        console.log("response data : ", resp);
         if (resp.user.role === "parent") {
           const parentId = response.data.user.id; // parent id
 
@@ -219,7 +219,7 @@ const SignIn = () => {
           });
 
         // You can navigate to another screen after successful login
-        navigation.navigate("AllPost");
+        navigation.navigate("MessageToTeacherHistory");
       }
     } catch (error) {
       // Check if the error message contains information about invalid email or password

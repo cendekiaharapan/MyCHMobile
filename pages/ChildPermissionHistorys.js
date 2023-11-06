@@ -17,14 +17,61 @@ import { useNavigation } from "@react-navigation/native";
 import AddButton from "../components/AddButton";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import * as SQLite from "expo-sqlite";
 
 const ChildPermissionHistorys = () => {
   const navigation = useNavigation();
+  const db = SQLite.openDatabase("login.db");
+  const [studentId, setStudentId] = useState(null);
+  const [childId, setChildId] = useState(null);
+  const [studentData, setStudentData] = useState([]);
+  const [studentName, setStudentName] = useState(null);
 
   useEffect(() => {
     console.log("use Effect actived!");
-    fetchMultipleStudentsData();
+    fetchChildDataFromSQLite()
+      .then((data) => {
+        if (data) {
+          // Use the retrieved data
+          console.log("inside fetchChildData");
+          const student_ids = data.map((item) => item.id);
+          const student_name = data.map((item) => item.name);
+          console.log("Student id : ", student_ids);
+          console.log("Student Name : ", student_name);
+
+          // Update your component state or data source with the new data
+          // For example, if you're using state in a functional component:
+          setChildId(student_ids);
+          setStudentName(student_name);
+
+          fetchMultipleStudentsData();
+        } else {
+          // Handle the case when no data is found
+          console.log("No data found in SQLite.");
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching response data from SQLite:", error);
+      });
   }, []);
+
+  const fetchChildDataFromSQLite = () => {
+    return new Promise((resolve, reject) => {
+      db.transaction((tx) => {
+        tx.executeSql("SELECT data FROM child_data", [], (tx, results) => {
+          const len = results.rows.length;
+          if (len > 0) {
+            const responseDataString = results.rows.item(0).data;
+            const responseData = JSON.parse(responseDataString);
+            resolve(responseData);
+          } else {
+            console.log("No response data found in SQLite.");
+            resolve(null);
+          }
+        });
+      });
+    });
+  };
 
   const fetchChildPermissionData = async (studentId) => {
     try {
@@ -34,7 +81,7 @@ const ChildPermissionHistorys = () => {
 
       // Handle the response data
       const data = response.data;
-      console.log(`Data for student ${studentId}:`, data);
+      // console.log(`Data for student ${studentId}:`, data);
 
       return data; // Return the data for this student
     } catch (error) {
@@ -45,11 +92,14 @@ const ChildPermissionHistorys = () => {
   };
 
   const fetchMultipleStudentsData = async () => {
-    const studentIds = [1029, 1396]; // Replace with the IDs of the students you want to fetch data for
-    const studentName = ["Timothy Jacob", "Tiffany Janice"];
+    console.log("inside fetch multiple 2:");
+    console.log("student id : ", childId);
+    console.log("student name :", studentName);
+    const studentIds = childId; // Replace with the IDs of the students you want to fetch data for
+
     try {
       // Use Promise.all to fetch data for multiple students concurrently
-      const studentDataPromises = studentIds.map((studentId) =>
+      const studentDataPromises = await studentIds.map((studentId) =>
         fetchChildPermissionData(studentId)
       );
       const studentData = await Promise.all(studentDataPromises);
@@ -58,7 +108,7 @@ const ChildPermissionHistorys = () => {
         return accumulator.concat(student.leaves);
       }, []);
 
-      console.log("Flattened Before Sorted : ", flattenedLeaves);
+      // console.log("Flattened Before Sorted : ", flattenedLeaves);
 
       flattenedLeaves.sort((leaveA, leaveB) => {
         const dateA = new Date(leaveA.created_at);
@@ -67,7 +117,7 @@ const ChildPermissionHistorys = () => {
         return dateB - dateA;
       });
 
-      console.log("Flattened After Sorted : ", flattenedLeaves);
+      // console.log("Flattened After Sorted : ", flattenedLeaves);
 
       setStudentData(flattenedLeaves);
 
@@ -106,12 +156,6 @@ const ChildPermissionHistorys = () => {
     }
   };
 
-  const [studentData, setStudentData] = useState([]);
-  const [studentName, setStudentName] = useState([
-    "Timothy Jacob",
-    "Tiffany Janice",
-  ]);
-
   return (
     <NativeBaseProvider>
       <View style={styles.contact}>
@@ -148,8 +192,7 @@ const ChildPermissionHistorys = () => {
               <View style={[styles.bodycontainer, styles.herocontainerLayout]}>
                 <ScrollView contentContainerStyle={styles.bodycontainerInner}>
                   {studentData.map((leave, index) => {
-                    const studentName = ["Timothy Jacob", "Tiffany Janice"];
-                    const studentIds = [1029, 1396];
+                    const studentIds = childId;
                     const studentId_index = studentIds.indexOf(
                       leave.student_id
                     );

@@ -10,7 +10,12 @@ import {
   Padding,
 } from "../../GlobalStyles";
 import { useNavigation } from "@react-navigation/native";
-const MessageHistory = () => {
+const MessageHistory = ({
+  note,
+  teacher = "Bu Sekar",
+  student = "Rufus Stewart",
+  timestamp = "25 Maret 2023, 12:40 AM",
+}) => {
   const navigation = useNavigation();
   return (
     <View style={styles.messagehistory}>
@@ -23,14 +28,14 @@ const MessageHistory = () => {
           />
         </View>
         <View style={styles.buSekarParent}>
-          <Text style={styles.buSekar}>Bu Sekar</Text>
+          <Text style={styles.buSekar}>{teacher}</Text>
           <View style={styles.frameChild} />
           <View style={styles.maret20231240AmParent}>
             <Text style={[styles.maret20231240, styles.messageTypo]}>
-              25 Maret 2023, 12:40 AM
+              {timestamp}
             </Text>
             <Text style={[styles.rufusStewart, styles.viewTypo]}>
-              Rufus Stewart
+              {student}
             </Text>
           </View>
         </View>
@@ -38,7 +43,12 @@ const MessageHistory = () => {
       <View style={styles.messageParent}>
         <Text style={[styles.message, styles.messageTypo]}>Message</Text>
         <FormControl>
-          <TextArea h={20} placeholder="Message History" />
+          <TextArea
+            readOnly
+            h={20}
+            placeholder="Message History"
+            value={note}
+          />
         </FormControl>
         <TouchableOpacity
           onPress={() => navigation.navigate("MessageToTeacherViewHis")}
@@ -79,7 +89,7 @@ const styles = StyleSheet.create({
   buSekar: {
     fontWeight: "600",
     fontFamily: FontFamily.poppinsSemiBold,
-    width: 87,
+    width: 250,
     height: 18,
     textAlign: "left",
     color: Color.colorGray_300,
