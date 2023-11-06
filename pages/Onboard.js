@@ -1,55 +1,79 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, Image } from "react-native";
+import * as React from "react";
+import { Image } from "expo-image";
+import { StyleSheet, Text, View } from "react-native";
 import { Color, FontSize, FontFamily, Padding } from "../GlobalStyles";
 
 const Onboard = ({ navigation }) => {
-  const [timePassed, setTimePassed] = useState(false);
+  const [timePassed, setTimePassed] = React.useState(false);
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setTimePassed(true);
-    }, 3000);
-
-    return () => clearTimeout(timer);
-  }, []);
+  setTimeout(function () {
+    setTimePassed(true);
+  }, 3000);
 
   if (!timePassed) {
     return (
-      <View style={styles.container}>
-        <Image
-          style={styles.logoIcon}
-          source={require("../assets/logo.png")}
-        />
-        <Text style={styles.welcomeText}>
-          Welcome to MyCH!
-        </Text>
+      <View style={[styles.onboard, styles.onboardLayout]}>
+        <View style={styles.content}>
+          <Image
+            style={[styles.logoIcon, styles.onboardLayout]}
+            contentFit="cover"
+            source={require("../assets/images/logo.png")}
+          />
+          <Text style={styles.welcomeToMychContainer}>
+            <Text style={styles.welcomeTo}>Welcome to</Text>
+            <Text style={styles.my}> My</Text>
+            <Text style={styles.ch}>CH</Text>
+            <Text style={styles.text}>!</Text>
+          </Text>
+        </View>
       </View>
     );
   }
 
-  navigation.navigate('SignIn');
+  navigation.navigate("SignIn");
   return null;
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Color.colorWhite,
-    alignItems: "center",
-    justifyContent: "center",
+  onboardLayout: {
+    overflow: "hidden",
+    width: "100%",
   },
   logoIcon: {
-    width: 100, // Customize the width
-    height: 100, // Customize the height
-    // Add your image styling here
+    maxWidth: "100%",
+    height: 321,
+    alignSelf: "stretch",
   },
-  welcomeText: {
-    fontSize: FontSize.size_xl,
+  welcomeTo: {
     color: Color.colorDarkslateblue,
-    fontFamily: FontFamily.poppinsBold,
+  },
+  my: {
+    color: "#005494",
+  },
+  ch: {
+    color: Color.colorTomato,
+  },
+  text: {
+    color: "#5eb743",
+  },
+  welcomeToMychContainer: {
+    fontSize: FontSize.size_xl,
     fontWeight: "700",
-    marginTop: 20, // Customize the margin-top
-    // Add your text styling here
+    fontFamily: FontFamily.poppinsBold,
+    textAlign: "left",
+    marginTop: 21,
+  },
+  content: {
+    alignSelf: "stretch",
+    alignItems: "center",
+  },
+  onboard: {
+    backgroundColor: Color.colorWhite,
+    flex: 1,
+    height: 800,
+    paddingHorizontal: Padding.p_lgi,
+    paddingVertical: 189,
+    alignItems: "center",
   },
 });
 

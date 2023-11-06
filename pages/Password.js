@@ -16,28 +16,29 @@ const Password = () => {
           <Image
             style={styles.vectorIcon}
             contentFit="cover"
-            source={require("../assets/backicon1.png")}
+            source={require("../assets/images/backicon1.png")}
           />
         </Pressable>
         <View style={styles.resetpassframe}>
           <Text style={styles.resetPassword}>Reset Password</Text>
           <Text
             style={[styles.forgotYourPassword, styles.resetTypo]}
->{`Forgot your password?
+          >{`Forgot your password?
 Please enter your email address.
 You will receive a link to create a new
 password via email.`}</Text>
-        <View style={[styles.ifemail, styles.ifemailShadowBox]}>
-        <Image
-            style={styles.emailimgIcon}
-            contentFit="cover"
-            source={require("../assets/emailimg.png")}
-          />
-          <TextInput
-            style={[styles.emailInput, styles.textTypo]} 
-            placeholder="Emaill" 
-            placeholderTextColor="#888" 
-            keyboardType="email-address"/>
+          <View style={[styles.ifemail, styles.ifemailShadowBox]}>
+            <Image
+              style={styles.emailimgIcon}
+              contentFit="cover"
+              source={require("../assets/images/emailimg.png")}
+            />
+            <TextInput
+              style={[styles.emailInput, styles.textTypo]}
+              placeholder="Emaill"
+              placeholderTextColor="#888"
+              keyboardType="email-address"
+            />
           </View>
           <Pressable
             style={styles.btnprimary}
