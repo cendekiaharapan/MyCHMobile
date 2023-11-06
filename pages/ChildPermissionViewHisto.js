@@ -1,29 +1,38 @@
 import * as React from "react";
 import { Image } from "expo-image";
-import {
-  StyleSheet,
-  Text,
-  View,
-  ScrollView,
-  TouchableOpacity,
-} from "react-native";
-import {
-  FormControl,
-  Input,
-  FormControlLabel,
-  NativeBaseProvider,
-  Select,
-  CheckIcon,
-  TextArea,
-} from "native-base";
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity,} from "react-native";
+import { FormControl, NativeBaseProvider, Select, CheckIcon, TextArea,} from "native-base";
 import { Padding, Color, Border, FontSize, FontFamily } from "../GlobalStyles";
 import DatePickerComponent from "../components/DatePicker";
 import DocumentPick from "../components/DocumentPick";
 import { useNavigation } from "@react-navigation/native";
 import DropDown from "../components/DropDown";
+
+
 const ChildPermissionViewHisto = () => {
-  const [service, setService] = React.useState("");
-  const navigation = useNavigation();
+const [service, setService] = React.useState("");
+const navigation = useNavigation();
+
+const handleDelete = async () => {
+  try {
+    const response = await fetch("https://www.balichildrenshouse.com/myCHStaging/api/delete_excused/6010", {
+      method: "DELETE"
+    });
+
+    if (response.status === 204) {
+      console.log("Deleted successfully");
+      // Add navigation logic here to go to the desired screen
+    } else {
+      const successText = await response.text();
+      console.log("Success to delete record. Status: " + response.status);
+      console.log("Success details: " + successText);
+    }
+  } catch (error) {
+    console.error("An error occurred:", error);
+  }
+};
+
+
   return (
     <NativeBaseProvider>
       <View style={[styles.childPermissionViewHisto, styles.lineIconLayout]}>
@@ -131,11 +140,14 @@ const ChildPermissionViewHisto = () => {
                 </Text>
               </View>
             </TouchableOpacity>
-            <TouchableOpacity style={[styles.btndelete, styles.btnsaveFlexBox]}>
-              <View>
-                <Text style={[styles.delete, styles.deleteTypo]}>Delete</Text>
-              </View>
-            </TouchableOpacity>
+
+            <TouchableOpacity
+            style={[styles.btndelete, styles.btnsaveFlexBox]} onPress={handleDelete}>
+            <View>
+           <Text style={[styles.delete, styles.deleteTypo]}>Delete</Text>
+           </View>
+          </TouchableOpacity>
+
           </View>
         </View>
       </View>

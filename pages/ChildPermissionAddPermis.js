@@ -86,7 +86,7 @@ const ChildPermissionAddPermis = () => {
         console.error("API request error:", error);
       });
 
-    navigation.navigate("ChildPermissionHistorys");
+    navigation.navigate("ChildPermissionViewHisto");
   };
 
   return (

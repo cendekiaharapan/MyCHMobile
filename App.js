@@ -51,8 +51,13 @@ const App = () => {
         {hideSplashScreen ? (
           <Stack.Navigator screenOptions={{ headerShown: false }}>
             <Stack.Screen
-              name="Onboard"
-              component={Onboard}
+              name="ChildPermissionViewHisto"
+              component={ChildPermissionViewHisto}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="ChildPermissionAddPermis"
+              component={ChildPermissionAddPermis}
               options={{ headerShown: false }}
             />
             <Stack.Screen
@@ -98,16 +103,6 @@ const App = () => {
             <Stack.Screen
               name="ChildPermissionHistorys"
               component={ChildPermissionHistorys}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="ChildPermissionAddPermis"
-              component={ChildPermissionAddPermis}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="ChildPermissionViewHisto"
-              component={ChildPermissionViewHisto}
               options={{ headerShown: false }}
             />
             <Stack.Screen
