@@ -9,10 +9,10 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import * as SQLite from "expo-sqlite";
 import * as SecureStore from "expo-secure-store";
+import { retrieveData, storeData } from "../database/database";
 
 const MessageToTeacherHistory = () => {
   const [responseData, setResponseData] = useState(null);
-  const db = SQLite.openDatabase("login.db");
   const [studentId, setStudentId] = useState(null);
   const [studentName, setStudentName] = useState(null);
   const [parentId, setParentId] = useState(null);
@@ -37,9 +37,10 @@ const MessageToTeacherHistory = () => {
   const fetchData = async () => {
     const parentData = await getRespDataFromSecureStore();
     console.log("inside FetchData");
-    console.log(parentData);
+    console.log("fetchdata = ", parentData);
     if (parentData) {
       const parent_id = parentData.user.id;
+      console.log("parent_id = ", parent_id);
       // Define the API URL
       const apiUrl = `https://www.balichildrenshouse.com/myCHStaging/api/history-communicate/${parent_id}`;
 
@@ -54,16 +55,13 @@ const MessageToTeacherHistory = () => {
           // Handle any errors that occurred during the request
           console.error("Error fetching data:", error);
         });
-
-      fetchChildDataFromSQLite()
+      console.log("setelah axios");
+      retrieveData("childData")
         .then((data) => {
           if (data) {
             // Use the retrieved data
-            console.log("inside fetchChildData");
             const student_ids = data.map((item) => item.id);
             const student_name = data.map((item) => item.name);
-            console.log("Student id : ", student_ids);
-            console.log("Student Name : ", student_name);
 
             // Update your component state or data source with the new data
             // For example, if you're using state in a functional component:
@@ -71,7 +69,7 @@ const MessageToTeacherHistory = () => {
             setStudentName(student_name);
           } else {
             // Handle the case when no data is found
-            console.log("No data found in SQLite.");
+            console.log("No data found in AsyncStorage.");
           }
         })
         .catch((error) => {
@@ -116,23 +114,23 @@ const MessageToTeacherHistory = () => {
     }
   }, [responseData]);
 
-  const fetchChildDataFromSQLite = () => {
-    return new Promise((resolve, reject) => {
-      db.transaction((tx) => {
-        tx.executeSql("SELECT data FROM child_data", [], (tx, results) => {
-          const len = results.rows.length;
-          if (len > 0) {
-            const responseDataString = results.rows.item(0).data;
-            const responseData = JSON.parse(responseDataString);
-            resolve(responseData);
-          } else {
-            console.log("No response data found in SQLite.");
-            resolve(null);
-          }
-        });
-      });
-    });
-  };
+  // const fetchChildDataFromSQLite = () => {
+  //   return new Promise((resolve, reject) => {
+  //     db.transaction((tx) => {
+  //       tx.executeSql("SELECT data FROM child_data", [], (tx, results) => {
+  //         const len = results.rows.length;
+  //         if (len > 0) {
+  //           const responseDataString = results.rows.item(0).data;
+  //           const responseData = JSON.parse(responseDataString);
+  //           resolve(responseData);
+  //         } else {
+  //           console.log("No response data found in SQLite.");
+  //           resolve(null);
+  //         }
+  //       });
+  //     });
+  //   });
+  // };
   return (
     <NativeBaseProvider>
       <SafeAreaView style={styles.AndroidSafeArea}>
