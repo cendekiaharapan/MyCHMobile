@@ -9,6 +9,7 @@ import * as SecureStore from "expo-secure-store";
 import Config from "react-native-config";
 import { APP_TOKEN, APP_SECRET } from "@env";
 import * as SQLite from "expo-sqlite";
+import { storeData, retrieveData } from "../database/database";
 
 const SignIn = () => {
   const [childData, setChildData] = useState(null);
@@ -56,97 +57,6 @@ const SignIn = () => {
     }
   };
 
-  const saveChildDataSecureStore = async (responseData) => {
-    try {
-      const responseDataString = JSON.stringify(responseData);
-      await SecureStore.setItemAsync("child_data", responseDataString);
-      console.log("Child data saved!");
-    } catch (error) {
-      console.error("Error saving response data:", error);
-    }
-  };
-
-  const getChildDataFromSecureStore = async () => {
-    try {
-      const responseDataString = await SecureStore.getItemAsync("child_data");
-      if (responseDataString) {
-        const responseData = JSON.parse(responseDataString);
-        return responseData;
-      } else {
-        console.log("No response data found in SecureStore.");
-        return null;
-      }
-    } catch (error) {
-      console.error("Error retrieving response data:", error);
-      return null;
-    }
-  };
-
-  const db = SQLite.openDatabase("login.db");
-
-  const saveChildDataSQLite = (responseData) => {
-    try {
-      db.transaction((tx) => {
-        tx.executeSql(
-          "CREATE TABLE IF NOT EXISTS child_data (id INTEGER PRIMARY KEY AUTOINCREMENT, data TEXT)",
-          []
-        );
-
-        // Check if a record already exists in the table
-        const existingData = fetchChildDataFromSQLite(); // Implement this function to fetch data
-
-        if (existingData) {
-          // If a record exists, update the existing record with the provided data
-          tx.executeSql("UPDATE child_data SET data = ? WHERE id = 1", [
-            JSON.stringify(responseData),
-          ]);
-        } else {
-          // If no record exists, insert a new record
-          tx.executeSql("INSERT INTO child_data (data) VALUES (?)", [
-            JSON.stringify(responseData),
-          ]);
-        }
-      });
-      console.log("Child data saved to SQLite!");
-    } catch (error) {
-      console.error("Error saving response data:", error);
-    }
-  };
-
-  const getChildDataFromSQLite = (callback) => {
-    db.transaction((tx) => {
-      tx.executeSql("SELECT data FROM child_data", [], (tx, results) => {
-        const len = results.rows.length;
-        if (len > 0) {
-          const responseDataString = results.rows.item(0).data;
-          const responseData = JSON.parse(responseDataString);
-          callback(responseData);
-        } else {
-          console.log("No response data found in SQLite.");
-          callback(null);
-        }
-      });
-    });
-  };
-
-  const fetchChildDataFromSQLite = () => {
-    return new Promise((resolve, reject) => {
-      db.transaction((tx) => {
-        tx.executeSql("SELECT data FROM child_data", [], (tx, results) => {
-          const len = results.rows.length;
-          if (len > 0) {
-            const responseDataString = results.rows.item(0).data;
-            const responseData = JSON.parse(responseDataString);
-            resolve(responseData);
-          } else {
-            console.log("No response data found in SQLite.");
-            resolve(null);
-          }
-        });
-      });
-    });
-  };
-
   const sendLoginRequest = async () => {
     try {
       const response = await axios.post(
@@ -181,8 +91,13 @@ const SignIn = () => {
           );
 
           if (parentStudentsResponse.status === 200) {
+            console.log("parent savechild data");
             // Handle the parent-students response data here
-            saveChildDataSQLite(parentStudentsResponse.data);
+            console.log(
+              "parent student response data = ",
+              parentStudentsResponse.data
+            );
+            storeData("childData", parentStudentsResponse.data);
 
             // You can navigate to another screen after successful login
           } else {
@@ -197,26 +112,26 @@ const SignIn = () => {
           }
         }
         // Fetching the student id by parent id
-        fetchChildDataFromSQLite()
-          .then((data) => {
-            if (data) {
-              // Use the retrieved data
-              const student_ids = data.map((item) => item.id);
-              const student_name = data.map((item) => item.name);
-              console.log("Student id : ", student_ids);
-              console.log("Student Name : ", student_name);
+        // fetchChildDataFromSQLite()
+        //   .then((data) => {
+        //     if (data) {
+        //       // Use the retrieved data
+        //       const student_ids = data.map((item) => item.id);
+        //       const student_name = data.map((item) => item.name);
+        //       console.log("Student id : ", student_ids);
+        //       console.log("Student Name : ", student_name);
 
-              // Update your component state or data source with the new data
-              // For example, if you're using state in a functional component:
-              setChildData(data);
-            } else {
-              // Handle the case when no data is found
-              console.log("No data found in SQLite.");
-            }
-          })
-          .catch((error) => {
-            console.error("Error fetching response data from SQLite:", error);
-          });
+        //       // Update your component state or data source with the new data
+        //       // For example, if you're using state in a functional component:
+        //       setChildData(data);
+        //     } else {
+        //       // Handle the case when no data is found
+        //       console.log("No data found in SQLite.");
+        //     }
+        //   })
+        //   .catch((error) => {
+        //     console.error("Error fetching response data from SQLite:", error);
+        //   });
 
         // You can navigate to another screen after successful login
         navigation.navigate("MessageToTeacherHistory");
