@@ -1,5 +1,12 @@
 import * as React from "react";
-import { Text, StyleSheet, View, Pressable, TextInput, Image } from "react-native";
+import {
+  Text,
+  StyleSheet,
+  View,
+  Pressable,
+  TextInput,
+  Image,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Border, Color, FontFamily, FontSize, Padding } from "../GlobalStyles";
 
@@ -15,29 +22,30 @@ const SignIn = () => {
           source={require("../assets/loginimg.png")}
         />
         <View style={[styles.ifemail, styles.ifemailShadowBox]}>
-        <Image
+          <Image
             style={styles.emailimgIcon}
             contentFit="cover"
             source={require("../assets/emailimg.png")}
           />
           <TextInput
-            style={[styles.emailInput, styles.textTypo]} 
-            placeholder="Emaill" 
-            placeholderTextColor="#888" 
-            keyboardType="email-address"/>
+            style={[styles.emailInput, styles.textTypo]}
+            placeholder="Emaill"
+            placeholderTextColor="#888"
+            keyboardType="email-address"
+          />
         </View>
         <View style={[styles.ifpassword, styles.ifemailShadowBox]}>
-        <Image
-          style={styles.emailimgIcon}
-          contentFit="cover"
-          source={require("../assets/pass.png")}
-        />
-        <TextInput
-          style={[styles.passwordInput, styles.textTypo]}
-          placeholder="Type your password" 
-          placeholderTextColor="#888" 
-          secureTextEntry={true} 
-        />
+          <Image
+            style={styles.emailimgIcon}
+            contentFit="cover"
+            source={require("../assets/pass.png")}
+          />
+          <TextInput
+            style={[styles.passwordInput, styles.textTypo]}
+            placeholder="Type your password"
+            placeholderTextColor="#888"
+            secureTextEntry={true}
+          />
         </View>
         <Pressable
           style={styles.forgetPasswordClickContainer}
@@ -50,7 +58,7 @@ const SignIn = () => {
         </Pressable>
         <Pressable
           style={styles.btnprimary}
-          onPress={() => navigation.navigate("AllPost")}
+          onPress={() => navigation.navigate("CallMyChild")}
         >
           <Text style={[styles.login1, styles.text1Typo]}>LOGIN</Text>
         </Pressable>

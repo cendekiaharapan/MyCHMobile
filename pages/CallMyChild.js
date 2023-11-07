@@ -1,20 +1,13 @@
 import React, { forwardRef } from "react";
-import {
-  Image,
-  StyleSheet,
-  Text,
-  View,
-  Dimensions,
-} from "react-native";
+import { Image, StyleSheet, Text, View, Dimensions } from "react-native";
 import { FontFamily, Color } from "../GlobalStyles";
 import { TouchableOpacity } from "react-native";
 import { Picker } from "@react-native-picker/picker"; // Import the Picker component
 import Toast from "react-native-toast-message";
 
-
 const CallMyChild = forwardRef(({ navigation }, ref) => {
   const { width } = Dimensions.get("window");
-  const isSmallScreen = width <= 375; 
+  const isSmallScreen = width <= 375;
 
   const [selectedChild, setSelectedChild] = React.useState("Ezra Gunawan");
   const [selectedLanguage, setSelectedLanguage] = React.useState("English");
@@ -25,14 +18,18 @@ const CallMyChild = forwardRef(({ navigation }, ref) => {
   const places = ["Jineng", "Parent Lounge", "Parking Lot"];
 
   return (
-    <View style={[styles.callMyChild, styles.callMyChildFlexBox, styles.container]}>
+    <View
+      style={[styles.callMyChild, styles.callMyChildFlexBox, styles.container]}
+    >
       <View style={styles.ictwotoneArrowBackParent}>
         <Image
           style={styles.ictwotoneArrowBackIcon}
           contentFit="cover"
           source={require("../assets/ictwotonearrowback1.png")}
         />
-        <Text style={[styles.callMyChild1, styles.callTypo]}>CALL MY CHILD</Text>
+        <Text style={[styles.callMyChild1, styles.callTypo]}>
+          CALL MY CHILD
+        </Text>
       </View>
       <Image
         style={styles.image3Icon}
@@ -44,13 +41,17 @@ const CallMyChild = forwardRef(({ navigation }, ref) => {
           <View style={[styles.basecardsbody, styles.basecardsFlexBox]}>
             <View style={styles.titleSubtitleWrapper}>
               <View style={[styles.titleSubtitle, styles.callMyChildFlexBox]}>
-                <Text style={[styles.selectChild, styles.selectTypo]}>Select Child</Text>
+                <Text style={[styles.selectChild, styles.selectTypo]}>
+                  Select Child
+                </Text>
               </View>
             </View>
             <View style={[styles.dropdown, styles.dropdownShadowBox]}>
               <Picker
                 selectedValue={selectedChild}
-                onValueChange={(itemValue, itemIndex) => setSelectedChild(itemValue)}
+                onValueChange={(itemValue, itemIndex) =>
+                  setSelectedChild(itemValue)
+                }
               >
                 {children.map((child, index) => (
                   <Picker.Item key={index} label={child} value={child} />
@@ -59,13 +60,17 @@ const CallMyChild = forwardRef(({ navigation }, ref) => {
             </View>
             <View style={styles.titleSubtitleContainer}>
               <View style={[styles.titleSubtitle, styles.callMyChildFlexBox]}>
-                <Text style={[styles.selectLanguage, styles.selectTypo]}>Select Language</Text>
+                <Text style={[styles.selectLanguage, styles.selectTypo]}>
+                  Select Language
+                </Text>
               </View>
             </View>
             <View style={[styles.dropdown1, styles.dropdownShadowBox]}>
               <Picker
                 selectedValue={selectedLanguage}
-                onValueChange={(itemValue, itemIndex) => setSelectedLanguage(itemValue)}
+                onValueChange={(itemValue, itemIndex) =>
+                  setSelectedLanguage(itemValue)
+                }
               >
                 {languages.map((language, index) => (
                   <Picker.Item key={index} label={language} value={language} />
@@ -74,13 +79,17 @@ const CallMyChild = forwardRef(({ navigation }, ref) => {
             </View>
             <View style={styles.titleSubtitleContainer}>
               <View style={[styles.titleSubtitle, styles.callMyChildFlexBox]}>
-                <Text style={[styles.selectLanguage, styles.selectTypo]}>Select Place</Text>
+                <Text style={[styles.selectLanguage, styles.selectTypo]}>
+                  Select Place
+                </Text>
               </View>
             </View>
             <View style={[styles.dropdown2, styles.dropdownShadowBox]}>
               <Picker
                 selectedValue={selectedPlace}
-                onValueChange={(itemValue, itemIndex) => setSelectedPlace(itemValue)}
+                onValueChange={(itemValue, itemIndex) =>
+                  setSelectedPlace(itemValue)
+                }
               >
                 {places.map((place, index) => (
                   <Picker.Item key={index} label={place} value={place} />
@@ -90,34 +99,17 @@ const CallMyChild = forwardRef(({ navigation }, ref) => {
           </View>
         </View>
         <TouchableOpacity
-        ref={ref}
-  style={styles.btnprimary}
-  onPress={() => {
-    // Tampilkan toast di sini
-    Toast.show({
-      type: "success",
-      text1: "SUCCESS!",
-      text2: "Successfully Called Your Child!",
-      visibilityTime: 2000, // Waktu toast ditampilkan (ms)
-      autoHide: true, // Otomatis sembunyikan toast setelah waktu tertentu
-      topOffset: 30, // Jarak dari bagian atas layar (px)
-      position: "top", // Posisi toast ("top" atau "bottom")
-      backgroundColor: "green", // Warna latar belakang toast
-      textStyle: { color: "white", fontSize: 15 }, // Gaya teks
-      onShow: () => {
-        // Callback ketika toast ditampilkan
-        console.log("Toast shown");
-      },
-      onHide: () => {
-        // Callback ketika toast disembunyikan
-        console.log("Toast hidden");
-      },
-    });
-  }}
->
-  <Text style={[styles.call, styles.callTypo]}>CALL</Text>
-</TouchableOpacity>
-
+          ref={ref}
+          style={styles.btnprimary}
+          onPress={() => {
+            // Tampilkan toast di sini
+            console.log("selected child : ", selectedChild);
+            console.log("selected language : ", selectedLanguage);
+            console.log("selected place : ", selectedPlace);
+          }}
+        >
+          <Text style={[styles.call, styles.callTypo]}>CALL</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -172,9 +164,9 @@ const styles = StyleSheet.create({
     minWidth: 162.5,
     shadowOpacity: 1,
     shadowOffset: {
-           width: 0,
-           height: 0,
-         },
+      width: 0,
+      height: 0,
+    },
     paddingVertical: 0,
     paddingHorizontal: 12,
     borderWidth: 1.1,
@@ -187,16 +179,15 @@ const styles = StyleSheet.create({
     backgroundColor: Color.colorsLight,
     borderRadius: 54, // Ubah sesuai kebutuhan Anda
   },
-  
 
   ictwotoneArrowBackIcon: {
     width: 26,
     height: 26,
-    marginTop:20,
+    marginTop: 20,
     overflow: "hidden",
   },
   callMyChild1: {
-    marginTop:20,
+    marginTop: 20,
     fontSize: 22,
     textTransform: "uppercase",
     color: Color.colorDarkslateblue,
@@ -209,6 +200,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   image3Icon: {
+    borderRadius: 50,
     width: 217,
     height: 217,
     marginTop: 21.67,
