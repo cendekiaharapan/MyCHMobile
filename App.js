@@ -1,11 +1,18 @@
+const Stack = createNativeStackNavigator();
 import * as React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { useFonts } from "expo-font";
+import Onboard from "./pages/Onboard";
+import SignIn from "./pages/SignIn";
+import PopUp from "./components/PopUp";
+import CHDollar from "./components/CHDollar";
+import Attendance from "./components/Attendance";
+import AverageDailyScore from "./components/AverageDailyScore";
 import PostDetails from "./pages/PostDetails";
 import AllPost from "./pages/AllPost";
 import Password from "./pages/Password";
-import Onboard from "./pages/Onboard";
-import SignIn from "./pages/SignIn";
+import Coba from "./components/Coba";
+
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { View, Text, Pressable, TouchableOpacity } from "react-native";
 
@@ -18,43 +25,74 @@ const App = () => {
     "Poppins-SemiBold": require("./assets/fonts/Poppins-SemiBold.ttf"),
     "Poppins-Bold": require("./assets/fonts/Poppins-Bold.ttf"),
     "Poppins-Black": require("./assets/fonts/Poppins-Black.ttf"),
-    "Roboto-Medium": require("./assets/fonts/Roboto-Medium.ttf"),
-    "SpaceGrotesk-Regular": require("./assets/fonts/SpaceGrotesk-Regular.ttf"),
   });
 
+  React.useEffect(() => {
+    setTimeout(() => {
+      setHideSplashScreen(true);
+    }, 3000);
+  }, []);
+
+  if (!fontsLoaded && !error) {
+    return null;
+  }
+
   return (
-    <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen
-          name="Onboard"
-          component={Onboard}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="SignIn"
-          component={SignIn}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="PostDetails"
-          component={PostDetails}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="AllPost"
-          component={AllPost}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Password"
-          component={Password}
-          options={{ headerShown: false }}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <>
+      <NavigationContainer>
+        {hideSplashScreen ? (
+          <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Screen
+              name="Onboard"
+              component={Onboard}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="SignIn"
+              component={SignIn}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="PopUp"
+              component={PopUp}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="CHDollar"
+              component={CHDollar}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Attendance"
+              component={Attendance}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="AverageDailyScore"
+              component={AverageDailyScore}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="PostDetails"
+              component={PostDetails}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="AllPost"
+              component={AllPost}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Password"
+              component={Password}
+              options={{ headerShown: false }}
+            />
+          </Stack.Navigator>
+        ) : (
+          <Onboard />
+        )}
+      </NavigationContainer>
+    </>
   );
 };
-
-const Stack = createNativeStackNavigator();
-
 export default App;
