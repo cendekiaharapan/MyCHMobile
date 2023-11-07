@@ -9,10 +9,11 @@ import { FontFamily, Color, FontSize, Padding, Border } from '../GlobalStyles';
 const ReportCard = () => {
   const [academicSessions, setAcademicSessions] = useState([]);
   const [termSessions, setTermSessions] = useState([]);
-  const [reportCardUrl, setReportCardUrl] = useState('https://www.balichildrenshouse.com/myCH/student-report-card');
   const [selectedSession, setSelectedSession] = useState("Academic Year 2023/2024");
   const [selectedSemester, setSelectedSemester] = useState("Semester 1");
-  const [selectedAcademicSessionId, setSelectedAcademicSessionId] = useState(null);
+  const [selectedAcademicSessionId, setSelectedAcademicSessionId] = useState(academicSessions[0]?.id);
+  const [filteredTermSessions, setFilteredTermSessions] = useState([]);
+
 
   useEffect(() => {
     axios.get('https://www.balichildrenshouse.com/myCH/api/get-academic-sessions')
@@ -25,7 +26,7 @@ const ReportCard = () => {
       })
       .catch((error) => {
         console.error('Error fetching academic sessions:', error);
-      });
+      });1
   }, []);
 
   useEffect(() => {
@@ -42,10 +43,16 @@ const ReportCard = () => {
       });
   }, []);
   
+  const filterTermSessions = () => {
+    const filteredTerms = termSessions.filter((term) => term.academic_session_id === selectedAcademicSessionId);
+    setFilteredTermSessions(filteredTerms);
+  };
 
   const handleAcademicSessionChange = (itemValue, itemId) => {
     setSelectedSession(itemValue);
     setSelectedAcademicSessionId(itemId); 
+
+    filterTermSessions();
   };
 
   const handleViewReportCard = () => {
@@ -100,19 +107,23 @@ const ReportCard = () => {
             <View style={styles.selectSemesterParent}>
               <Text style={styles.selectSession}>Select Semester</Text>
               <Center> 
+              {academicSessions.length > 0 && (
               <Select
-                    selectedValue={selectedSemester}
-                    minWidth="275"
-                    accessibilityLabel="Choose Semester"
-                    placeholder="Choose Semester"
-                    onValueChange={(itemValue) => {setSelectedSemester(itemValue)
-                    console.log('Selected Semester:', itemValue);}}
-                    
-                  >
-                    {termSessions.map(session => (
-                      <Select.Item key={session.id} label={session.name} value={session.id} />
+                selectedValue={selectedSemester}
+                minWidth="275"
+                accessibilityLabel="Choose Semester"
+                placeholder="Choose Semester"
+                onValueChange={(itemValue) => {
+                  setSelectedSemester(itemValue);
+                  console.log('Selected Semester:', itemValue);
+                }}
+              >
+                {filteredTermSessions.map((term) => (
+                <Select.Item key={term.id} label={term.name} value={term.id} />
                 ))}
               </Select>
+            )}
+
               </Center>
             </View>
             <View style={styles.buttonCariTiket}>
