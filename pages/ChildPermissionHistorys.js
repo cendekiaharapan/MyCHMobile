@@ -18,6 +18,12 @@ import AddButton from "../components/AddButton";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import * as SQLite from "expo-sqlite";
+import {
+  storeItem,
+  retrieveItem,
+  deleteItem,
+  getAllKeys,
+} from "../database/database";
 
 const ChildPermissionHistorys = () => {
   const navigation = useNavigation();
@@ -29,7 +35,7 @@ const ChildPermissionHistorys = () => {
 
   useEffect(() => {
     console.log("use Effect actived!");
-    fetchChildDataFromSQLite()
+    retrieveItem("childData")
       .then((data) => {
         if (data) {
           // Use the retrieved data
