@@ -33,9 +33,9 @@ const AllPost = () => {
               onPress={() => navigation.navigate("SignIn")}
             >
               <Image
-                style={[styles.icon, styles.iconLayout1]}
-                contentFit="cover"
-                source={require("../assets/images/backicon2.png")}
+              style={styles.icon}
+              contentFit="cover"
+              source={require("../assets/images/backicon2.png")}
               />
             </Pressable>
             <View style={[styles.postWrapper, styles.allFlexBox1]}>
@@ -67,7 +67,7 @@ const AllPost = () => {
               Latest Post
             </Text>
 
-            <View style={[styles.allframes, styles.allframesFlexBox]}>
+            <View style={[styles.allframesFlexBox]}>
               <View style={[styles.frameParent, styles.allframesFlexBox]}>
                 <View style={styles.post1Parent}>
                   <Pressable
@@ -104,7 +104,7 @@ const AllPost = () => {
               </View>
             </View>
 
-            <View style={[styles.allframes, styles.allframesFlexBox]}>
+            <View style={[styles.allframesFlexBox]}>
               <View style={[styles.frameParent, styles.allframesFlexBox]}>
                 <View style={styles.post1Parent}>
                   <Pressable
@@ -141,7 +141,7 @@ const AllPost = () => {
               </View>
             </View>
 
-            <View style={[styles.allframes, styles.allframesFlexBox]}>
+            <View style={[styles.allframesFlexBox]}>
               <View style={[styles.frameParent, styles.allframesFlexBox]}>
                 <View style={styles.post1Parent}>
                   <Pressable
@@ -178,7 +178,7 @@ const AllPost = () => {
               </View>
             </View>
 
-            <View style={[styles.allframes, styles.allframesFlexBox]}>
+            <View style={[styles.allframesFlexBox]}>
               <View style={[styles.frameParent, styles.allframesFlexBox]}>
                 <View style={styles.post1Parent}>
                   <Pressable
@@ -257,12 +257,12 @@ const styles = StyleSheet.create({
   },
   post1timeTypo: {
     color: Color.black20,
+    top: 140,
     fontSize: FontSize.size_6xs,
     fontFamily: FontFamily.poppinsRegular,
   },
   post1tittleTypo: {
-    left: 0,
-    top: 104,
+    top: 100,
     fontSize: FontSize.size_sm,
     textAlign: "left",
     position: "absolute",
@@ -284,30 +284,29 @@ const styles = StyleSheet.create({
   backicon: {
     width: 24,
     height: 24,
+    marginLeft: 40,
   },
   post: {
     fontSize: FontSize.size_xl,
     textAlign: "center",
     color: Color.colorMidnightblue,
     flex: 1,
+    marginRight: 50,
   },
   postWrapper: {
     flexDirection: "row",
     flex: 1,
   },
   backiconParent: {
-    alignSelf: "stretch",
     flexDirection: "row",
     flex: 1,
   },
   posthimgIcon: {
-    maxWidth: "100%",
     height: 200,
     zIndex: 0,
     borderRadius: Border.br_5xs,
-    alignSelf: "stretch",
     overflow: "hidden",
-    width: "100%",
+    width: 300,
   },
   posthtime: {
     top: 169,
@@ -319,6 +318,7 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.poppinsRegular,
     color: Color.white,
     left: 12,
+    marginLeft: 40,
     position: "absolute",
   },
   posthtittle: {
@@ -328,6 +328,7 @@ const styles = StyleSheet.create({
     textAlign: "left",
     color: Color.white,
     left: 12,
+    marginLeft: 40,
     position: "absolute",
     fontSize: FontSize.size_sm,
   },
@@ -342,6 +343,7 @@ const styles = StyleSheet.create({
     alignSelf: "stretch",
   },
   latestpost: {
+    marginBottom:20,
     fontSize: FontSize.size_mini,
     textAlign: "left",
     color: Color.colorMidnightblue,
@@ -439,10 +441,6 @@ const styles = StyleSheet.create({
   frameParent: {
     flex: 1,
   },
-  allframes: {
-    marginTop: 14,
-    alignSelf: "stretch",
-  },
   all1: {
     alignSelf: "stretch",
   },
@@ -461,6 +459,11 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     width: 500,
+    marginTop: 20,
+  },
+  icon: {
+    height: "100%",
+    width: "100%",
   },
 });
 
