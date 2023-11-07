@@ -9,7 +9,12 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import * as SQLite from "expo-sqlite";
 import * as SecureStore from "expo-secure-store";
-import { retrieveData, storeData } from "../database/database";
+import {
+  storeItem,
+  retrieveItem,
+  deleteItem,
+  getAllKeys,
+} from "../database/database";
 
 const MessageToTeacherHistory = () => {
   const [responseData, setResponseData] = useState(null);
@@ -56,7 +61,7 @@ const MessageToTeacherHistory = () => {
           console.error("Error fetching data:", error);
         });
       console.log("setelah axios");
-      retrieveData("childData")
+      retrieveItem("childData")
         .then((data) => {
           if (data) {
             // Use the retrieved data
