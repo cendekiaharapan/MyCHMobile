@@ -18,6 +18,7 @@ import {
 
 const SignIn = () => {
   const [childData, setChildData] = useState(null);
+  const [userId, setUserId] = useState(null);
   const saveTokenToSecureStore = async (token) => {
     try {
       await SecureStore.setItemAsync("api_token", token);
@@ -91,6 +92,7 @@ const SignIn = () => {
         if (resp.user.role === "parent") {
           const parentId = response.data.user.id; // parent id
 
+          setUserId(parentId);
           const parentStudentsResponse = await axios.get(
             `https://www.balichildrenshouse.com/myCHStaging/api/parent-students/${parentId}`
           );
@@ -138,8 +140,15 @@ const SignIn = () => {
         //     console.error("Error fetching response data from SQLite:", error);
         //   });
 
-        // You can navigate to another screen after successful login
-        navigation.navigate("MessageToTeacherSendMes");
+       // Inside the `sendLoginRequest` function in SignIn.js
+          if (response.data.user.role === "parent") {
+            const parentId = response.data.user.id; // parent id
+            setUserId(parentId); // Set the userId state
+            console.log("User ID:", parentId);
+            navigation.navigate("MessageToTeacherSendMes", { parentId, token: token, childData },); // Pass parentId as a parameter
+            
+          }
+
       }
     } catch (error) {
       // Check if the error message contains information about invalid email or password
