@@ -6,8 +6,11 @@ import { Border, Color, FontFamily, FontSize, Padding } from "../GlobalStyles";
 import axios from "axios";
 import * as SecureStore from "expo-secure-store";
 import { APP_TOKEN, APP_SECRET } from "@env";
+import * as SQLite from "expo-sqlite";
+import { storeData, retrieveData } from "../database/database";
 
 const SignIn = () => {
+  const [childData, setChildData] = useState(null);
   const saveTokenToSecureStore = async (token) => {
     try {
       await SecureStore.setItemAsync("api_token", token);
@@ -52,32 +55,6 @@ const SignIn = () => {
     }
   };
 
-  const saveChildDataSecureStore = async (responseData) => {
-    try {
-      const responseDataString = JSON.stringify(responseData);
-      await SecureStore.setItemAsync("child_data", responseDataString);
-      console.log("Child data saved!");
-    } catch (error) {
-      console.error("Error saving response data:", error);
-    }
-  };
-
-  const getChildDataFromSecureStore = async () => {
-    try {
-      const responseDataString = await SecureStore.getItemAsync("child_data");
-      if (responseDataString) {
-        const responseData = JSON.parse(responseDataString);
-        return responseData;
-      } else {
-        console.log("No response data found in SecureStore.");
-        return null;
-      }
-    } catch (error) {
-      console.error("Error retrieving response data:", error);
-      return null;
-    }
-  };
-
   const sendLoginRequest = async () => {
     try {
       const response = await axios.post(
@@ -94,7 +71,7 @@ const SignIn = () => {
 
       if (response.status === 200) {
         // Handle a successful login response here
-        console.log("Login successful", response.data);
+        console.log("Login successful");
 
         const token = response.data.success.token;
         saveTokenToSecureStore(token);
@@ -112,9 +89,13 @@ const SignIn = () => {
           );
 
           if (parentStudentsResponse.status === 200) {
+            console.log("parent savechild data");
             // Handle the parent-students response data here
-
-            saveChildDataSecureStore(parentStudentsResponse.data);
+            console.log(
+              "parent student response data = ",
+              parentStudentsResponse.data
+            );
+            storeData("childData", parentStudentsResponse.data);
 
             // You can navigate to another screen after successful login
           } else {
@@ -129,8 +110,27 @@ const SignIn = () => {
           }
         }
         // Fetching the student id by parent id
-        child_data = await getChildDataFromSecureStore();
-        console.log("child object : ", child_data);
+        // fetchChildDataFromSQLite()
+        //   .then((data) => {
+        //     if (data) {
+        //       // Use the retrieved data
+        //       const student_ids = data.map((item) => item.id);
+        //       const student_name = data.map((item) => item.name);
+        //       console.log("Student id : ", student_ids);
+        //       console.log("Student Name : ", student_name);
+
+        //       // Update your component state or data source with the new data
+        //       // For example, if you're using state in a functional component:
+        //       setChildData(data);
+        //     } else {
+        //       // Handle the case when no data is found
+        //       console.log("No data found in SQLite.");
+        //     }
+        //   })
+        //   .catch((error) => {
+        //     console.error("Error fetching response data from SQLite:", error);
+        //   });
+
         // You can navigate to another screen after successful login
         navigation.navigate("AllPost");
       }
