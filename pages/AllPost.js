@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Pressable, Text, View, Image } from "react-native";
+import { StyleSheet, Pressable, Text, View, Image, ScrollView } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { FontFamily, Color, FontSize, Border, Padding } from "../GlobalStyles";
 
@@ -23,6 +23,7 @@ const AllPost = () => {
   }, []);
 
   return (
+    
     <View style={[styles.allPost, styles.allFlexBox1]}>
       <View style={[styles.content, styles.allFlexBox1]}>
         <View style={[styles.hero, styles.allFlexBox1]}>
@@ -58,11 +59,14 @@ const AllPost = () => {
             </Text>
           </Pressable>
         </View>
+        <ScrollView style={styles.scrollView}>
+
         <View style={styles.allFlexBox}>
           <View style={[styles.all1, styles.allFlexBox1]}>
             <Text style={[styles.latestpost, styles.postTypo]}>
               Latest Post
             </Text>
+
             <View style={[styles.allframes, styles.allframesFlexBox]}>
               <View style={[styles.frameParent, styles.allframesFlexBox]}>
                 <View style={styles.post1Parent}>
@@ -70,7 +74,7 @@ const AllPost = () => {
                     style={styles.post1}
                     onPress={() => navigation.navigate("PostDetails")}
                   >
-                    <Text style={[styles.post1time, styles.post1timeTypo]}>
+                    <Text style={[styles.post2time, styles.post1timeTypo]}>
                       28, Sep 2023 at 12:21 pm
                     </Text>
                     <Text style={[styles.post1tittle, styles.post1tittleTypo]}>
@@ -82,6 +86,7 @@ const AllPost = () => {
                       source={require("../assets/post1img.png")}
                     />
                   </Pressable>
+
                   <View style={styles.post2}>
                     <Text style={[styles.post2time, styles.post1timeTypo]}>
                       28, Sep 2023 at 12:21 pm
@@ -96,48 +101,126 @@ const AllPost = () => {
                     />
                   </View>
                 </View>
-                <View style={styles.post3Parent}>
-                  <View>
-                    <Image
-                      style={[styles.post3imgIcon, styles.iconLayout]}
-                      contentFit="cover"
-                      source={require("../assets/post3img.png")}
-                    />
-                    <Text
-                      style={[styles.post3tittle, styles.post3timeSpaceBlock]}
-                    >
-                      News Title Lorem Ipsum Dolor Sit Amet
-                    </Text>
-                    <Text
-                      style={[styles.post3time, styles.post3timeSpaceBlock]}
-                    >
+              </View>
+            </View>
+
+            <View style={[styles.allframes, styles.allframesFlexBox]}>
+              <View style={[styles.frameParent, styles.allframesFlexBox]}>
+                <View style={styles.post1Parent}>
+                  <Pressable
+                    style={styles.post1}
+                    onPress={() => navigation.navigate("PostDetails")}
+                  >
+                    <Text style={[styles.post2time, styles.post1timeTypo]}>
                       28, Sep 2023 at 12:21 pm
                     </Text>
-                  </View>
-                  <View style={styles.post4}>
-                    <Image
-                      style={[styles.post4imgIcon, styles.iconLayout]}
-                      contentFit="cover"
-                      source={require("../assets/post4img.png")}
-                    />
-                    <Text
-                      style={[styles.post4tittle, styles.post3timeSpaceBlock]}
-                    >
-                      News Title Lorem Ipsum Dolor Sit Amet
+                    <Text style={[styles.post1tittle, styles.post1tittleTypo]}>
+                      News Title Lorems Ipsum Dolor Sit Amet
                     </Text>
-                    <Text
-                      style={[styles.post4time, styles.post3timeSpaceBlock]}
-                    >
+                    <Image
+                      style={[styles.post1imgIcon, styles.iconLayout]}
+                      contentFit="cover"
+                      source={require("../assets/post1img.png")}
+                    />
+                  </Pressable>
+
+                  <View style={styles.post2}>
+                    <Text style={[styles.post2time, styles.post1timeTypo]}>
                       28, Sep 2023 at 12:21 pm
                     </Text>
+                    <Text style={[styles.post2tittle, styles.post1tittleTypo]}>
+                      News Title Lorem Ipsum Dolor Sit Amet
+                    </Text>
+                    <Image
+                      style={[styles.post2imgIcon, styles.iconLayout]}
+                      contentFit="cover"
+                      source={require("../assets/post2img.png")}
+                    />
                   </View>
                 </View>
               </View>
             </View>
+
+            <View style={[styles.allframes, styles.allframesFlexBox]}>
+              <View style={[styles.frameParent, styles.allframesFlexBox]}>
+                <View style={styles.post1Parent}>
+                  <Pressable
+                    style={styles.post1}
+                    onPress={() => navigation.navigate("PostDetails")}
+                  >
+                    <Text style={[styles.post2time, styles.post1timeTypo]}>
+                      28, Sep 2023 at 12:21 pm
+                    </Text>
+                    <Text style={[styles.post1tittle, styles.post1tittleTypo]}>
+                      News Title Lorems Ipsum Dolor Sit Amet
+                    </Text>
+                    <Image
+                      style={[styles.post1imgIcon, styles.iconLayout]}
+                      contentFit="cover"
+                      source={require("../assets/post1img.png")}
+                    />
+                  </Pressable>
+
+                  <View style={styles.post2}>
+                    <Text style={[styles.post2time, styles.post1timeTypo]}>
+                      28, Sep 2023 at 12:21 pm
+                    </Text>
+                    <Text style={[styles.post2tittle, styles.post1tittleTypo]}>
+                      News Title Lorem Ipsum Dolor Sit Amet
+                    </Text>
+                    <Image
+                      style={[styles.post2imgIcon, styles.iconLayout]}
+                      contentFit="cover"
+                      source={require("../assets/post2img.png")}
+                    />
+                  </View>
+                </View>
+              </View>
+            </View>
+
+            <View style={[styles.allframes, styles.allframesFlexBox]}>
+              <View style={[styles.frameParent, styles.allframesFlexBox]}>
+                <View style={styles.post1Parent}>
+                  <Pressable
+                    style={styles.post1}
+                    onPress={() => navigation.navigate("PostDetails")}
+                  >
+                    <Text style={[styles.post2time, styles.post1timeTypo]}>
+                      28, Sep 2023 at 12:21 pm
+                    </Text>
+                    <Text style={[styles.post1tittle, styles.post1tittleTypo]}>
+                      News Title Lorems Ipsum Dolor Sit Amet
+                    </Text>
+                    <Image
+                      style={[styles.post1imgIcon, styles.iconLayout]}
+                      contentFit="cover"
+                      source={require("../assets/post1img.png")}
+                    />
+                  </Pressable>
+
+                  <View style={styles.post2}>
+                    <Text style={[styles.post2time, styles.post1timeTypo]}>
+                      28, Sep 2023 at 12:21 pm
+                    </Text>
+                    <Text style={[styles.post2tittle, styles.post1tittleTypo]}>
+                      News Title Lorem Ipsum Dolor Sit Amet
+                    </Text>
+                    <Image
+                      style={[styles.post2imgIcon, styles.iconLayout]}
+                      contentFit="cover"
+                      source={require("../assets/post2img.png")}
+                    />
+                  </View>
+                </View>
+              </View>
+            </View>
+           
           </View>
         </View>
+          </ScrollView>
       </View>
     </View>
+    
   );
 };
 
@@ -375,6 +458,9 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     width: "100%",
     flex: 1,
+  },
+  scrollView: {
+    width: 500,
   },
 });
 
