@@ -9,27 +9,49 @@ import { FontFamily, Color, FontSize, Padding, Border } from '../GlobalStyles';
 const ReportCard = () => {
   const [academicSessions, setAcademicSessions] = useState([]);
   const [termSessions, setTermSessions] = useState([]);
-  const reportCardUrl = 'https://example.com/report-card-url'; 
+  const [reportCardUrl, setReportCardUrl] = useState('https://www.balichildrenshouse.com/myCH/student-report-card');
   const [selectedSession, setSelectedSession] = useState("Academic Year 2023/2024");
   const [selectedSemester, setSelectedSemester] = useState("Semester 1");
+  const [selectedAcademicSessionId, setSelectedAcademicSessionId] = useState(null);
 
   useEffect(() => {
-    Promise.all([
-      axios.get('https://www.balichildrenshouse.com/myCH/api/get-academic-sessions'),
-      axios.get('https://www.balichildrenshouse.com/myCH/api/get_session_terms/14'),
-    ])
-      .then(([response, termsResponse]) => {
-        setAcademicSessions(response.data);
-        setTermSessions(termsResponse.data);
+    axios.get('https://www.balichildrenshouse.com/myCH/api/get-academic-sessions')
+      .then((response) => {
+        if (response && response.data) {
+          setAcademicSessions(response.data);
+        } else {
+          console.error('Error fetching academic sessions: Response data is undefined');
+        }
       })
-      .catch(error => {
-        console.error('Error fetching academic sessions: ', error);
+      .catch((error) => {
+        console.error('Error fetching academic sessions:', error);
       });
   }, []);
 
-  const handleViewReportCard = () => {
-    Linking.openURL(reportCardUrl); 
+  useEffect(() => {
+    axios.get('https://www.balichildrenshouse.com/myCH/api/get_session_terms')
+      .then((termsResponse) => {
+        if (termsResponse && termsResponse.data) {
+          setTermSessions(termsResponse.data);
+        } else {
+          console.error('Error fetching term sessions: Response data is undefined');
+        }
+      })
+      .catch((error) => {
+        console.error('Error fetching term sessions:', error);
+      });
+  }, []);
+  
+
+  const handleAcademicSessionChange = (itemValue, itemId) => {
+    setSelectedSession(itemValue);
+    setSelectedAcademicSessionId(itemId); 
   };
+
+  const handleViewReportCard = () => {
+    Linking.openURL(reportCardUrl);
+  };
+  
   return (
     <NativeBaseProvider>
       <View style={styles.reportCard}>
@@ -60,9 +82,8 @@ const ReportCard = () => {
                     minWidth="275"
                     accessibilityLabel="Choose Session"
                     placeholder="Choose Session"
-                    onValueChange={(itemValue) => {setSelectedSession(itemValue)
-                    console.log('Selected Session:', itemValue);}}
-                    
+                    onValueChange={(itemValue, itemId) => { handleAcademicSessionChange(itemValue, itemId);
+                    console.log('Selected Session:', itemValue);}}                    
                   >
                     {academicSessions.map(session => (
                       <Select.Item key={session.id} label={session.name} value={session.id} />
@@ -88,7 +109,7 @@ const ReportCard = () => {
                     console.log('Selected Semester:', itemValue);}}
                     
                   >
-                    {academicSessions.map(session => (
+                    {termSessions.map(session => (
                       <Select.Item key={session.id} label={session.name} value={session.id} />
                 ))}
               </Select>
