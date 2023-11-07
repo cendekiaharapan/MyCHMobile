@@ -16,7 +16,7 @@ const Onboard = ({ navigation }) => {
           <Image
             style={[styles.logoIcon, styles.onboardLayout]}
             contentFit="cover"
-            source={require("../assets/logo.png")}
+            source={require("../assets/images/logo.png")}
           />
           <Text style={styles.welcomeToMychContainer}>
             <Text style={styles.welcomeTo}>Welcome to</Text>

@@ -6,9 +6,7 @@ import { useNavigation } from "@react-navigation/native";
 import { Border, Color, FontFamily, FontSize, Padding } from "../GlobalStyles";
 import axios from "axios";
 import * as SecureStore from "expo-secure-store";
-import Config from "react-native-config";
 import { APP_TOKEN, APP_SECRET } from "@env";
-import * as SQLite from "expo-sqlite";
 import {
   storeItem,
   retrieveItem,

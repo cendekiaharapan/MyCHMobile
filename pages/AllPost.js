@@ -35,7 +35,7 @@ const AllPost = () => {
               <Image
                 style={[styles.icon, styles.iconLayout1]}
                 contentFit="cover"
-                source={require("../assets/backicon2.png")}
+                source={require("../assets/images/backicon2.png")}
               />
             </Pressable>
             <View style={[styles.postWrapper, styles.allFlexBox1]}>
@@ -49,7 +49,7 @@ const AllPost = () => {
             <Image
               style={styles.posthimgIcon}
               contentFit="cover"
-              source={require("../assets/posthimg.png")}
+              source={require("../assets/images/posthimg.png")}
             />
             <Text style={[styles.posthtime, styles.posthtimePosition]}>
               28, Sep 2023 at 12:21 pm
@@ -83,7 +83,7 @@ const AllPost = () => {
                     <Image
                       style={[styles.post1imgIcon, styles.iconLayout]}
                       contentFit="cover"
-                      source={require("../assets/post1img.png")}
+                      source={require("../assets/images/post1img.png")}
                     />
                   </Pressable>
 
@@ -97,7 +97,7 @@ const AllPost = () => {
                     <Image
                       style={[styles.post2imgIcon, styles.iconLayout]}
                       contentFit="cover"
-                      source={require("../assets/post2img.png")}
+                      source={require("../assets/images/post2img.png")}
                     />
                   </View>
                 </View>
@@ -120,7 +120,7 @@ const AllPost = () => {
                     <Image
                       style={[styles.post1imgIcon, styles.iconLayout]}
                       contentFit="cover"
-                      source={require("../assets/post1img.png")}
+                      source={require("../assets/images/post1img.png")}
                     />
                   </Pressable>
 
@@ -134,7 +134,7 @@ const AllPost = () => {
                     <Image
                       style={[styles.post2imgIcon, styles.iconLayout]}
                       contentFit="cover"
-                      source={require("../assets/post2img.png")}
+                      source={require("../assets/images/post2img.png")}
                     />
                   </View>
                 </View>
@@ -157,7 +157,7 @@ const AllPost = () => {
                     <Image
                       style={[styles.post1imgIcon, styles.iconLayout]}
                       contentFit="cover"
-                      source={require("../assets/post1img.png")}
+                      source={require("../assets/images/post1img.png")}
                     />
                   </Pressable>
 
@@ -171,7 +171,7 @@ const AllPost = () => {
                     <Image
                       style={[styles.post2imgIcon, styles.iconLayout]}
                       contentFit="cover"
-                      source={require("../assets/post2img.png")}
+                      source={require("../assets/images/post2img.png")}
                     />
                   </View>
                 </View>
@@ -194,7 +194,7 @@ const AllPost = () => {
                     <Image
                       style={[styles.post1imgIcon, styles.iconLayout]}
                       contentFit="cover"
-                      source={require("../assets/post1img.png")}
+                      source={require("../assets/images/post1img.png")}
                     />
                   </Pressable>
 
@@ -208,7 +208,7 @@ const AllPost = () => {
                     <Image
                       style={[styles.post2imgIcon, styles.iconLayout]}
                       contentFit="cover"
-                      source={require("../assets/post2img.png")}
+                      source={require("../assets/images/post2img.png")}
                     />
                   </View>
                 </View>

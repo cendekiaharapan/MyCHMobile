@@ -22,7 +22,7 @@ const Password = () => {
           <Image
             style={styles.vectorIcon}
             contentFit="cover"
-            source={require("../assets/backicon1.png")}
+            source={require("../assets/images/backicon1.png")}
           />
         </Pressable>
         <View style={styles.resetpassframe}>
@@ -37,7 +37,7 @@ password via email.`}</Text>
             <Image
               style={styles.emailimgIcon}
               contentFit="cover"
-              source={require("../assets/emailimg.png")}
+              source={require("../assets/images/emailimg.png")}
             />
             <TextInput
               style={[styles.emailInput, styles.textTypo]}
