@@ -4,6 +4,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import Onboard from "./pages/Onboard";
 import SignIn from "./pages/SignIn";
+import CallMyChild from "./pages/CallMyChild";
 import PopUp from "./components/PopUp";
 import CHDollar from "./components/CHDollar";
 import Attendance from "./components/Attendance";
@@ -50,6 +51,11 @@ const App = () => {
             <Stack.Screen
               name="SignIn"
               component={SignIn}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="CallMyChild"
+              component={CallMyChild}
               options={{ headerShown: false }}
             />
             <Stack.Screen

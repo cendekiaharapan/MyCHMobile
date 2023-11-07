@@ -39,6 +39,7 @@ export const Color = {
   colorDimgray: "#65676d",
   amberBlack: "#072d4b",
   white: "#f8f8f8",
+  colorTomato_100: "#ff6347",
 };
 /* Paddings */
 export const Padding = {

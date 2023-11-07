@@ -1,21 +1,147 @@
-import React, { forwardRef } from "react";
+import React, { forwardRef, useEffect } from "react";
 import { Image, StyleSheet, Text, View, Dimensions } from "react-native";
 import { FontFamily, Color } from "../GlobalStyles";
 import { TouchableOpacity } from "react-native";
 import { Picker } from "@react-native-picker/picker"; // Import the Picker component
-import Toast from "react-native-toast-message";
+import {
+  storeItem,
+  retrieveItem,
+  deleteItem,
+  getAllKeys,
+} from "../database/database";
 
 const CallMyChild = forwardRef(({ navigation }, ref) => {
   const { width } = Dimensions.get("window");
   const isSmallScreen = width <= 375;
 
-  const [selectedChild, setSelectedChild] = React.useState("Ezra Gunawan");
-  const [selectedLanguage, setSelectedLanguage] = React.useState("English");
-  const [selectedPlace, setSelectedPlace] = React.useState("Jineng");
+  // const [children, setChildren] = React.useState(null);
+  const [studentName, setStudentName] = React.useState("");
+  const [studentId, setStudentId] = React.useState("");
+  const [selectedChild, setSelectedChild] = React.useState("");
+  const [selectedLanguage, setSelectedLanguage] = React.useState(null);
+  const [selectedPlace, setSelectedPlace] = React.useState(null);
+  useEffect(() => {
+    // This code will run after the component renders
+    retrieveItem("childData")
+      .then((data) => {
+        if (data) {
+          // Use the retrieved data
+          const student_ids = data.map((item) => item.id);
+          const student_name = data.map((item) => item.name);
 
-  const children = ["Ezra Gunawan", "Andrew Zefanya", "Eveline Kurnia"];
-  const languages = ["English", "Bahasa Indonesia"];
+          setStudentId(student_ids);
+          setStudentName(student_name);
+          // Update your component state or data source with the new data
+          // For example, if you're using state in a functional component:
+        } else {
+          // Handle the case when no data is found
+          console.log("No data found in AsyncStorage.");
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching response data from SQLite:", error);
+      });
+  }, []);
+  // const studentId = [1774, 2065];
+  // const studentName = ["Student A", "Tester 2"];
+
+  // const children = ["Ezra Gunawan", "Andrew Zefanya", "Eveline Kurnia"];
+  const languages = {
+    en: "English",
+    af: "Afrikaans",
+    ar: "Arabic",
+    bg: "Bulgarian",
+    bn: "Bengali",
+    bs: "Bosnian",
+    ca: "Catalan",
+    cs: "Czech",
+    da: "Danish",
+    de: "German",
+    el: "Greek",
+    es: "Spanish",
+    et: "Estonian",
+    fi: "Finnish",
+    fr: "French",
+    gu: "Gujarati",
+    hi: "Hindi",
+    hr: "Croatian",
+    hu: "Hungarian",
+    id: "Indonesian",
+    is: "Icelandic",
+    it: "Italian",
+    iw: "Hebrew",
+    ja: "Japanese",
+    jw: "Javanese",
+    km: "Khmer",
+    kn: "Kannada",
+    ko: "Korean",
+    la: "Latin",
+    lv: "Latvian",
+    ml: "Malayalam",
+    mr: "Marathi",
+    ms: "Malay",
+    my: "Myanmar (Burmese)",
+    ne: "Nepali",
+    nl: "Dutch",
+    no: "Norwegian",
+    pl: "Polish",
+    pt: "Portuguese",
+    ro: "Romanian",
+    ru: "Russian",
+    si: "Sinhala",
+    sk: "Slovak",
+    sq: "Albanian",
+    sr: "Serbian",
+    su: "Sundanese",
+    sv: "Swedish",
+    sw: "Swahili",
+    ta: "Tamil",
+    te: "Telugu",
+    th: "Thai",
+    tl: "Filipino",
+    tr: "Turkish",
+    uk: "Ukrainian",
+    ur: "Urdu",
+    vi: "Vietnamese",
+    "zh-CN": "Chinese (Simplified)",
+    "zh-TW": "Chinese (Traditional)",
+  };
+
   const places = ["Jineng", "Parent Lounge", "Parking Lot"];
+
+  const callMyChildAPI = () => {
+    if (!selectedChild || !selectedPlace || !selectedLanguage) {
+      // Handle error, show a message to the user, or prevent the request.
+      console.log("Please select all required fields.");
+      return;
+    }
+
+    const apiUrl =
+      "https://www.balichildrenshouse.com/myCHStaging/api/call-my-child";
+    const requestData = {
+      student_id: selectedChild,
+      call_to: selectedPlace,
+      lang: selectedLanguage,
+    };
+
+    fetch(apiUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(requestData),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        // Handle the response data as needed.
+        console.log("API Response: ", data);
+        // You can navigate to another screen or perform other actions based on the response.
+      })
+      .catch((error) => {
+        console.error("Error making the API request: ", error);
+        // Handle the error, show a message to the user, or take appropriate action.
+      });
+  };
 
   return (
     <View
@@ -47,17 +173,25 @@ const CallMyChild = forwardRef(({ navigation }, ref) => {
               </View>
             </View>
             <View style={[styles.dropdown, styles.dropdownShadowBox]}>
-              <Picker
-                selectedValue={selectedChild}
-                onValueChange={(itemValue, itemIndex) =>
-                  setSelectedChild(itemValue)
-                }
-              >
-                {children.map((child, index) => (
-                  <Picker.Item key={index} label={child} value={child} />
-                ))}
-              </Picker>
+              {studentId && studentName && studentName.length > 0 && (
+                <Picker
+                  selectedValue={selectedChild}
+                  onValueChange={(itemValue, itemIndex) =>
+                    setSelectedChild(itemValue)
+                  }
+                >
+                  <Picker.Item label="Select your child" value="" />
+                  {studentName.map((name, index) => (
+                    <Picker.Item
+                      key={studentId[index]}
+                      label={name}
+                      value={studentId[index]}
+                    />
+                  ))}
+                </Picker>
+              )}
             </View>
+
             <View style={styles.titleSubtitleContainer}>
               <View style={[styles.titleSubtitle, styles.callMyChildFlexBox]}>
                 <Text style={[styles.selectLanguage, styles.selectTypo]}>
@@ -72,9 +206,16 @@ const CallMyChild = forwardRef(({ navigation }, ref) => {
                   setSelectedLanguage(itemValue)
                 }
               >
-                {languages.map((language, index) => (
-                  <Picker.Item key={index} label={language} value={language} />
-                ))}
+                <Picker.Item label="Select Language" value="" />
+                {Object.entries(languages).map(
+                  ([languageCode, languageName]) => (
+                    <Picker.Item
+                      key={languageCode}
+                      label={languageName}
+                      value={languageCode}
+                    />
+                  )
+                )}
               </Picker>
             </View>
             <View style={styles.titleSubtitleContainer}>
@@ -91,6 +232,7 @@ const CallMyChild = forwardRef(({ navigation }, ref) => {
                   setSelectedPlace(itemValue)
                 }
               >
+                <Picker.Item label="Select Place" value="" />
                 {places.map((place, index) => (
                   <Picker.Item key={index} label={place} value={place} />
                 ))}
@@ -106,6 +248,8 @@ const CallMyChild = forwardRef(({ navigation }, ref) => {
             console.log("selected child : ", selectedChild);
             console.log("selected language : ", selectedLanguage);
             console.log("selected place : ", selectedPlace);
+            callMyChildAPI();
+            console.log("API Triggered!");
           }}
         >
           <Text style={[styles.call, styles.callTypo]}>CALL</Text>
