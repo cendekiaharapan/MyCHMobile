@@ -1,35 +1,55 @@
 import * as React from "react";
 import * as SQLite from "expo-sqlite";
-import { Storage } from "expo-storage";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Storage } from "expo-storage";
 
-// Function to store data
-const storeData = async (key, data) => {
+const storeItem = async (key, data) => {
   try {
-    const dataString = JSON.stringify(data);
-    await AsyncStorage.setItem(key, dataString);
-    console.log("Data stored successfully (AsyncStorage)");
+    await Storage.setItem({
+      key,
+      value: JSON.stringify(data),
+    });
+    console.log(`Item with key ${key} stored successfully.`);
   } catch (error) {
-    console.error("Error storing data (AsyncStorage) :", error);
+    console.error(`Error storing item with key ${key}:`, error);
   }
 };
 
-// Function to retrieve data
-const retrieveData = async (key) => {
+const retrieveItem = async (key) => {
   try {
-    const dataString = await AsyncStorage.getItem(key);
+    const dataString = await Storage.getItem({ key });
     if (dataString) {
       const data = JSON.parse(dataString);
-      console.log("Retrieved data (AsyncStorage) :", data);
+      console.log(`Item with key ${key} retrieved successfully.`, data);
       return data;
     } else {
-      console.log("Data not found (AsyncStorage)");
+      console.log(`Item with key ${key} not found.`);
       return null;
     }
   } catch (error) {
-    console.error("Error retrieving data (AsyncStorage):", error);
+    console.error(`Error retrieving item with key ${key}:`, error);
     return null;
   }
 };
 
-export { storeData, retrieveData };
+const deleteItem = async (key) => {
+  try {
+    await Storage.removeItem({ key });
+    console.log(`Item with key ${key} has been deleted successfully.`);
+  } catch (error) {
+    console.error(`Error deleting item with key ${key}:`, error);
+  }
+};
+
+const getAllKeys = async () => {
+  try {
+    const keys = await Storage.getAllKeys();
+    console.log("All keys:", keys);
+    return keys;
+  } catch (error) {
+    console.error("Error retrieving keys:", error);
+    return [];
+  }
+};
+
+export { storeItem, retrieveItem, deleteItem, getAllKeys };

@@ -9,7 +9,12 @@ import * as SecureStore from "expo-secure-store";
 import Config from "react-native-config";
 import { APP_TOKEN, APP_SECRET } from "@env";
 import * as SQLite from "expo-sqlite";
-import { storeData, retrieveData } from "../database/database";
+import {
+  storeItem,
+  retrieveItem,
+  deleteItem,
+  getAllKeys,
+} from "../database/database";
 
 const SignIn = () => {
   const [childData, setChildData] = useState(null);
@@ -97,7 +102,7 @@ const SignIn = () => {
               "parent student response data = ",
               parentStudentsResponse.data
             );
-            storeData("childData", parentStudentsResponse.data);
+            storeItem("childData", parentStudentsResponse.data);
 
             // You can navigate to another screen after successful login
           } else {
