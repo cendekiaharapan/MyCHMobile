@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useEffect, useState } from "react"; 
 import {
   StyleSheet,
   View,
@@ -9,19 +10,21 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
-import { useEffect, useState } from "react";
 import { FontFamily, Color, Border, Padding } from "../GlobalStyles";
 
 const DetailPost = () => {
   const navigation = useNavigation();
   const [postData, setPostData] = useState(null);
+  const baseUrl = "https://www.balichildrenshouse.com";
+  const imagePath = "post-images/32859nyepi-calmpetition-winners.png";
+  const imageURL = `${baseUrl}/${imagePath}`;
 
   useEffect(() => {
-    // Fetch data when the component mounts
     axios
-      .get("https://www.balichildrenshouse.com/myCHStaging/api/post_details/")
+      .get("https://www.balichildrenshouse.com/myCHStaging/api/post_details/2426")
       .then((response) => {
-        setPostData(response.data); // Assuming your API response is in JSON format
+        console.log("Response Data:", response.data);
+        setPostData(response.data); 
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -29,7 +32,6 @@ const DetailPost = () => {
   }, []);
 
   if (!postData) {
-    // You can display a loading indicator here while waiting for the API response
     return <Text>Loading...</Text>;
   }
 
@@ -38,7 +40,7 @@ const DetailPost = () => {
       <ImageBackground
         style={[styles.borocayScreenIcon, styles.titleFlexBox]}
         resizeMode="cover"
-        source={require("../assets/images/screen.png")}
+        source={{ uri: imageURL }}
       >
         <View style={styles.titleFlexBox} />
         <View style={styles.bottomDrawer}>
@@ -46,28 +48,23 @@ const DetailPost = () => {
             <View style={[styles.title, styles.titleFlexBox]}>
               <View style={styles.titleInner}>
                 <View>
-                <Text style={styles.loremIpsumDolor}>{postData.title}</Text>
+                  <Text style={[styles.loremIpsumDolor, styles.loremFlexBox]}>
+                  {postData.title} 
+                  </Text>
                   <View style={styles.authortimestamp}>
                     <Image
                       style={styles.vectorIcon}
                       contentFit="cover"
-                      source={require("../assets/images/vector.png")}
+                      source={require("../assets/vector.png")}
                     />
-                    <Text style={styles.timestamp}>20/09/2023</Text>
+                    <Text style={styles.timestamp}>{postData.created_at}</Text>
                   </View>
                 </View>
               </View>
             </View>
             <View style={styles.overviewText}>
               <Text style={[styles.loremIpsumDolor1, styles.loremFlexBox]}>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore Lorem ipsum dolor sit amet,
-                consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-                labore Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                sed do eiusmod tempor incididunt ut labore Lorem ipsum dolor sit
-                amet, consectetur adipiscing elit, sed do eiusmod tempor
-                incididunt ut labore Lorem ipsum dolor sit amet, consectetur
-                adipislllllll.
+              {postData.body}
               </Text>
             </View>
           </View>
@@ -80,7 +77,7 @@ const DetailPost = () => {
         <Image
           style={styles.icon}
           contentFit="cover"
-          source={require("../assets/images/backicon2.png")}
+          source={require("../assets/backicon2.png")}
         />
       </Pressable>
     </View>
