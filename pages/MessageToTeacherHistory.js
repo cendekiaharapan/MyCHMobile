@@ -15,6 +15,7 @@ import {
   deleteItem,
   getAllKeys,
 } from "../database/database";
+import { LoadingModal } from "react-native-loading-modal";
 
 const MessageToTeacherHistory = () => {
   const [responseData, setResponseData] = useState(null);
@@ -97,45 +98,45 @@ const MessageToTeacherHistory = () => {
 
       // Fetch teacher names for each unique teacher ID
       const fetchTeacherNames = async () => {
-        const names = {};
+        const data = {};
+
         for (const teacherId of uniqueTeacherIds) {
           try {
             const response = await axios.get(
               `https://www.balichildrenshouse.com/myCHStaging/api/get-teacher/${teacherId}`
             );
-            const teacherNameExtracted = response.data.map((item) => item.name);
-            console.log(teacherNameExtracted);
-            names[teacherId] = teacherNameExtracted;
-            console.log("teacher names : ", names);
+
+            const teacherName = response.data[0]?.name || "Unknown Teacher";
+            const teacherImage =
+              response.data[0]?.image || "default-image-url.jpg";
+
+            data[teacherId] = {
+              name: teacherName,
+              image: teacherImage,
+            };
+
+            console.log(
+              "Teacher data for teacher ID",
+              teacherId,
+              ":",
+              data[teacherId]
+            );
           } catch (error) {
             console.error("Error fetching teacher data:", error);
-            names[teacherId] = "Unknown Teacher"; // Set a default name in case of an error
+            data[teacherId] = {
+              name: "Unknown Teacher",
+              image: "default-image-url.jpg",
+            };
           }
         }
-        setTeacherNames(names);
+
+        setTeacherNames(data);
       };
 
       fetchTeacherNames();
     }
   }, [responseData]);
 
-  // const fetchChildDataFromSQLite = () => {
-  //   return new Promise((resolve, reject) => {
-  //     db.transaction((tx) => {
-  //       tx.executeSql("SELECT data FROM child_data", [], (tx, results) => {
-  //         const len = results.rows.length;
-  //         if (len > 0) {
-  //           const responseDataString = results.rows.item(0).data;
-  //           const responseData = JSON.parse(responseDataString);
-  //           resolve(responseData);
-  //         } else {
-  //           console.log("No response data found in SQLite.");
-  //           resolve(null);
-  //         }
-  //       });
-  //     });
-  //   });
-  // };
   return (
     <NativeBaseProvider>
       <SafeAreaView style={styles.AndroidSafeArea}>
@@ -172,7 +173,7 @@ const MessageToTeacherHistory = () => {
                           note={message.message}
                           teacher={
                             teacherNames[message.teacher_id]
-                              ? teacherNames[message.teacher_id][0] // Assuming you want the first name if available
+                              ? teacherNames[message.teacher_id].name
                               : "Other Teacher"
                           }
                           student={
@@ -181,14 +182,21 @@ const MessageToTeacherHistory = () => {
                               : "Other Student"
                           }
                           timestamp={message.created_at}
+                          image={
+                            teacherNames[message.teacher_id] &&
+                            teacherNames[message.teacher_id].image
+                              ? teacherNames[message.teacher_id].image
+                              : "53613.png" // Provide a default image URL
+                          }
+                          imageUrl="https://www.balichildrenshouse.com/myCH/ev-assets/uploads/avatars/"
                         />
                       );
                     })
                   ) : (
-                    <Text>Loading...</Text> // Or any other loading indicator
+                    <LoadingModal modalVisible={true} color="red" />
                   )
                 ) : (
-                  <Text>Loading Student Data...</Text> // Or any other loading indicator
+                  <LoadingModal modalVisible={true} color="red" />
                 )}
               </ScrollView>
             </View>

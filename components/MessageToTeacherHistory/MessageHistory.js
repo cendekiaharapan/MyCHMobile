@@ -15,8 +15,11 @@ const MessageHistory = ({
   teacher = "Bu Sekar",
   student = "Rufus Stewart",
   timestamp = "25 Maret 2023, 12:40 AM",
+  image,
+  imageUrl,
 }) => {
   const navigation = useNavigation();
+  const concatenatedImageUrl = `${imageUrl}${image}`;
   return (
     <View style={styles.messagehistory}>
       <View style={styles.helperTextFlexBox}>
@@ -24,7 +27,9 @@ const MessageHistory = ({
           <Image
             style={styles.unsplashaoewueh7yasIcon}
             contentFit="cover"
-            source={require("../../assets/unsplashaoewueh7yas1.png")}
+            source={{
+              uri: concatenatedImageUrl,
+            }}
           />
         </View>
         <View style={styles.buSekarParent}>
@@ -83,8 +88,12 @@ const styles = StyleSheet.create({
     fontSize: FontSize.textRegularSm14_size,
   },
   unsplashaoewueh7yasIcon: {
-    width: 56,
-    height: 58,
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    borderColor: "red",
+    borderWidth: 2,
+    borderStyle: "solid",
   },
   buSekar: {
     fontWeight: "600",
