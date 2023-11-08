@@ -9,6 +9,7 @@ import {
   deleteItem,
   getAllKeys,
 } from "../database/database";
+import Toast from "react-native-toast-message";
 
 const CallMyChild = forwardRef(({ navigation }, ref) => {
   const { width } = Dimensions.get("window");
@@ -108,14 +109,20 @@ const CallMyChild = forwardRef(({ navigation }, ref) => {
   };
 
   const places = ["Jineng", "Parent Lounge", "Parking Lot"];
-
+  const showToastErrorRequired = () => {
+    Toast.show({
+      text1: "Please select all required fields!",
+      text1Style: { fontSize: 15 },
+      text2Style: { fontSize: 13 },
+      type: "error",
+    });
+  };
   const callMyChildAPI = () => {
     if (!selectedChild || !selectedPlace || !selectedLanguage) {
       // Handle error, show a message to the user, or prevent the request.
-      console.log("Please select all required fields.");
+      showToastErrorRequired();
       return;
     }
-
     const apiUrl =
       "https://www.balichildrenshouse.com/myCHStaging/api/call-my-child";
     const requestData = {
@@ -131,18 +138,41 @@ const CallMyChild = forwardRef(({ navigation }, ref) => {
       },
       body: JSON.stringify(requestData),
     })
-      .then((response) => response.json())
+      .then((response) => {
+        if (response.status === 200) {
+          showToastSuccess(); // Show success toast
+        } else {
+          showToastError(); // Show error toast for non-200 status
+        }
+        return response.json();
+      })
       .then((data) => {
         // Handle the response data as needed.
         console.log("API Response: ", data);
         // You can navigate to another screen or perform other actions based on the response.
       })
       .catch((error) => {
+        showToastError(); // Show error toast for network or other errors
         console.error("Error making the API request: ", error);
         // Handle the error, show a message to the user, or take appropriate action.
       });
   };
-
+  const showToastSuccess = () => {
+    Toast.show({
+      text1: "Successfully, call your child!",
+      text1Style: { fontSize: 15 },
+      text2Style: { fontSize: 13 },
+      type: "success",
+    });
+  };
+  const showToastError = () => {
+    Toast.show({
+      text1: "Failed, call your child!",
+      text1Style: { fontSize: 15 },
+      text2Style: { fontSize: 13 },
+      type: "error",
+    });
+  };
   return (
     <View
       style={[styles.callMyChild, styles.callMyChildFlexBox, styles.container]}
