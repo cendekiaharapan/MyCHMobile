@@ -32,21 +32,10 @@ const App = () => {
   });
 
   return (
-    <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="FrameScreen" component={FrameScreen} />
-        <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name="Onboard" component={Onboard} options={{ headerShown: false }} />
-        <Stack.Screen name="SignIn" component={SignIn} options={{ headerShown: false }} />
-        <Stack.Screen name="PostDetails" component={PostDetails} options={{ headerShown: false }} />
-        <Stack.Screen name="AllPost" component={AllPost} options={{ headerShown: false }} />
-        <Stack.Screen name="Password" component={Password} options={{ headerShown: false }} />
-      </Stack.Navigator>
-    </NavigationContainer>
 
 <>
 <NavigationContainer>
-  {hideSplashScreen ? (
+ 
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen
         name="PageStart"
@@ -89,7 +78,7 @@ const App = () => {
         options={{ headerShown: false }}
       />
     </Stack.Navigator>
-  ) : null}
+
 </NavigationContainer>
 </>
 

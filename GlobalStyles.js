@@ -52,6 +52,22 @@ export const FontFamily = {
     whiteInput: "#f6fbff",
     darkslategray_100: "#343434",
     amberBlack: "#072d4b",
+
+    singleToneWhite: "#fff",
+    colorLightgray: "#d4d4d4",
+    primaryPrimary700: "#1d4ed8",
+    colorGray_100: "#fcfcfc",
+    colorGray_200: "#262626",
+    textText900: "#171717",
+    colorGray_300: "#111",
+    colorDarkslategray: "#3e3e3e",
+    colorLimegreen: "#00b512",
+    colorFloralwhite: "#fff6eb",
+    colorMidnightblue: "#241856",
+    colorTomato_100: "#ff5b5b",
+    colorTomato_200: "#fc4b41",
+    colorWhitesmoke: "#f0f0f0",
+    colorBlack: "#000",
   };
   /* Paddings */
   export const Padding = {
@@ -62,6 +78,14 @@ export const FontFamily = {
     p_xs: 12,
     p_sm: 14,
     p_mini: 15,
+    
+    p_5xs: 8,
+    
+    p_4xs: 9,
+    
+    p_3xl: 22,
+    p_16xl: 35,
+    p_31xl: 50,  
   };
   /* border radiuses */
   export const Border = {
@@ -75,5 +99,10 @@ export const FontFamily = {
     br_3xs: 10,
     br_sm_2: 13,
     br_9xs_8: 4,
-    br_69xl: 88,
+    br_69xl: 88,
+    
+    br_mini: 15,
+    br_5xs: 8,
+    
+    br_smi: 13,  
   };
