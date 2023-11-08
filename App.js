@@ -12,6 +12,14 @@ import PostDetails from "./pages/PostDetails";
 import AllPost from "./pages/AllPost";
 import Password from "./pages/Password";
 import Coba from "./components/Coba";
+import PageStart from "./pages/PageStart";
+import PaidInvoiceDetails from "./pages/PaidInvoiceDetails";
+import PaidInvoiceHistory from "./pages/PaidInvoiceHistory";
+import PaymentCHDHistory from "./pages/PaymentCHDHistory";
+import PaymentCHDAccount from "./pages/PaymentCHDAccount";
+import PaymentInvoice from "./pages/PaymentInvoice";
+import PaymentInvoiceDetails from "./pages/PaymentInvoiceDetails";
+import PaymentTopup from "./pages/PaymentTopup";
 
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { View, Text, Pressable, TouchableOpacity } from "react-native";
@@ -50,6 +58,46 @@ const App = () => {
             <Stack.Screen
               name="SignIn"
               component={SignIn}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="PageStart"
+              component={PageStart}
+              options={{ headerShown: false }}
+            /> 
+            <Stack.Screen
+              name="PaidInvoiceDetails"
+              component={PaidInvoiceDetails}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="PaidInvoiceHistory"
+              component={PaidInvoiceHistory}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="PaymentCHDAccount"
+              component={PaymentCHDAccount}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="PaymentCHDHistory"
+              component={PaymentCHDHistory}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="PaymentInvoice"
+              component={PaymentInvoice}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="PaymentInvoiceDetails"
+              component={PaymentInvoiceDetails}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="PaymentTopup"
+              component={PaymentTopup}
               options={{ headerShown: false }}
             />
             <Stack.Screen
