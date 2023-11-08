@@ -24,6 +24,7 @@ import {
   deleteItem,
   getAllKeys,
 } from "../database/database";
+import { LoadingModal } from "react-native-loading-modal";
 
 const ChildPermissionHistorys = () => {
   const navigation = useNavigation();
@@ -31,7 +32,8 @@ const ChildPermissionHistorys = () => {
   const [studentId, setStudentId] = useState(null);
   const [childId, setChildId] = useState(null);
   const [studentName, setStudentName] = useState(null);
-  const [studentData, setStudentData] = useState([]);
+  const [studentData, setStudentData] = useState(null);
+  const [studentImg, setStudentImg] = useState(null);
 
   useEffect(() => {
     console.log("use Effect actived!");
@@ -39,17 +41,19 @@ const ChildPermissionHistorys = () => {
       .then((data) => {
         if (data) {
           // Use the retrieved data
-          console.log("inside fetchChildData");
+          console.log("inside fetchChildData (data) : ", data);
           const student_ids = data.map((item) => item.id);
           const student_name = data.map((item) => item.name);
-          console.log("Student id : ", student_ids);
-          console.log("Student Name : ", student_name);
+          const student_image = data.map((item) => item.image);
+          console.log("Student id in fetch child : ", student_ids);
+          console.log("Student Name in fetch child : ", student_name);
+          console.log("Student Image in fetch child : ", student_image);
 
           // Update your component state or data source with the new data
           // For example, if you're using state in a functional component:
           setChildId(student_ids);
           setStudentName(student_name);
-
+          setStudentImg(student_image);
           fetchMultipleStudentsData(student_ids);
         } else {
           // Handle the case when no data is found
@@ -124,13 +128,14 @@ const ChildPermissionHistorys = () => {
       });
 
       setStudentData(flattenedLeaves);
-
       // You can set the data to your state or do any necessary processing
     } catch (error) {
       // Handle errors if any of the requests fail
       console.error("Error:", error);
     }
   };
+
+  const imageUrl = `https://www.balichildrenshouse.com/myCH/ev-assets/uploads/avatars/`;
 
   return (
     <NativeBaseProvider>
@@ -167,30 +172,34 @@ const ChildPermissionHistorys = () => {
             <View style={[styles.frameGroup, styles.frameGroupLayout]}>
               <View style={[styles.bodycontainer, styles.herocontainerLayout]}>
                 <ScrollView contentContainerStyle={styles.bodycontainerInner}>
-                  {childId && studentName && studentData ? (
-                    studentData.map((leave, index) => {
-                      const studentIds = childId;
-                      const studentId_index = studentIds.indexOf(
-                        leave.student_id
-                      );
+                  {childId && studentName && studentImg ? (
+                    studentData ? (
+                      studentData.map((leave, index) => {
+                        const studentIds = childId;
+                        const studentId_index = studentIds.indexOf(
+                          leave.student_id
+                        );
 
-                      return (
-                        <PermissionHistory
-                          name={studentName[studentId_index]}
-                          type={
-                            leave.apply_type === "sick_leave"
-                              ? "Sick"
-                              : "Excused"
-                          }
-                          time={leave.created_at}
-                        />
-                      );
-                    })
+                        return (
+                          <PermissionHistory
+                            imageUri={studentImg[studentId_index]}
+                            imageUrl={imageUrl}
+                            name={studentName[studentId_index]}
+                            type={
+                              leave.apply_type === "sick_leave"
+                                ? "Sick"
+                                : "Excused"
+                            }
+                            time={leave.created_at}
+                          />
+                        );
+                      })
+                    ) : (
+                      <LoadingModal modalVisible={true} color="red" />
+                    )
                   ) : (
-                    <Text>Loading...</Text> // Or any other loading indicator
+                    <LoadingModal modalVisible={true} color="red" />
                   )}
-
-                  {/* EndHistory Content */}
                 </ScrollView>
               </View>
             </View>

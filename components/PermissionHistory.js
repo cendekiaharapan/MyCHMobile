@@ -4,15 +4,20 @@ import { StyleSheet, Text, View } from "react-native";
 import { Button } from "native-base";
 import { Color, Padding, FontFamily, FontSize, Border } from "../GlobalStyles";
 import { useNavigation } from "@react-navigation/native";
-const PermissionHistory = ({ name, type, time }) => {
+const PermissionHistory = ({ name, type, time, imageUri, imageUrl }) => {
   const navigation = useNavigation();
+  const fullImageUrl = `${imageUrl}${imageUri}`;
   return (
     <View style={styles.history1}>
       <View style={styles.profilepicParent}>
         <Image
           style={styles.profilepicIcon}
           contentFit="cover"
-          source={require("../assets/profilepic.png")}
+          source={
+            imageUri
+              ? { uri: fullImageUrl }
+              : require("../assets/profilepic.png") // Default image source
+          }
         />
         <View style={styles.frameWrapper}>
           <View>
@@ -121,8 +126,12 @@ const styles = StyleSheet.create({
     top: 0,
   },
   profilepicIcon: {
-    width: 56,
-    height: 58,
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    borderColor: "red",
+    borderWidth: 2,
+    borderStyle: "solid",
   },
   rufusStewart: {
     fontWeight: "600",
