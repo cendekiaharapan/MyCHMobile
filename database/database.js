@@ -1,6 +1,5 @@
 import * as React from "react";
-import * as SQLite from "expo-sqlite";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+
 import { Storage } from "expo-storage";
 
 const storeItem = async (key, data) => {

@@ -1,26 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { Image, Linking } from 'react-native';
 import { StyleSheet, Text, View } from 'react-native';
-import { Button, NativeBaseProvider, Select, Center } from 'native-base';
+import { Button, NativeBaseProvider, Box, Select, Center } from 'native-base';
 import { LinearGradient } from 'expo-linear-gradient';
-import axios from 'axios'; 
+import axios from 'axios'; // Import Axios
 import { FontFamily, Color, FontSize, Padding, Border } from '../GlobalStyles';
 
 const ReportCard = () => {
   const [academicSessions, setAcademicSessions] = useState([]);
-  const [termSessions, setTermSessions] = useState([]);
-  const reportCardUrl = 'https://example.com/report-card-url'; 
-  const [selectedSession, setSelectedSession] = useState("Academic Year 2023/2024");
-  const [selectedSemester, setSelectedSemester] = useState("Semester 1");
+  const [selectedSession, setSelectedSession] = useState([]);
+  const [selectedSemester, setSelectedSemester] = useState([]);
 
   useEffect(() => {
-    Promise.all([
-      axios.get('https://www.balichildrenshouse.com/myCH/api/get-academic-sessions'),
-      axios.get('https://www.balichildrenshouse.com/myCH/api/get_session_terms/14'),
-    ])
-      .then(([response, termsResponse]) => {
+    axios.get('https://www.balichildrenshouse.com/myCH/api/get-academic-sessions')
+      .then(response => {
         setAcademicSessions(response.data);
-        setTermSessions(termsResponse.data);
       })
       .catch(error => {
         console.error('Error fetching academic sessions: ', error);
@@ -28,7 +22,20 @@ const ReportCard = () => {
   }, []);
 
   const handleViewReportCard = () => {
-    Linking.openURL(reportCardUrl); 
+    const studentId = "1981"; // You can change this to your desired student ID
+    const url = `https://www.balichildrenshouse.com/myCH/api/getacademicreport/${studentId}/${selectedSession}/${selectedSemester}`;
+
+    axios.get(url)
+      .then(response => {
+        // Handle the response data as needed
+        
+
+        // Open the URL in the default web browser
+        Linking.openURL(url); // Replace 'url' with the actual response field that contains the URL
+      })
+      .catch(error => {
+        console.error('Error fetching academic report: ', error);
+      });
   };
   return (
     <NativeBaseProvider>
@@ -54,20 +61,21 @@ const ReportCard = () => {
             <View style={styles.frame3}>
               <View style={styles.selectSessionParent}>
                 <Text style={styles.selectSession}>Select Session</Text>
-                <Center> 
-                <Select
+                <Center> {/* Center the Select in Session */}
+                  <Select
                     selectedValue={selectedSession}
                     minWidth="275"
                     accessibilityLabel="Choose Session"
                     placeholder="Choose Session"
-                    onValueChange={(itemValue) => {setSelectedSession(itemValue)
-                    console.log('Selected Session:', itemValue);}}
-                    
+                    onValueChange={(itemValue) => {
+                      setSelectedSession(itemValue);
+                      console.log('Selected Session:', itemValue);
+                    }}
                   >
                     {academicSessions.map(session => (
                       <Select.Item key={session.id} label={session.name} value={session.id} />
-                ))}
-              </Select>
+                    ))}
+                  </Select>
                 </Center>
               </View>
               <Image
@@ -78,20 +86,23 @@ const ReportCard = () => {
             </View>
             <View style={styles.selectSemesterParent}>
               <Text style={styles.selectSession}>Select Semester</Text>
-              <Center> 
-              <Select
-                    selectedValue={selectedSemester}
-                    minWidth="275"
-                    accessibilityLabel="Choose Semester"
-                    placeholder="Choose Semester"
-                    onValueChange={(itemValue) => {setSelectedSemester(itemValue)
-                    console.log('Selected Semester:', itemValue);}}
-                    
-                  >
-                    {academicSessions.map(session => (
-                      <Select.Item key={session.id} label={session.name} value={session.id} />
-                ))}
-              </Select>
+              <Center> {/* Center the Select in Semester */}
+                <Select
+                  selectedValue={selectedSemester}
+                  minWidth="275"
+                  accessibilityLabel="Choose Semester"
+                  placeholder="Choose Semester"
+                  onValueChange={(itemValue) => {
+                    setSelectedSemester(itemValue);
+                    console.log('selected sem:', itemValue);
+                  }}
+                >
+                  <Select.Item label="Mid Semester 1" value="19" />
+                  <Select.Item label="Semester 1" value="20" />
+                  <Select.Item label="Mid Semester 2" value="17" />
+                  <Select.Item label="Semester 2" value="18" />
+                  {/* Add other semester options here */}
+                </Select>
               </Center>
             </View>
             <View style={styles.buttonCariTiket}>
@@ -111,6 +122,7 @@ const ReportCard = () => {
             </View>
           </LinearGradient>
         </View>
+       
       </View>
     </NativeBaseProvider>
   );
