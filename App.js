@@ -12,7 +12,7 @@ import PostDetails from "./pages/PostDetails";
 import AllPost from "./pages/AllPost";
 import Password from "./pages/Password";
 import ReportCard from "./pages/ReportCard";
-
+import  Toast from 'react-native-toast-message';
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 const App = () => {
@@ -49,11 +49,6 @@ const App = () => {
             <Stack.Screen
               name="AllPost"
               component={AllPost}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="Onboard"
-              component={Onboard}
               options={{ headerShown: false }}
             />
             <Stack.Screen
@@ -94,8 +89,9 @@ const App = () => {
           </Stack.Navigator>
         ) : (
           <Onboard />
-        )}
+          )}
       </NavigationContainer>
+      <Toast />
     </>
   );
 };

@@ -5,54 +5,67 @@ import { Button, NativeBaseProvider, Select, Center } from 'native-base';
 import { LinearGradient } from 'expo-linear-gradient';
 import axios from 'axios'; 
 import { FontFamily, Color, FontSize, Padding, Border } from '../GlobalStyles';
+import Toast  from 'react-native-toast-message';
+
 
 const ReportCard = () => {
-  const [academicSessions, setAcademicSessions] = useState([]);
-  const [termSessions, setTermSessions] = useState([]);
-  const [selectedSession, setSelectedSession] = useState("Academic Year 2023/2024");
-  const [selectedSemester, setSelectedSemester] = useState("Semester 1");
-  const [selectedAcademicSessionId, setSelectedAcademicSessionId] = useState(academicSessions[0]?.id);
-  const [filteredTermSessions, setFilteredTermSessions] = useState([]);
+    const [academicSessions, setAcademicSessions] = useState([]);
+    const [termSessions, setTermSessions] = useState([]);
+    const [selectedSession, setSelectedSession] = useState(null);
+    const [selectedSemester, setSelectedSemester] = useState("Semester 1");
+    const [filteredTermSessions, setFilteredTermSessions] = useState([]);
+    const [reportCardUrl, setReportCardUrl] = useState('https://www.balichildrenshouse.com/myCH/student-report-card');
 
-
-  useEffect(() => {
-    axios.get('https://www.balichildrenshouse.com/myCH/api/get-academic-sessions')
-      .then((response) => {
-        if (response && response.data) {
-          setAcademicSessions(response.data);
-        } else {
-          console.error('Error fetching academic sessions: Response data is undefined');
-        }
-      })
-      .catch((error) => {
-        console.error('Error fetching academic sessions:', error);
-      });1
-  }, []);
-
-  useEffect(() => {
-    axios.get('https://www.balichildrenshouse.com/myCH/api/get_session_terms')
-      .then((termsResponse) => {
-        if (termsResponse && termsResponse.data) {
-          setTermSessions(termsResponse.data);
-        } else {
-          console.error('Error fetching term sessions: Response data is undefined');
-        }
-      })
-      .catch((error) => {
-        console.error('Error fetching term sessions:', error);
+    const showToast = () => {
+      Toast.show({
+        type: 'error',
+        text1: 'Academic Session',
+        text2: 'There are no terms for this academic session',
+        position: 'top', 
       });
-  }, []);
-  
-  const filterTermSessions = () => {
-    const filteredTerms = termSessions.filter((term) => term.academic_session_id === selectedAcademicSessionId);
-    setFilteredTermSessions(filteredTerms);
-  };
+    };
 
-  const handleAcademicSessionChange = (itemValue, itemId) => {
-    setSelectedSession(itemValue);
-    setSelectedAcademicSessionId(itemId); 
+  useEffect(() => {
+      axios
+        .get('https://www.balichildrenshouse.com/myCH/api/get-academic-sessions')
+        .then((response) => {
+          if (response && response.data) {
+            setAcademicSessions(response.data);
+          } else {
+            console.error('Error fetching academic sessions: Response data is undefined');
+          }
+        })
+        .catch((error) => {
+          console.error('Error fetching academic sessions:', error);
+        });
+    }, []);
+    
+  function fetchAndSetTermSessions(selectedSession) {
+    console.log("inside ftech and set term session id : ",selectedSession);
+    if (selectedSession) {
+      console.log("SELECTED ACADEMIC SESSION NOT NULL!");
+      axios.get(`https://www.balichildrenshouse.com/myCH/api/get_session_terms/${selectedSession}`)
+        .then((termsResponse) => {
+          if (termsResponse && termsResponse.data) {
+            console.log("ini isi term response data", termsResponse.data);
+            setFilteredTermSessions(termsResponse.data);
+            setTermSessions(termsResponse.data);
 
-    filterTermSessions();
+          } else {  
+            console.error('Error fetching term sessions: Response data is undefined');
+          }
+        })
+        .catch((error) => {
+          showToast();
+          // console.log("ganti ini dengan toast message kalau tidak ada term session");
+          // console.error('Error fetching term sessions:', error);
+        });
+    }
+  }
+  const handleAcademicSessionChange = (itemId) => {
+    setSelectedSession(itemId);
+    
+    console.log("set selected section (itemId) = ",itemId);
   };
 
   const handleViewReportCard = () => {
@@ -85,18 +98,21 @@ const ReportCard = () => {
                 <Text style={styles.selectSession}>Select Session</Text>
                 <Center> 
                 <Select
-                    selectedValue={selectedSession}
-                    minWidth="275"
-                    accessibilityLabel="Choose Session"
-                    placeholder="Choose Session"
-                    onValueChange={(itemValue, itemId) => { handleAcademicSessionChange(itemValue, itemId);
-                    console.log('Selected Session:', itemValue);}}                    
-                  >
-                    {academicSessions.map(session => (
-                      <Select.Item key={session.id} label={session.name} value={session.id} />
+                
+                minWidth="275"
+                accessibilityLabel="Choose Session"
+                placeholder="Choose Session"
+                onValueChange={(itemId) => {
+                  // console.log("set selected session id : ",itemId);
+                  // console.log("value of selected session id : ",selectedSession);
+                  fetchAndSetTermSessions(itemId);
+                  setSelectedSession(itemId);
+                  }}>
+                {academicSessions.map(session => (
+                  <Select.Item key={session.id} label={session.name} value={session.id} />
                 ))}
               </Select>
-                </Center>
+              </Center>
               </View>
               <Image
                 style={styles.frameChild}
@@ -109,19 +125,19 @@ const ReportCard = () => {
               <Center> 
               {academicSessions.length > 0 && (
               <Select
-                selectedValue={selectedSemester}
-                minWidth="275"
-                accessibilityLabel="Choose Semester"
-                placeholder="Choose Semester"
-                onValueChange={(itemValue) => {
-                  setSelectedSemester(itemValue);
-                  console.log('Selected Semester:', itemValue);
-                }}
-              >
-                {filteredTermSessions.map((term) => (
+              selectedValue={selectedSemester}
+              minWidth="275"
+              accessibilityLabel="Choose Semester"
+              placeholder="Choose Semester"
+              onValueChange={(itemValue) => {
+                setSelectedSemester(itemValue);
+                console.log('Selected Semester:', itemValue);
+              }}
+            >
+              {filteredTermSessions.map((term) => (
                 <Select.Item key={term.id} label={term.name} value={term.id} />
-                ))}
-              </Select>
+              ))}
+            </Select>
             )}
 
               </Center>
