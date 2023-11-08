@@ -8,10 +8,30 @@ import {
   Image,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { FontFamily, Color, Border, Padding } from "../GlobalStyles";
 
 const DetailPost = () => {
   const navigation = useNavigation();
+  const [postData, setPostData] = useState(null);
+
+  useEffect(() => {
+    // Fetch data when the component mounts
+    axios
+      .get("https://www.balichildrenshouse.com/myCHStaging/api/post_details/")
+      .then((response) => {
+        setPostData(response.data); // Assuming your API response is in JSON format
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }, []);
+
+  if (!postData) {
+    // You can display a loading indicator here while waiting for the API response
+    return <Text>Loading...</Text>;
+  }
 
   return (
     <View style={styles.detailPost}>
@@ -26,9 +46,7 @@ const DetailPost = () => {
             <View style={[styles.title, styles.titleFlexBox]}>
               <View style={styles.titleInner}>
                 <View>
-                  <Text style={[styles.loremIpsumDolor, styles.loremFlexBox]}>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing eli
-                  </Text>
+                <Text style={styles.loremIpsumDolor}>{postData.title}</Text>
                   <View style={styles.authortimestamp}>
                     <Image
                       style={styles.vectorIcon}
