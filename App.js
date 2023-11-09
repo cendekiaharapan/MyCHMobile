@@ -10,8 +10,11 @@ import Attendance from "./components/Attendance";
 import AverageDailyScore from "./components/AverageDailyScore";
 import PostDetails from "./pages/PostDetails";
 import AllPost from "./pages/AllPost";
+import PaymentCHDAccount from "./pages/PaymentCHDAccount";
+import PaymentTopup from "./pages/PaymentTopup";
 import Password from "./pages/Password";
 import Coba from "./components/Coba";
+
 
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { View, Text, Pressable, TouchableOpacity } from "react-native";
@@ -48,18 +51,28 @@ const App = () => {
               options={{ headerShown: false }}
             />
             <Stack.Screen
+              name="PaymentCHDAccount"
+              component={PaymentCHDAccount}
+              options={{ headerShown: false }}
+            />   
+             <Stack.Screen
+              name="PaymentTopup"
+              component={PaymentTopup}
+              options={{ headerShown: false }}
+            />   
+            <Stack.Screen
               name="SignIn"
               component={SignIn}
               options={{ headerShown: false }}
             />
+              <Stack.Screen
+                name="CHDollar"
+                component={CHDollar}
+                options={{ headerShown: false }}
+              />
             <Stack.Screen
               name="PopUp"
               component={PopUp}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="CHDollar"
-              component={CHDollar}
               options={{ headerShown: false }}
             />
             <Stack.Screen
