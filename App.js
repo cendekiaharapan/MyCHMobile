@@ -15,7 +15,7 @@ import Password from "./pages/Password";
 import Coba from "./components/Coba";
 import LoginStack from "./LoginStack";
 import MainStack from "./MainStack";
-
+import Toast from "react-native-toast-message";
 import {
   storeItem,
   retrieveItem,
@@ -98,6 +98,7 @@ const App = () => {
           <Onboard />
         )}
       </NavigationContainer>
+      <Toast />
     </>
   );
 };

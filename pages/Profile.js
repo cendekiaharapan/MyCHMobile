@@ -13,6 +13,7 @@ import { useNavigation } from "@react-navigation/native";
 import { FontFamily, Color, FontSize, Border, Padding } from "../GlobalStyles";
 import * as Svg from "react-native-svg";
 import { useEffect, useState } from "react";
+import Toast from "react-native-toast-message";
 import {
   storeItem,
   retrieveItem,
@@ -89,6 +90,13 @@ const AllPost = () => {
 
       // Navigate to your login screen or perform any other actions as needed
       navigation.navigate("Login Stack", { screen: "SignIn" }); // Replace "LoginStack" with the actual name of your login screen
+      Toast.show({
+        type: "success",
+        position: "top",
+        text1: "Logout Success",
+        visibilityTime: 3000,
+        autoHide: true,
+      });
     } catch (error) {
       console.error("Error during logout:", error);
     }

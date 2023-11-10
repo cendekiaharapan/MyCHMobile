@@ -19,7 +19,7 @@ import {
   saveRespDataSecureStore,
   getRespDataFromSecureStore,
 } from "../database/database";
-
+import Toast from "react-native-toast-message";
 const SignIn = () => {
   const [childData, setChildData] = useState(null);
   const navigation = useNavigation();
@@ -83,17 +83,38 @@ const SignIn = () => {
         }
         // You can navigate to another screen after successful login
         navigation.navigate("Main App Stack", { screen: "Profile" });
+        Toast.show({
+          type: "success",
+          position: "top",
+          text1: "Login Success",
+          visibilityTime: 3000,
+          autoHide: true,
+        });
       }
     } catch (error) {
       // Check if the error message contains information about invalid email or password
       if (error.response && error.response.status === 401) {
         if (error.response.data.error === "email not found") {
-          console.error("Email not found");
+          Toast.show({
+            type: "error",
+            position: "top",
+            text1: "Email not found",
+            visibilityTime: 3000,
+            autoHide: true,
+          });
+          // console.error("Email not found");
           // Show an error message to the user that email is not found
         } else if (
           error.response.data.error === "email and password do not match"
         ) {
-          console.error("Email and password do not match");
+          Toast.show({
+            type: "error",
+            position: "top",
+            text1: "Email and password do not match",
+            visibilityTime: 3000,
+            autoHide: true,
+          });
+          // console.error("Email and password do not match");
           // Show an error message to the user that email and password do not match
         } else {
           console.error("Login Error", error);
