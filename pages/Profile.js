@@ -101,6 +101,12 @@ const AllPost = () => {
       console.error("Error during logout:", error);
     }
   };
+
+  const handleTemporaryButton = () => {
+    navigation.navigate("Main App Stack", {
+      screen: "CallMyChild",
+    });
+  };
   // const handleLogout = () => {
   //   clearTokenFromSecureStore();
   //   clearResponseDataFromSecureStore();
@@ -160,7 +166,10 @@ const AllPost = () => {
             )}
           </View>
           <View style={styles.ButtonContainer}>
-            <TouchableOpacity style={styles.Button1}>
+            <TouchableOpacity
+              style={styles.Button1}
+              onPress={handleTemporaryButton}
+            >
               <Text style={styles.ButtonText}>Temporary Button</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.Button2} onPress={handleLogout}>

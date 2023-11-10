@@ -3,6 +3,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Onboard from "./pages/Onboard";
 import AllPost from "./pages/AllPost";
 import PostDetails from "./pages/PostDetails";
+import CallMyChild from "./pages/CallMyChild";
 import Profile from "./pages/Profile";
 import PopUp from "./components/PopUp";
 import CHDollar from "./components/CHDollar";
@@ -22,6 +23,11 @@ const MainStack = () => {
       <Stack.Screen
         name="PopUp"
         component={PopUp}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="CallMyChild"
+        component={CallMyChild}
         options={{ headerShown: false }}
       />
       <Stack.Screen
