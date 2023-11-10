@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Text, StyleSheet, View, Pressable, TextInput } from "react-native";
 import { Image } from "expo-image";
 import { useNavigation } from "@react-navigation/native";
@@ -14,55 +14,20 @@ import {
   retrieveItem,
   deleteItem,
   getAllKeys,
+  saveTokenToSecureStore,
+  getTokenFromSecureStore,
+  saveRespDataSecureStore,
+  getRespDataFromSecureStore,
 } from "../database/database";
 
 const SignIn = () => {
   const [childData, setChildData] = useState(null);
-  const saveTokenToSecureStore = async (token) => {
-    try {
-      await SecureStore.setItemAsync("api_token", token);
-      console.log("api_token Saved!");
-    } catch (error) {
-      console.error("Error saving token:", error);
-    }
-  };
-
-  const getTokenFromSecureStore = async () => {
-    try {
-      return await SecureStore.getItemAsync("api_token");
-    } catch (error) {
-      console.error("Error retrieving token:", error);
-      return null;
-    }
-  };
-
-  const saveRespDataSecureStore = async (responseData) => {
-    try {
-      const responseDataString = JSON.stringify(responseData);
-      await SecureStore.setItemAsync("resp_data", responseDataString);
-      console.log("Response data saved!");
-    } catch (error) {
-      console.error("Error saving response data:", error);
-    }
-  };
-
-  const getRespDataFromSecureStore = async () => {
-    try {
-      const responseDataString = await SecureStore.getItemAsync("resp_data");
-      if (responseDataString) {
-        const responseData = JSON.parse(responseDataString);
-        return responseData;
-      } else {
-        console.log("No response data found in SecureStore.");
-        return null;
-      }
-    } catch (error) {
-      console.error("Error retrieving response data:", error);
-      return null;
-    }
-  };
+  const navigation = useNavigation();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const sendLoginRequest = async () => {
+    console.log("this is inside send login request function");
     try {
       const response = await axios.post(
         "https://www.balichildrenshouse.com/myCHStaging/api/login",
@@ -77,14 +42,15 @@ const SignIn = () => {
       );
 
       if (response.status === 200) {
+        console.log("inside response 200 (send Login Request)");
         // Handle a successful login response here
         console.log("Login successful");
-
+        console.log("(send login Request) response data : ", response.data);
         const token = response.data.success.token;
-        saveTokenToSecureStore(token);
+        await saveTokenToSecureStore(token);
 
         const response_data = response.data;
-        saveRespDataSecureStore(response_data);
+        await saveRespDataSecureStore(response_data);
 
         resp = await getRespDataFromSecureStore();
 
@@ -98,12 +64,11 @@ const SignIn = () => {
           if (parentStudentsResponse.status === 200) {
             console.log("parent savechild data");
             // Handle the parent-students response data here
-            console.log(
-              "parent student response data = ",
-              parentStudentsResponse.data
-            );
+            // console.log(
+            //   "parent student response data = ",
+            //   parentStudentsResponse.data
+            // );
             storeItem("childData", parentStudentsResponse.data);
-
             // You can navigate to another screen after successful login
           } else {
             // Handle cases where there is no student data
@@ -116,30 +81,8 @@ const SignIn = () => {
             }
           }
         }
-        // Fetching the student id by parent id
-        // fetchChildDataFromSQLite()
-        //   .then((data) => {
-        //     if (data) {
-        //       // Use the retrieved data
-        //       const student_ids = data.map((item) => item.id);
-        //       const student_name = data.map((item) => item.name);
-        //       console.log("Student id : ", student_ids);
-        //       console.log("Student Name : ", student_name);
-
-        //       // Update your component state or data source with the new data
-        //       // For example, if you're using state in a functional component:
-        //       setChildData(data);
-        //     } else {
-        //       // Handle the case when no data is found
-        //       console.log("No data found in SQLite.");
-        //     }
-        //   })
-        //   .catch((error) => {
-        //     console.error("Error fetching response data from SQLite:", error);
-        //   });
-
         // You can navigate to another screen after successful login
-        navigation.navigate("AllPost");
+        navigation.navigate("Main App Stack", { screen: "Profile" });
       }
     } catch (error) {
       // Check if the error message contains information about invalid email or password
@@ -162,11 +105,6 @@ const SignIn = () => {
       }
     }
   };
-
-  const navigation = useNavigation();
-
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
 
   // Step 3: Define an onChangeText function
   const handlePasswordChange = (text) => {
