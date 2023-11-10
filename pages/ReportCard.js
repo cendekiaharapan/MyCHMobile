@@ -5,11 +5,25 @@ import { Button, NativeBaseProvider, Box, Select, Center } from 'native-base';
 import { LinearGradient } from 'expo-linear-gradient';
 import axios from 'axios'; // Import Axios
 import { FontFamily, Color, FontSize, Padding, Border } from '../GlobalStyles';
+import Toast  from 'react-native-toast-message';
+
 
 const ReportCard = () => {
   const [academicSessions, setAcademicSessions] = useState([]);
   const [selectedSession, setSelectedSession] = useState([]);
-  const [selectedSemester, setSelectedSemester] = useState([]);
+  const [selectedSemester, setSelectedSemester] = useState("Semester 1");
+  const [termSessions, setTermSessions] = useState([]);
+  const [filteredTermSessions, setFilteredTermSessions] = useState([]);
+  const [reportCardUrl, setReportCardUrl] = useState('https://www.balichildrenshouse.com/myCH/student-report-card');
+
+  const showToast = () => {
+    Toast.show({
+      type: 'error',
+      text1: 'Academic Session',
+      text2: 'There are no terms for this academic session',
+      position: 'top', 
+    });
+  };
 
   useEffect(() => {
     axios.get('https://www.balichildrenshouse.com/myCH/api/get-academic-sessions')
@@ -20,6 +34,33 @@ const ReportCard = () => {
         console.error('Error fetching academic sessions: ', error);
       });
   }, []);
+
+  function fetchAndSetTermSessions(selectedSession) {
+    console.log("inside ftech and set term session id : ",selectedSession);
+    if (selectedSession) {
+      console.log("SELECTED ACADEMIC SESSION NOT NULL!");
+      axios.get(`https://www.balichildrenshouse.com/myCH/api/get_session_terms/${selectedSession}`)
+        .then((termsResponse) => {
+          if (termsResponse && termsResponse.data) {
+            console.log("ini isi term response data", termsResponse.data);
+            setFilteredTermSessions(termsResponse.data);
+            setTermSessions(termsResponse.data);
+
+          } else {  
+            console.error('Error fetching term sessions: Response data is undefined');
+          }
+        })
+        .catch((error) => {
+          showToast();
+        });
+      }
+    }
+
+    const handleAcademicSessionChange = (itemId) => {
+      setSelectedSession(itemId);
+      
+      console.log("set selected section (itemId) = ",itemId);
+    };  
 
   const handleViewReportCard = () => {
     const studentId = "1981"; // You can change this to your desired student ID
@@ -47,7 +88,7 @@ const ReportCard = () => {
               contentFit="cover"
               source={require('../assets/frame.png')}
             />
-            <View style={styles.reportCardWrapper}>
+ <View style={styles.reportCardWrapper}>
               <Text style={styles.reportCard1}>Report Card</Text>
             </View>
           </View>
@@ -61,22 +102,23 @@ const ReportCard = () => {
             <View style={styles.frame3}>
               <View style={styles.selectSessionParent}>
                 <Text style={styles.selectSession}>Select Session</Text>
-                <Center> {/* Center the Select in Session */}
-                  <Select
-                    selectedValue={selectedSession}
-                    minWidth="275"
-                    accessibilityLabel="Choose Session"
-                    placeholder="Choose Session"
-                    onValueChange={(itemValue) => {
-                      setSelectedSession(itemValue);
-                      console.log('Selected Session:', itemValue);
-                    }}
-                  >
-                    {academicSessions.map(session => (
-                      <Select.Item key={session.id} label={session.name} value={session.id} />
-                    ))}
-                  </Select>
-                </Center>
+                <Center> 
+                <Select
+                
+                minWidth="275"
+                accessibilityLabel="Choose Session"
+                placeholder="Choose Session"
+                onValueChange={(itemId) => {
+                  // console.log("set selected session id : ",itemId);
+                  // console.log("value of selected session id : ",selectedSession);
+                  fetchAndSetTermSessions(itemId);
+                  setSelectedSession(itemId);
+                  }}>
+                {academicSessions.map(session => (
+                  <Select.Item key={session.id} label={session.name} value={session.id} />
+                ))}
+              </Select>
+              </Center>
               </View>
               <Image
                 style={styles.frameChild}
@@ -86,23 +128,24 @@ const ReportCard = () => {
             </View>
             <View style={styles.selectSemesterParent}>
               <Text style={styles.selectSession}>Select Semester</Text>
-              <Center> {/* Center the Select in Semester */}
-                <Select
-                  selectedValue={selectedSemester}
-                  minWidth="275"
-                  accessibilityLabel="Choose Semester"
-                  placeholder="Choose Semester"
-                  onValueChange={(itemValue) => {
-                    setSelectedSemester(itemValue);
-                    console.log('selected sem:', itemValue);
-                  }}
-                >
-                  <Select.Item label="Mid Semester 1" value="19" />
-                  <Select.Item label="Semester 1" value="20" />
-                  <Select.Item label="Mid Semester 2" value="17" />
-                  <Select.Item label="Semester 2" value="18" />
-                  {/* Add other semester options here */}
-                </Select>
+              <Center> 
+              {academicSessions.length > 0 && (
+              <Select
+              selectedValue={selectedSemester}
+              minWidth="275"
+              accessibilityLabel="Choose Semester"
+              placeholder="Choose Semester"
+              onValueChange={(itemValue) => {
+                setSelectedSemester(itemValue);
+                console.log('Selected Semester:', itemValue);
+              }}
+            >
+              {filteredTermSessions.map((term) => (
+                <Select.Item key={term.id} label={term.name} value={term.id} />
+              ))}
+            </Select>
+            )}
+
               </Center>
             </View>
             <View style={styles.buttonCariTiket}>
