@@ -103,8 +103,9 @@ const AllPost = () => {
   };
 
   const handleTemporaryButton = () => {
+    console.log("this is handle temporary button");
     navigation.navigate("Main App Stack", {
-      screen: "AllPost", // change this with your screen name
+      screen: "PaymentInvoice", // change this with your screen name
     });
   };
   // const handleLogout = () => {
@@ -166,10 +167,11 @@ const AllPost = () => {
             )}
           </View>
           <View style={styles.ButtonContainer}>
-            <TouchableOpacity style={styles.Button1}>
-              <Text style={styles.ButtonText} onPress={handleTemporaryButton}>
-                Temporary Button
-              </Text>
+            <TouchableOpacity
+              style={styles.Button1}
+              onPress={handleTemporaryButton}
+            >
+              <Text style={styles.ButtonText}>Temporary Button</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.Button2} onPress={handleLogout}>
               <Text style={styles.ButtonText}>Log Out</Text>

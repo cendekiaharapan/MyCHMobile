@@ -2,6 +2,8 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Onboard from "./pages/Onboard";
 import AllPost from "./pages/AllPost";
+import PaymentInvoice from "./pages/PaymentInvoice";
+import PaidInvoiceHistory from "./pages/PaidInvoiceHistory";
 import PostDetails from "./pages/PostDetails";
 import Profile from "./pages/Profile";
 import PopUp from "./components/PopUp";
@@ -17,6 +19,16 @@ const MainStack = () => {
       <Stack.Screen
         name="Profile"
         component={Profile}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="PaymentInvoice"
+        component={PaymentInvoice}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="PaidInvoiceHistory"
+        component={PaidInvoiceHistory}
         options={{ headerShown: false }}
       />
       <Stack.Screen
