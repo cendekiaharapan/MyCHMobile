@@ -12,6 +12,7 @@ import PostDetails from "./pages/PostDetails";
 import AllPost from "./pages/AllPost";
 import Password from "./pages/Password";
 import ReportCard from "./pages/ReportCard";
+import Toast  from 'react-native-toast-message';
 
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
@@ -96,6 +97,7 @@ const App = () => {
           <Onboard />
         )}
       </NavigationContainer>
+      <Toast />
     </>
   );
 };

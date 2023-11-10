@@ -6,7 +6,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import axios from 'axios'; // Import Axios
 import { FontFamily, Color, FontSize, Padding, Border } from '../GlobalStyles';
 import Toast  from 'react-native-toast-message';
-
+import { retrieveItem } from "../database/database";
 
 const ReportCard = () => {
   const [academicSessions, setAcademicSessions] = useState([]);
@@ -15,6 +15,36 @@ const ReportCard = () => {
   const [termSessions, setTermSessions] = useState([]);
   const [filteredTermSessions, setFilteredTermSessions] = useState([]);
   const [reportCardUrl, setReportCardUrl] = useState('https://www.balichildrenshouse.com/myCH/student-report-card');
+  const [studentIds, setStudentIds] = React.useState([]); // State to store student IDs
+  const [studentNames, setStudentNames] = React.useState([]);
+  const [selectedStudent, setSelectedStudent] = useState("");
+  
+  React.useEffect(() => {
+    // Retrieve student data from storage
+    retrieveItem("childData")
+      .then((data) => {
+        if (data) {
+          // Extract student_ids and student_name from data
+          const studentIds = data.map((item) => item.id);
+          const studentNames = data.map((item) => item.name);
+
+          // Set the extracted data to the component state
+          setStudentIds(studentIds);
+          setStudentNames(studentNames);
+
+          // Log the retrieved student_ids and student_names
+          console.log("Student IDssss:", studentIds);
+          console.log("Student Names:", studentNames);
+
+
+        } else {
+          console.log("No data found in SQLite.");
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching response data from SQLite:", error);
+      });
+  }, []);
 
   const showToast = () => {
     Toast.show({
@@ -63,8 +93,8 @@ const ReportCard = () => {
     };  
 
   const handleViewReportCard = () => {
-    const studentId = "1981"; // You can change this to your desired student ID
-    const url = `https://www.balichildrenshouse.com/myCH/api/getacademicreport/${studentId}/${selectedSession}/${selectedSemester}`;
+    // You can change this to your desired student ID
+    const url = `https://www.balichildrenshouse.com/myCH/api/getacademicreport/${selectedStudent}/${selectedSession}/${selectedSemester}`;
 
     axios.get(url)
       .then(response => {
@@ -100,6 +130,22 @@ const ReportCard = () => {
             colors={['#fff', 'rgba(255, 255, 255, 0)']}
           >
             <View style={styles.frame3}>
+              <View style={styles.selectSessionParent}>
+              <Text style={styles.selectSession}>Select Student</Text>
+                  {/* New Select component for students */}
+                  <Select
+                    minWidth="275"
+                    accessibilityLabel="Choose Student"
+                    placeholder="Choose Student"
+                    onValueChange={(studentId) => {
+                      setSelectedStudent(studentId);
+                    }}
+                  >
+                    {studentNames.map((student, index) => (
+                      <Select.Item key={studentIds[index]} label={student} value={studentIds[index]} />
+                    ))}
+                  </Select>
+                </View>
               <View style={styles.selectSessionParent}>
                 <Text style={styles.selectSession}>Select Session</Text>
                 <Center> 
@@ -205,6 +251,7 @@ const styles = StyleSheet.create({
   },
   frame: {
     width: 360,
+    height:50,
     overflow: "hidden",
     flexDirection: "column",
     alignItems: "center",
