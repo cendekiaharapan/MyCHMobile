@@ -1,22 +1,35 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { TouchableOpacity, Text, StyleSheet, Platform } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { FontFamily, FontSize } from "../GlobalStyles";
 
-const DatePickerComponent = ({ onDateChange }) => {
-  const [selectedDate, setSelectedDate] = useState(null); // Initialize to null
+const DatePickerComponent = ({ onDateChange, leave, fromDate, toDate }) => {
+  const [selectedDate, setSelectedDate] = useState(null);
   const [showDatePicker, setShowDatePicker] = useState(false);
 
-  // Function to handle date change
+  useEffect(() => {
+    if (leave) {
+      if (fromDate) {
+        setSelectedDate(new Date(fromDate));
+      } else if (toDate) {
+        setSelectedDate(new Date(toDate));
+      } else {
+        setSelectedDate(new Date());
+      }
+    }
+  }, [leave, fromDate, toDate]);
+
   const handleDateChange = (event, selected) => {
     if (selected !== undefined) {
+      // Formatting the date to the required format
+      const formattedDate = `${selected.getFullYear()}-${String(selected.getMonth() + 1).padStart(2, '0')}-${String(selected.getDate()).padStart(2, '0')} ${String(selected.getHours()).padStart(2, '0')}:${String(selected.getMinutes()).padStart(2, '0')}`;
+      
       setSelectedDate(selected);
       setShowDatePicker(Platform.OS === "ios"); // Close the picker on iOS
-      onDateChange(selected);
+      onDateChange(formattedDate);
     }
-  };
+  };  
 
-  // Function to show/hide the date picker
   const toggleDatePicker = () => {
     setShowDatePicker((prev) => !prev);
   };
@@ -36,11 +49,28 @@ const DatePickerComponent = ({ onDateChange }) => {
     "December",
   ];
 
+  const formatDate = (year, month, day, time) => {
+    if (!year || !month || !day || !time) {
+      return null;
+    }
+
+    const [hour, minute] = time.split(":");
+    const date = new Date(year, month - 1, day, hour, minute);
+
+    const yyyy = date.getFullYear();
+    const mm = String(date.getMonth() + 1).padStart(2, "0");
+    const dd = String(date.getDate()).padStart(2, "0");
+    const hh = String(date.getHours()).padStart(2, "0");
+    const min = String(date.getMinutes()).padStart(2, "0");
+
+    return `${yyyy}-${mm}-${dd} ${hh}:${min}`;
+  };
+
   const formattedDate = selectedDate
     ? `${selectedDate.getDate()} ${
         months[selectedDate.getMonth()]
       } ${selectedDate.getFullYear()}`
-    : "Select Date"; // Use "Select Date" if selectedDate is null
+    : "Select Date";
 
   return (
     <>
@@ -50,7 +80,7 @@ const DatePickerComponent = ({ onDateChange }) => {
 
       {showDatePicker && (
         <DateTimePicker
-          value={selectedDate || new Date()} // Use selectedDate or current date
+          value={selectedDate || new Date()}
           mode="date"
           display="default"
           onChange={handleDateChange}

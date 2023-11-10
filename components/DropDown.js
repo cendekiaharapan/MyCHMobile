@@ -1,7 +1,7 @@
 import * as React from "react";
 import { FormControl, Select, CheckIcon } from "native-base";
 
-const DropDown = ({ label, onServiceChange }) => {
+const DropDown = ({ label, onServiceChange, studentGet, leave }) => {
   const [service, setService] = React.useState("");
 
   // When the value changes, invoke the callback to pass the selected service
@@ -9,6 +9,15 @@ const DropDown = ({ label, onServiceChange }) => {
     setService(itemValue);
     onServiceChange(itemValue); // Call the callback
   };
+
+  React.useEffect(() => {
+    if (studentGet && studentGet.length > 0 && leave) {
+      const selectedStudent = studentGet.find((student) => student.id === leave.student_id);
+      if (selectedStudent) {
+        setService(selectedStudent.id);
+      }
+    }
+  }, [leave, studentGet]);
 
   return (
     <FormControl mt="3" mb="3">
@@ -28,8 +37,15 @@ const DropDown = ({ label, onServiceChange }) => {
         borderRadius="full"
         isReadOnly={true}
       >
-        <Select.Item label="Patrick" value="1029" />
-        <Select.Item label="Andrew" value="1030" />
+        {studentGet &&
+          studentGet.length > 0 &&
+          studentGet.map((student) => (
+            <Select.Item
+              key={student.id}
+              label={student.name}
+              value={student.id}
+            />
+          ))}
       </Select>
     </FormControl>
   );

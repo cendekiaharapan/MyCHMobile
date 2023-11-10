@@ -34,6 +34,7 @@ const ChildPermissionHistorys = () => {
   const [studentName, setStudentName] = useState(null);
   const [studentData, setStudentData] = useState(null);
   const [studentImg, setStudentImg] = useState(null);
+  const [studentGet, setStudentGet] = useState(null);
 
   useEffect(() => {
     console.log("use Effect actived!");
@@ -51,6 +52,7 @@ const ChildPermissionHistorys = () => {
 
           // Update your component state or data source with the new data
           // For example, if you're using state in a functional component:
+          setStudentGet(data);
           setChildId(student_ids);
           setStudentName(student_name);
           setStudentImg(student_image);
@@ -184,6 +186,8 @@ const ChildPermissionHistorys = () => {
                           <PermissionHistory
                             imageUri={studentImg[studentId_index]}
                             imageUrl={imageUrl}
+                            studentGet={studentGet}
+                            childId={childId[studentId_index]}
                             name={studentName[studentId_index]}
                             type={
                               leave.apply_type === "sick_leave"
@@ -191,6 +195,7 @@ const ChildPermissionHistorys = () => {
                                 : "Excused"
                             }
                             time={leave.created_at}
+                            leave={leave}
                           />
                         );
                       })
