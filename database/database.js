@@ -1,6 +1,5 @@
-import * as React from "react";
-import * as SQLite from "expo-sqlite";
 import { Storage } from "expo-storage";
+import * as SecureStore from "expo-secure-store";
 
 const storeItem = async (key, data) => {
   try {
@@ -51,4 +50,77 @@ const getAllKeys = async () => {
   }
 };
 
-export { storeItem, retrieveItem, deleteItem, getAllKeys };
+const saveTokenToSecureStore = async (token) => {
+  try {
+    await SecureStore.setItemAsync("api_token", token);
+    console.log("api_token Saved!");
+  } catch (error) {
+    console.error("Error saving token:", error);
+  }
+};
+
+const getTokenFromSecureStore = async () => {
+  try {
+    return await SecureStore.getItemAsync("api_token");
+  } catch (error) {
+    console.error("Error retrieving token:", error);
+    return null;
+  }
+};
+
+const saveRespDataSecureStore = async (responseData) => {
+  try {
+    const responseDataString = JSON.stringify(responseData);
+    await SecureStore.setItemAsync("resp_data", responseDataString);
+    console.log("Response data saved!");
+  } catch (error) {
+    console.error("Error saving response data:", error);
+  }
+};
+
+const clearResponseDataFromSecureStore = async () => {
+  try {
+    await SecureStore.deleteItemAsync("resp_data");
+    console.log("Response data cleared from SecureStore.");
+  } catch (error) {
+    console.error("Error clearing response data:", error);
+  }
+};
+
+const clearTokenFromSecureStore = async () => {
+  try {
+    await SecureStore.deleteItemAsync("api_token");
+    console.log("Token cleared from SecureStore.");
+  } catch (error) {
+    console.error("Error clearing token:", error);
+  }
+};
+
+const getRespDataFromSecureStore = async () => {
+  try {
+    const responseDataString = await SecureStore.getItemAsync("resp_data");
+    if (responseDataString) {
+      const responseData = JSON.parse(responseDataString);
+      return responseData;
+    } else {
+      console.log("No response data found in SecureStore.");
+      return null;
+    }
+  } catch (error) {
+    console.error("Error retrieving response data:", error);
+    return null;
+  }
+};
+
+export {
+  storeItem,
+  retrieveItem,
+  deleteItem,
+  getAllKeys,
+  saveTokenToSecureStore,
+  getTokenFromSecureStore,
+  saveRespDataSecureStore,
+  getRespDataFromSecureStore,
+  clearTokenFromSecureStore,
+  clearResponseDataFromSecureStore,
+};
