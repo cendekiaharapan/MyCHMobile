@@ -86,7 +86,7 @@ const ChildPermissionHistorys = () => {
   const fetchChildPermissionData = async (studentId) => {
     try {
       const response = await axios.get(
-        `https://www.balichildrenshouse.com/myCHStaging/api/get-leave-by-student-id/${studentId}`
+        `https://www.balichildrenshouse.com/myCH/api/get-leave-by-student-id/${studentId}`
       );
 
       // Handle the response data
