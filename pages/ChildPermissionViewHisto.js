@@ -7,28 +7,53 @@ import DatePickerComponent from "../components/DatePicker";
 import DocumentPick from "../components/DocumentPick";
 import { useNavigation } from "@react-navigation/native";
 import DropDown from "../components/DropDown";
+import Toast from 'react-native-toast-message';
 
 
 const ChildPermissionViewHisto = () => {
 const [service, setService] = React.useState("");
+const [loading, setLoading] = React.useState(false);
 const navigation = useNavigation();
+
+const showToastSuccess = () => {
+  Toast.show({
+    type: 'success',
+    text1: 'Execuse Deleted Successfully',
+    position: 'top'
+  });
+};
+
+const showToastError = () => {
+  Toast.show({
+    type: 'error',
+    text1: 'Execuse Cannot be Deleted',
+    position: 'top'
+  });
+};
 
 const handleDelete = async () => {
   try {
-    const response = await fetch("https://www.balichildrenshouse.com/myCHStaging/api/delete_excused/6010", {
+    setLoading(true);
+
+    const response = await fetch("https://www.balichildrenshouse.com/myCH/api/delete_excused/7946", {
       method: "DELETE"
     });
 
+    console.log("Response:", response);
+
     if (response.status === 204) {
+      showToastSuccess();
       console.log("Deleted successfully");
-      // Add navigation logic here to go to the desired screen
     } else {
-      const successText = await response.text();
-      console.log("Success to delete record. Status: " + response.status);
-      console.log("Success details: " + successText);
+      showToastError();
+      const errorText = await response.text();
+      console.error("error to delete record. Status: " + response.status);
+      console.error("error details: " + errorText);
     }
   } catch (error) {
     console.error("An error occurred:", error);
+  } finally {
+    setLoading(false); 
   }
 };
 

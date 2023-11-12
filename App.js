@@ -11,7 +11,7 @@ import AverageDailyScore from "./components/AverageDailyScore";
 import PostDetails from "./pages/PostDetails";
 import AllPost from "./pages/AllPost";
 import Password from "./pages/Password";
-import Coba from "./components/Coba";
+import Toast from 'react-native-toast-message';
 
 // permission history
 import ChildPermissionAddPermis from "./pages/ChildPermissionAddPermis";
@@ -51,6 +51,11 @@ const App = () => {
         {hideSplashScreen ? (
           <Stack.Navigator screenOptions={{ headerShown: false }}>
             <Stack.Screen
+              name="SignIn"
+              component={SignIn}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
               name="ChildPermissionViewHisto"
               component={ChildPermissionViewHisto}
               options={{ headerShown: false }}
@@ -58,11 +63,6 @@ const App = () => {
             <Stack.Screen
               name="ChildPermissionAddPermis"
               component={ChildPermissionAddPermis}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="SignIn"
-              component={SignIn}
               options={{ headerShown: false }}
             />
             <Stack.Screen
@@ -125,6 +125,7 @@ const App = () => {
           <Onboard />
         )}
       </NavigationContainer>
+      <Toast />
     </>
   );
 };
