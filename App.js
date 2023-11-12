@@ -66,6 +66,11 @@ const App = () => {
               options={{ headerShown: false }}
             />
             <Stack.Screen
+              name="ChildPermissionAddPermis"
+              component={ChildPermissionAddPermis}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
               name="CHDollar"
               component={CHDollar}
               options={{ headerShown: false }}
@@ -98,11 +103,6 @@ const App = () => {
             <Stack.Screen
               name="ChildPermissionHistorys"
               component={ChildPermissionHistorys}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="ChildPermissionAddPermis"
-              component={ChildPermissionAddPermis}
               options={{ headerShown: false }}
             />
             <Stack.Screen

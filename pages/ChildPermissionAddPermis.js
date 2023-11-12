@@ -27,14 +27,22 @@ import {
   useToast,
 } from "native-base";
 import { useNavigation } from "@react-navigation/native"; // Import useNavigation
-import DateTimePicker from "@react-native-community/datetimepicker"; //date time picker
-import DatePickerComponent from "../components/DatePicker"; // date picker
+
+// date picker
 import DocumentPick from "../components/DocumentPick"; // document pick
 import DropDown from "../components/DropDown";
 import axios from "axios";
+import DateTimePicker from "../components/DateTimePicker"; 
+
+import { retrieveItem } from "../database/database";
+import { useState } from "react";
 
 const ChildPermissionAddPermis = () => {
   const navigation = useNavigation();
+  const [studentIds, setStudentIds] = React.useState([]); // State to store student IDs
+  const [studentNames, setStudentNames] = React.useState([]);
+  const [selectedStudent, setSelectedStudent] = useState("");
+
 
   const [service, setService] = React.useState(""); // Initialize service state
   const [type, setType] = React.useState(""); // Initialize service state
@@ -42,6 +50,32 @@ const ChildPermissionAddPermis = () => {
   const [toDate, setToDate] = React.useState(null);
   const [note, setNote] = React.useState("");
 
+  React.useEffect(() => {
+    // Retrieve student data from storage
+    retrieveItem("childData")
+      .then((data) => {
+        if (data) {
+          // Extract student_ids and student_name from data
+          const studentIds = data.map((item) => item.id);
+          const studentNames = data.map((item) => item.name);
+
+          // Set the extracted data to the component state
+          setStudentIds(studentIds);
+          setStudentNames(studentNames);
+
+          // Log the retrieved student_ids and student_names
+          console.log("Student IDssss:", studentIds);
+          console.log("Student Names:", studentNames);
+
+
+        } else {
+          console.log("No data found in SQLite.");
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching response data from SQLite:", error);
+      });
+  }, []);
   // Function to handle the selected date
   const handleDateChange = (date, field) => {
     if (field === "from") {
@@ -61,7 +95,8 @@ const ChildPermissionAddPermis = () => {
     setNote(text);
   };
 
-  const handleSubmitButton = () => {
+  const handleSubmitButton = async () => {
+    console.log("inside from date : ",fromDate);
     // Create a data object with the data to send in the request
     const data = {
       student_id: service,
@@ -70,6 +105,7 @@ const ChildPermissionAddPermis = () => {
       to_date: toDate,
       note: note,
     };
+    console.log("inside data : ",data);
 
     // Make a POST request to the API
     axios
@@ -114,7 +150,25 @@ const ChildPermissionAddPermis = () => {
           {/* End Hero Content */}
           <ScrollView>
             {/* Form 1 ( Child ) */}
-            <DropDown label="Child" onServiceChange={handleServiceChange} />
+            <FormControl mb="3">
+              <FormControl.Label>Select Student</FormControl.Label>
+                  {/* New Select component for students */}
+                  <Select
+                     height="10"
+                    minWidth="200"
+                    accessibilityLabel="Choose Student"
+                    placeholder="Choose Student"
+                    onValueChange={(studentId) => {
+                      setSelectedStudent(studentId);
+                    }}
+                    borderRadius="full"
+                    isReadOnly={true}
+                  >
+                    {studentNames.map((student, index) => (
+                      <Select.Item key={studentIds[index]} label={student} value={studentIds[index]} />
+                    ))}
+                  </Select>
+                </FormControl>
             {/* End Form 1 ( Child ) */}
 
             {/* Form 2 ( Type Of Permission ) */}
@@ -144,7 +198,7 @@ const ChildPermissionAddPermis = () => {
             {/* Form 3 ( Date Picker ) */}
             <FormControl mb="3">
               <FormControl.Label>From</FormControl.Label>
-              <DatePickerComponent
+              <DateTimePicker
                 onDateChange={(date) => handleDateChange(date, "from")}
               />
             </FormControl>
@@ -152,7 +206,7 @@ const ChildPermissionAddPermis = () => {
             {/* Form 4 ( Date Picker ) */}
             <FormControl mb="3">
               <FormControl.Label>To</FormControl.Label>
-              <DatePickerComponent
+              <DateTimePicker
                 onDateChange={(date) => handleDateChange(date, "to")}
               />
             </FormControl>
