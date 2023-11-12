@@ -10,12 +10,10 @@ import { Color, FontFamily, FontSize, Border, Padding } from "../GlobalStyles";
 
 const Assessment = () => {
   const navigation = useNavigation();
-  const Assessment = () => {
-    const [isTextClicked, setIsTextClicked] = useState(false);
+  const [isTextClicked, setIsTextClicked] = useState(false);
 
-    const handleTextClick = () => {
-      setIsTextClicked(!isTextClicked);
-    };
+  const handleTextClick = () => {
+    setIsTextClicked(!isTextClicked);
   };
 
   return (

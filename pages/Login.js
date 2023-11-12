@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Text, StyleSheet, View, Image, TouchableOpacity } from "react-native";
 import { Border, Color, FontFamily, FontSize, Padding } from "../GlobalStyles";
-import {Home} from "./Home";
+import { Home } from "./Home";
 
 const Login = ({ navigation }) => {
   return (
@@ -41,7 +41,7 @@ const Login = ({ navigation }) => {
       <TouchableOpacity
         style={styles.btnprimary}
         activeOpacity={0.2}
-        onPress={() => navigation.navigate('Home')}
+        onPress={() => navigation.navigate("Assessment")}
       >
         <Text style={[styles.login1, styles.textTypo]}>LOGIN</Text>
       </TouchableOpacity>
