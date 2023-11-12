@@ -1,226 +1,100 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Pressable, Text, View, Image, ScrollView } from "react-native";
+import {
+  StyleSheet,
+  Pressable,
+  Text,
+  View,
+  Image,
+  ScrollView,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { FontFamily, Color, FontSize, Border, Padding } from "../GlobalStyles";
+import LatestPost from "../components/LatestPost";
 
 const AllPost = () => {
   const navigation = useNavigation();
-  const [postData, setPostData] = useState([]);
+  const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-    // Define the API endpoint URL
-    const apiUrl = "https://www.balichildrenshouse.com/myCH/api/all_post";
-
-    // Fetch data from the API
-    fetch(apiUrl)
+    fetch("https://www.balichildrenshouse.com/myCH/api/all-post")
       .then((response) => response.json())
       .then((data) => {
-        setPostData(data); // Store the retrieved data in the state
+        setPosts(data.posts);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
   }, []);
 
+  const handlePostPress = (post) => {
+    navigation.navigate("PostDetails", { post });
+  };
+
   return (
-    
-    <View style={[styles.allPost, styles.allFlexBox1]}>
-      <View style={[styles.content, styles.allFlexBox1]}>
-        <View style={[styles.hero, styles.allFlexBox1]}>
-          <View style={[styles.backiconParent, styles.allFlexBox1]}>
+    <View style={styles.allPost}>
+      <View style={styles.content}>
+        <View style={styles.hero}>
+          <View style={styles.backiconParent}>
             <Pressable
               style={styles.backicon}
               onPress={() => navigation.navigate("SignIn")}
             >
               <Image
-              style={styles.icon}
-              contentFit="cover"
-              source={require("../assets/images/backicon2.png")}
+                style={styles.icon}
+                source={require("../assets/images/backicon2.png")}
               />
             </Pressable>
-            <View style={[styles.postWrapper, styles.allFlexBox1]}>
-              <Text style={[styles.post, styles.postTypo]}>Post</Text>
+            <View style={styles.postWrapper}>
+              <Text style={styles.post}>Post</Text>
             </View>
           </View>
-          <Pressable
-            style={styles.allFlexBox}
-            onPress={() => navigation.navigate("PostDetails")}
-          >
-            <Image
-              style={styles.posthimgIcon}
-              contentFit="cover"
-              source={require("../assets/images/posthimg.png")}
-            />
-            <Text style={[styles.posthtime, styles.posthtimePosition]}>
-              28, Sep 2023 at 12:21 pm
-            </Text>
-            <Text style={[styles.posthtittle, styles.posthtittleTypo]}>
-              Massa tortor nibh nulla condimentum imperdiet scelerisque...
-            </Text>
-          </Pressable>
+          {posts.length > 0 && (
+            <Pressable
+              style={styles.allFlexBox}
+              onPress={() => handlePostPress(posts[0])}
+            >
+              <Image
+                style={styles.posthimgIcon}
+                source={{
+                  uri:
+                    "https://www.balichildrenshouse.com/myCH/ev-assets/uploads/post-images/" +
+                    posts[0].image,
+                }}
+              />
+              <Text style={[styles.posthtime, styles.posthtimePosition]}>
+                {posts[0].created_at}
+              </Text>
+              <Text style={[styles.posthtittle, styles.posthtittleTypo]}>
+                {posts[0].title}
+              </Text>
+            </Pressable>
+          )}
         </View>
+
         <ScrollView style={styles.scrollView}>
-
-        <View style={styles.allFlexBox}>
-          <View style={[styles.all1, styles.allFlexBox1]}>
-            <Text style={[styles.latestpost, styles.postTypo]}>
-              Latest Post
-            </Text>
-
-            <View style={[styles.allframesFlexBox]}>
-              <View style={[styles.frameParent, styles.allframesFlexBox]}>
-                <View style={styles.post1Parent}>
-                  <Pressable
-                    style={styles.post1}
-                    onPress={() => navigation.navigate("PostDetails")}
-                  >
-                    <Text style={[styles.post2time, styles.post1timeTypo]}>
-                      28, Sep 2023 at 12:21 pm
-                    </Text>
-                    <Text style={[styles.post1tittle, styles.post1tittleTypo]}>
-                      News Title Lorems Ipsum Dolor Sit Amet
-                    </Text>
-                    <Image
-                      style={[styles.post1imgIcon, styles.iconLayout]}
-                      contentFit="cover"
-                      source={require("../assets/images/post1img.png")}
+          <View style={styles.allFlexBox}>
+            <View style={styles.all1}>
+              <Text style={[styles.latestpost, styles.postTypo]}>
+                Latest Post
+              </Text>
+              <View style={styles.latestPostContainer}>
+                {posts.length > 0 ? (
+                  posts.map((post, index) => (
+                    <LatestPost
+                      post={post}
+                      onPress={() => handlePostPress(post)}
+                      key={post.id}
                     />
-                  </Pressable>
-
-                  <View style={styles.post2}>
-                    <Text style={[styles.post2time, styles.post1timeTypo]}>
-                      28, Sep 2023 at 12:21 pm
-                    </Text>
-                    <Text style={[styles.post2tittle, styles.post1tittleTypo]}>
-                      News Title Lorem Ipsum Dolor Sit Amet
-                    </Text>
-                    <Image
-                      style={[styles.post2imgIcon, styles.iconLayout]}
-                      contentFit="cover"
-                      source={require("../assets/images/post2img.png")}
-                    />
-                  </View>
-                </View>
+                  ))
+                ) : (
+                  <Text>Loading...</Text>
+                )}
               </View>
             </View>
-
-            <View style={[styles.allframesFlexBox]}>
-              <View style={[styles.frameParent, styles.allframesFlexBox]}>
-                <View style={styles.post1Parent}>
-                  <Pressable
-                    style={styles.post1}
-                    onPress={() => navigation.navigate("PostDetails")}
-                  >
-                    <Text style={[styles.post2time, styles.post1timeTypo]}>
-                      28, Sep 2023 at 12:21 pm
-                    </Text>
-                    <Text style={[styles.post1tittle, styles.post1tittleTypo]}>
-                      News Title Lorems Ipsum Dolor Sit Amet
-                    </Text>
-                    <Image
-                      style={[styles.post1imgIcon, styles.iconLayout]}
-                      contentFit="cover"
-                      source={require("../assets/images/post1img.png")}
-                    />
-                  </Pressable>
-
-                  <View style={styles.post2}>
-                    <Text style={[styles.post2time, styles.post1timeTypo]}>
-                      28, Sep 2023 at 12:21 pm
-                    </Text>
-                    <Text style={[styles.post2tittle, styles.post1tittleTypo]}>
-                      News Title Lorem Ipsum Dolor Sit Amet
-                    </Text>
-                    <Image
-                      style={[styles.post2imgIcon, styles.iconLayout]}
-                      contentFit="cover"
-                      source={require("../assets/images/post2img.png")}
-                    />
-                  </View>
-                </View>
-              </View>
-            </View>
-
-            <View style={[styles.allframesFlexBox]}>
-              <View style={[styles.frameParent, styles.allframesFlexBox]}>
-                <View style={styles.post1Parent}>
-                  <Pressable
-                    style={styles.post1}
-                    onPress={() => navigation.navigate("PostDetails")}
-                  >
-                    <Text style={[styles.post2time, styles.post1timeTypo]}>
-                      28, Sep 2023 at 12:21 pm
-                    </Text>
-                    <Text style={[styles.post1tittle, styles.post1tittleTypo]}>
-                      News Title Lorems Ipsum Dolor Sit Amet
-                    </Text>
-                    <Image
-                      style={[styles.post1imgIcon, styles.iconLayout]}
-                      contentFit="cover"
-                      source={require("../assets/images/post1img.png")}
-                    />
-                  </Pressable>
-
-                  <View style={styles.post2}>
-                    <Text style={[styles.post2time, styles.post1timeTypo]}>
-                      28, Sep 2023 at 12:21 pm
-                    </Text>
-                    <Text style={[styles.post2tittle, styles.post1tittleTypo]}>
-                      News Title Lorem Ipsum Dolor Sit Amet
-                    </Text>
-                    <Image
-                      style={[styles.post2imgIcon, styles.iconLayout]}
-                      contentFit="cover"
-                      source={require("../assets/images/post2img.png")}
-                    />
-                  </View>
-                </View>
-              </View>
-            </View>
-
-            <View style={[styles.allframesFlexBox]}>
-              <View style={[styles.frameParent, styles.allframesFlexBox]}>
-                <View style={styles.post1Parent}>
-                  <Pressable
-                    style={styles.post1}
-                    onPress={() => navigation.navigate("PostDetails")}
-                  >
-                    <Text style={[styles.post2time, styles.post1timeTypo]}>
-                      28, Sep 2023 at 12:21 pm
-                    </Text>
-                    <Text style={[styles.post1tittle, styles.post1tittleTypo]}>
-                      News Title Lorems Ipsum Dolor Sit Amet
-                    </Text>
-                    <Image
-                      style={[styles.post1imgIcon, styles.iconLayout]}
-                      contentFit="cover"
-                      source={require("../assets/images/post1img.png")}
-                    />
-                  </Pressable>
-
-                  <View style={styles.post2}>
-                    <Text style={[styles.post2time, styles.post1timeTypo]}>
-                      28, Sep 2023 at 12:21 pm
-                    </Text>
-                    <Text style={[styles.post2tittle, styles.post1tittleTypo]}>
-                      News Title Lorem Ipsum Dolor Sit Amet
-                    </Text>
-                    <Image
-                      style={[styles.post2imgIcon, styles.iconLayout]}
-                      contentFit="cover"
-                      source={require("../assets/images/post2img.png")}
-                    />
-                  </View>
-                </View>
-              </View>
-            </View>
-           
           </View>
-        </View>
-          </ScrollView>
+        </ScrollView>
       </View>
     </View>
-    
   );
 };
 
@@ -228,6 +102,7 @@ const styles = StyleSheet.create({
   allFlexBox1: {
     justifyContent: "center",
     alignItems: "center",
+    marginBottom: 0,
   },
   iconLayout1: {
     overflow: "hidden",
@@ -237,6 +112,18 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.poppinsBold,
     fontWeight: "700",
     color: Color.colorMidnightblue,
+    marginLeft: "28%",
+    marginBottom: 20,
+  },
+  latestPostContainer: {
+    flexWrap: "wrap",
+    flexDirection: "row",
+    width: "100%",
+  },
+  latestPostRow: {
+    flexDirection: "row",
+    marginBottom: 20, // Jarak di tengah Latest Post
+    width: "50%",
   },
   posthtimePosition: {
     color: Color.white,
@@ -254,6 +141,15 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "row",
+  },
+  latestPostRow: {
+    flexDirection: "row",
+    marginBottom: 10, // Jarak vertikal antara baris Latest Post
+  },
+  post1: {
+    height: 194,
+    width: 143,
+    marginRight: 10, // Jarak horizontal antara komponen LatestPost
   },
   post1timeTypo: {
     color: Color.black20,
@@ -288,10 +184,12 @@ const styles = StyleSheet.create({
   },
   post: {
     fontSize: FontSize.size_xl,
-    textAlign: "center",
     color: Color.colorMidnightblue,
     flex: 1,
-    marginRight: 50,
+    fontFamily: FontFamily.poppinsBold,
+    fontWeight: "700",
+    color: Color.colorMidnightblue,
+    marginLeft: "40%",
   },
   postWrapper: {
     flexDirection: "row",
@@ -347,6 +245,7 @@ const styles = StyleSheet.create({
     fontSize: FontSize.size_mini,
     textAlign: "left",
     color: Color.colorMidnightblue,
+    testAlign: "center",
   },
   post1time: {
     width: 85,
@@ -451,7 +350,7 @@ const styles = StyleSheet.create({
     backgroundColor: Color.colorGray_100,
     height: 800,
     paddingHorizontal: Padding.p_xl,
-    paddingVertical: 40,
+    paddingVertical: 30,
     flexDirection: "row",
     overflow: "hidden",
     width: "100%",
