@@ -48,7 +48,7 @@ const MessageToTeacherHistory = () => {
       const parent_id = parentData.user.id;
       console.log("parent_id = ", parent_id);
       // Define the API URL
-      const apiUrl = `https://www.balichildrenshouse.com/myCHStaging/api/history-communicate/${parent_id}`;
+      const apiUrl = `https://www.balichildrenshouse.com/myCH/api/history-communicate/${parent_id}`;
 
       // Make a GET request to the API
       axios
@@ -103,7 +103,7 @@ const MessageToTeacherHistory = () => {
         for (const teacherId of uniqueTeacherIds) {
           try {
             const response = await axios.get(
-              `https://www.balichildrenshouse.com/myCHStaging/api/get-teacher/${teacherId}`
+              `https://www.balichildrenshouse.com/myCH/api/get-teacher/${teacherId}`
             );
 
             const teacherName = response.data[0]?.name || "Unknown Teacher";
