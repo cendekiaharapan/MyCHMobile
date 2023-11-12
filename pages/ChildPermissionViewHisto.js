@@ -44,24 +44,26 @@ const ChildPermissionViewHisto = ({ route, navigation }) => {
   // State variables for the form fields
   const [student, setStudent] = useState("");
   const [type, setType] = useState("");
-  const [fromDate, setFromDate] = useState(null);
-  const [toDate, setToDate] = useState(null);
+  const [fromDateTime, setFromDateTime] = useState(null);
+  const [toDateTime, setToDateTime] = useState(null);
   const [note, setNote] = useState("");
 
+  const fromTimestamp = formatTimestamp(fromDateTime);
+  const toTimestamp = formatTimestamp(toDateTime);
   const fullImageUrl = `${imageUrl}${imageUri}`;
 
   useEffect(() => {
     if (leave) {
       setStudent(leave.student_id);
       setType(leave.apply_type);
-      setFromDate(formatDate(leave.year, leave.month, leave.day, leave.from_time));
-      setToDate(formatDate(leave.to_year, leave.to_month, leave.to_day, leave.to_time));
+      setFromDateTime(formatDateTime(leave.year, leave.month, leave.day, leave.from_time));
+      setToDateTime(formatDateTime(leave.to_year, leave.to_month, leave.to_day, leave.to_time));
       setNote(leave.note);
     }
   }, [leave]);
   
   // Helper function to format date and time
-  const formatDate = (year, month, day, time) => {
+  const formatDateTime = (year, month, day, time) => {
     if (!year || !month || !day || !time) {
       return null;
     }
@@ -79,11 +81,11 @@ const ChildPermissionViewHisto = ({ route, navigation }) => {
     return `${yyyy}-${mm}-${dd} ${hh}:${min}`;
   };
 
-  const handleDateChange = (date, field) => {
+  const handleDateTimeChange = (dateTime, field) => {
     if (field === "from") {
-      setFromDate(date);
+      setFromDateTime(dateTime);
     } else if (field === "to") {
-      setToDate(date);
+      setToDateTime(dateTime);
     }
   };
 
@@ -96,29 +98,48 @@ const ChildPermissionViewHisto = ({ route, navigation }) => {
   };
 
   const handleUpdateData = () => {
+    // Format from_timestamp and to_timestamp
+  
     const data = {
       id: leave.id,
       student_id: student,
       apply_type: type,
-      from_timestamp: fromDate,
-      to_timestamp: toDate,
+      from_timestamp: fromTimestamp,
+      to_timestamp: toTimestamp,
       note: note,
     };
-
+  
     console.log(data);
-
+  
     axios
       .patch("https://www.balichildrenshouse.com/myCHStaging/api/edit-leave", data)
       .then((response) => {
         console.log("API response:", response.data);
-
         navigation.goBack();
       })
       .catch((error) => {
         console.error("API request error:", error);
-        
       });
   };
+  
+  // Helper function to format timestamp
+  const formatTimestamp = (timestamp) => {
+    if (!timestamp) {
+      return null;
+    }
+  
+    const date = new Date(timestamp);
+  
+    const yyyy = date.getFullYear();
+    const mm = String(date.getMonth() + 1).padStart(2, "0");
+    const dd = String(date.getDate()).padStart(2, "0");
+    const hh = String(date.getHours()).padStart(2, "0");
+    const min = String(date.getMinutes()).padStart(2, "0");
+  
+    return `${yyyy}-${mm}-${dd} ${hh}:${min}`;
+  };
+  
+  
 
   return (
     <NativeBaseProvider>
@@ -194,33 +215,27 @@ const ChildPermissionViewHisto = ({ route, navigation }) => {
                 {/* Form 3 ( Date Picker ) */}
                 <FormControl mb="3">
                   <FormControl.Label>From</FormControl.Label>
-                  <DatePickerComponent 
-                  onDateChange={(date) => handleDateChange(date, "from")} 
-                  fromDate={formatDate(leave.year, leave.month, leave.day, leave.from_time)}
+                  <DatePickerComponent
+                    onDateChange={(dateTime) => handleDateTimeChange(dateTime, "from")}
+                    dateTime={formatDateTime(leave.year, leave.month, leave.day, leave.from_time)}
                   />
                 </FormControl>
                 {/* End Form 3 ( Date Picker ) */}
                 {/* Form 4 ( Date Picker ) */}
                 <FormControl mb="3">
                   <FormControl.Label>To</FormControl.Label>
-                  <DatePickerComponent 
-                  onDateChange={(date) => handleDateChange(date, "to")} 
-                  toDate={formatDate(leave.to_year, leave.to_month, leave.to_day, leave.to_time)}
+                  <DatePickerComponent
+                    onDateChange={(dateTime) => handleDateTimeChange(dateTime, "to")}
+                    dateTime={formatDateTime(leave.year, leave.month, leave.day, leave.from_time)}
                   />
                 </FormControl>
                 {/* End Form 4 ( Date Picker ) */}
-                {/* Form 5 ( Document Picker ) */}
-                <FormControl mb="3">
-                  <FormControl.Label>Letter (Optional)</FormControl.Label>
-                  <DocumentPick />
-                </FormControl>
-                {/* End Form 5 ( Document Picker ) */}
-                {/* Form 6 ( Commment Box ) */}
+                {/* Form 5 ( Commment Box ) */}
                 <FormControl mb="3">
                   <FormControl.Label>Note</FormControl.Label>
                   <TextArea h={40} placeholder="Leave a note" value={note} onChangeText={handleNoteChange} />
                 </FormControl>
-                {/* End Form 6 ( Comment Box ) */}
+                {/* End Form 5 ( Comment Box ) */}
               </View>
             </ScrollView>
           </View>

@@ -3,7 +3,7 @@ import { TouchableOpacity, Text, StyleSheet, Platform } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { FontFamily, FontSize } from "../GlobalStyles";
 
-const DatePickerComponent = ({ onDateChange, leave, fromDate, toDate }) => {
+const DatePickerComponent = ({ onDateChange, dateTime, leave }) => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [showDatePicker, setShowDatePicker] = useState(false);
 
@@ -11,20 +11,14 @@ const DatePickerComponent = ({ onDateChange, leave, fromDate, toDate }) => {
   const [showTimePicker, setShowTimePicker] = useState(false);
 
   useEffect(() => {
-    if (leave) {
-      if (fromDate) {
-        const [date, time] = fromDate.split(" ");
-        setSelectedDate(new Date(date));
-        setSelectedTime(time || null);
-      } else if (toDate) {
-        const [date, time] = toDate.split(" ");
-        setSelectedDate(new Date(date));
-        setSelectedTime(time || null);
-      } else {
-        setSelectedDate(new Date());
-      }
+    if (dateTime) {
+      const [date, time] = dateTime.split(" ");
+      setSelectedDate(new Date(date));
+      setSelectedTime(time || null);
+    } else {
+      setSelectedDate(new Date());
     }
-  }, [leave, fromDate, toDate]);
+  }, [dateTime]);
 
   // Inside DatePickerComponent
 
@@ -36,8 +30,11 @@ const DatePickerComponent = ({ onDateChange, leave, fromDate, toDate }) => {
       // Format selected date
       const formattedDate = `${selected.getFullYear()}-${String(selected.getMonth() + 1).padStart(2, '0')}-${String(selected.getDate()).padStart(2, '0')}`;
 
-      // Pass formatted date to the parent component
-      onDateChange({ date: formattedDate, time: selectedTime });
+      // Ensure onDateChange is a function before calling it
+      if (typeof onDateChange === 'function') {
+        // Pass formatted date to the parent component
+        onDateChange({ date: formattedDate, time: selectedTime });
+      }
     }
   };
 
@@ -49,11 +46,13 @@ const DatePickerComponent = ({ onDateChange, leave, fromDate, toDate }) => {
       // Format selected time
       const formattedTime = `${String(selected.getHours()).padStart(2, '0')}:${String(selected.getMinutes()).padStart(2, '0')}`;
 
-      // Pass formatted time to the parent component
-      onDateChange({ date: selectedDate, time: formattedTime });
+      // Ensure onDateChange is a function before calling it
+      if (typeof onDateChange === 'function') {
+        // Pass formatted time to the parent component
+        onDateChange({ date: selectedDate, time: formattedTime });
+      }
     }
   };
-
 
   const toggleDatePicker = () => {
     setShowDatePicker((prev) => !prev);
@@ -62,21 +61,6 @@ const DatePickerComponent = ({ onDateChange, leave, fromDate, toDate }) => {
   const toggleTimePicker = () => {
     setShowTimePicker((prev) => !prev);
   };
-
-  const months = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
 
   const formattedDate = selectedDate
     ? `${selectedDate.getFullYear()}-${String(selectedDate.getMonth() + 1).padStart(2, '0')}-${String(selectedDate.getDate()).padStart(2, '0')}`
