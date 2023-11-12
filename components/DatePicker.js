@@ -7,31 +7,60 @@ const DatePickerComponent = ({ onDateChange, leave, fromDate, toDate }) => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [showDatePicker, setShowDatePicker] = useState(false);
 
+  const [selectedTime, setSelectedTime] = useState(null);
+  const [showTimePicker, setShowTimePicker] = useState(false);
+
   useEffect(() => {
     if (leave) {
       if (fromDate) {
-        setSelectedDate(new Date(fromDate));
+        const [date, time] = fromDate.split(" ");
+        setSelectedDate(new Date(date));
+        setSelectedTime(time || null);
       } else if (toDate) {
-        setSelectedDate(new Date(toDate));
+        const [date, time] = toDate.split(" ");
+        setSelectedDate(new Date(date));
+        setSelectedTime(time || null);
       } else {
         setSelectedDate(new Date());
       }
     }
   }, [leave, fromDate, toDate]);
 
+  // Inside DatePickerComponent
+
   const handleDateChange = (event, selected) => {
     if (selected !== undefined) {
-      // Formatting the date to the required format
-      const formattedDate = `${selected.getFullYear()}-${String(selected.getMonth() + 1).padStart(2, '0')}-${String(selected.getDate()).padStart(2, '0')} ${String(selected.getHours()).padStart(2, '0')}:${String(selected.getMinutes()).padStart(2, '0')}`;
-      
       setSelectedDate(selected);
       setShowDatePicker(Platform.OS === "ios"); // Close the picker on iOS
-      onDateChange(formattedDate);
+
+      // Format selected date
+      const formattedDate = `${selected.getFullYear()}-${String(selected.getMonth() + 1).padStart(2, '0')}-${String(selected.getDate()).padStart(2, '0')}`;
+
+      // Pass formatted date to the parent component
+      onDateChange({ date: formattedDate, time: selectedTime });
     }
-  };  
+  };
+
+  const handleTimeChange = (event, selected) => {
+    if (selected !== undefined && selected !== null) {
+      setSelectedTime(`${String(selected.getHours()).padStart(2, '0')}:${String(selected.getMinutes()).padStart(2, '0')}`);
+      setShowTimePicker(Platform.OS === "ios"); // Close the picker on iOS
+
+      // Format selected time
+      const formattedTime = `${String(selected.getHours()).padStart(2, '0')}:${String(selected.getMinutes()).padStart(2, '0')}`;
+
+      // Pass formatted time to the parent component
+      onDateChange({ date: selectedDate, time: formattedTime });
+    }
+  };
+
 
   const toggleDatePicker = () => {
     setShowDatePicker((prev) => !prev);
+  };
+
+  const toggleTimePicker = () => {
+    setShowTimePicker((prev) => !prev);
   };
 
   const months = [
@@ -49,33 +78,19 @@ const DatePickerComponent = ({ onDateChange, leave, fromDate, toDate }) => {
     "December",
   ];
 
-  const formatDate = (year, month, day, time) => {
-    if (!year || !month || !day || !time) {
-      return null;
-    }
-
-    const [hour, minute] = time.split(":");
-    const date = new Date(year, month - 1, day, hour, minute);
-
-    const yyyy = date.getFullYear();
-    const mm = String(date.getMonth() + 1).padStart(2, "0");
-    const dd = String(date.getDate()).padStart(2, "0");
-    const hh = String(date.getHours()).padStart(2, "0");
-    const min = String(date.getMinutes()).padStart(2, "0");
-
-    return `${yyyy}-${mm}-${dd} ${hh}:${min}`;
-  };
-
   const formattedDate = selectedDate
-    ? `${selectedDate.getDate()} ${
-        months[selectedDate.getMonth()]
-      } ${selectedDate.getFullYear()}`
+    ? `${selectedDate.getFullYear()}-${String(selectedDate.getMonth() + 1).padStart(2, '0')}-${String(selectedDate.getDate()).padStart(2, '0')}`
     : "Select Date";
+
+  const formattedTime = selectedTime || "Select Time";
 
   return (
     <>
       <TouchableOpacity style={styles.datePicker} onPress={toggleDatePicker}>
         <Text style={styles.dateText}>{formattedDate}</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.datePicker} onPress={toggleTimePicker}>
+        <Text style={styles.dateText}>{formattedTime}</Text>
       </TouchableOpacity>
 
       {showDatePicker && (
@@ -84,6 +99,15 @@ const DatePickerComponent = ({ onDateChange, leave, fromDate, toDate }) => {
           mode="date"
           display="default"
           onChange={handleDateChange}
+        />
+      )}
+
+      {showTimePicker && (
+        <DateTimePicker
+          value={selectedTime ? new Date(`2000-01-01T${selectedTime}`) : new Date()}
+          mode="time"
+          display="default"
+          onChange={handleTimeChange}
         />
       )}
     </>

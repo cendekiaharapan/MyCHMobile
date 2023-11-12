@@ -59,7 +59,7 @@ const ChildPermissionViewHisto = ({ route, navigation }) => {
       setNote(leave.note);
     }
   }, [leave]);
-
+  
   // Helper function to format date and time
   const formatDate = (year, month, day, time) => {
     if (!year || !month || !day || !time) {
@@ -111,10 +111,12 @@ const ChildPermissionViewHisto = ({ route, navigation }) => {
       .patch("https://www.balichildrenshouse.com/myCHStaging/api/edit-leave", data)
       .then((response) => {
         console.log("API response:", response.data);
+
         navigation.goBack();
       })
       .catch((error) => {
         console.error("API request error:", error);
+        
       });
   };
 
