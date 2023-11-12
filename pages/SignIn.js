@@ -30,7 +30,7 @@ const SignIn = () => {
     console.log("this is inside send login request function");
     try {
       const response = await axios.post(
-        "https://www.balichildrenshouse.com/myCHStaging/api/login",
+        "https://www.balichildrenshouse.com/myCH/api/login",
         {
           email: email,
           password: password,
@@ -58,16 +58,16 @@ const SignIn = () => {
           const parentId = response.data.user.id; // parent id
 
           const parentStudentsResponse = await axios.get(
-            `https://www.balichildrenshouse.com/myCHStaging/api/parent-students/${parentId}`
+            `https://www.balichildrenshouse.com/myCH/api/parent-students/${parentId}`
           );
 
           if (parentStudentsResponse.status === 200) {
             console.log("parent savechild data");
             // Handle the parent-students response data here
-            // console.log(
-            //   "parent student response data = ",
-            //   parentStudentsResponse.data
-            // );
+            console.log(
+              "parent student response data = ",
+              parentStudentsResponse.data
+            );
             storeItem("childData", parentStudentsResponse.data);
             // You can navigate to another screen after successful login
           } else {
