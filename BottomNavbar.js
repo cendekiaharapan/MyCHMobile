@@ -6,6 +6,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 //screens
 import HomeScreen from "./pages/HomeParent";
 import Profile from "./pages/Profile";
+import Apps from "./pages/AppsList";
 
 //screen names
 const homeName = "Home";
@@ -50,7 +51,7 @@ export default function BottomNavbar() {
       />
       <Tab.Screen
         name={appsName}
-        component={HomeScreen}
+        component={Apps}
         options={{ headerShown: false }}
       />
       <Tab.Screen
