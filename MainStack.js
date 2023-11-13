@@ -4,6 +4,7 @@ import Onboard from "./pages/Onboard";
 import AllPost from "./pages/AllPost";
 import PostDetails from "./pages/PostDetails";
 import Profile from "./pages/Profile";
+import HomeParent from "./pages/HomeParent";
 import PopUp from "./components/PopUp";
 import CHDollar from "./components/CHDollar";
 import Attendance from "./components/Attendance";
@@ -22,6 +23,11 @@ const MainStack = () => {
       <Stack.Screen
         name="PopUp"
         component={PopUp}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="HomeParent"
+        component={HomeParent}
         options={{ headerShown: false }}
       />
       <Stack.Screen

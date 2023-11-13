@@ -1,5 +1,6 @@
 import * as React from "react";
-import { View, Text, StyleSheet, Image } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
+import { Image } from "expo-image";
 import { Color, FontFamily, FontSize } from "../GlobalStyles";
 
 const AverageDailyScore = ({ onClose }) => {
