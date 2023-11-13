@@ -9,6 +9,7 @@ import PopUp from "./components/PopUp";
 import CHDollar from "./components/CHDollar";
 import Attendance from "./components/Attendance";
 import AverageDailyScore from "./components/AverageDailyScore";
+import BottomNavbar from "./BottomNavbar";
 
 const Stack = createNativeStackNavigator();
 
@@ -16,20 +17,25 @@ const MainStack = () => {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen
+        name="BottomNavbar"
+        component={BottomNavbar}
+        options={{ headerShown: false }}
+      />
+      {/* <Stack.Screen
         name="Profile"
         component={Profile}
         options={{ headerShown: false }}
-      />
+      /> */}
       <Stack.Screen
         name="PopUp"
         component={PopUp}
         options={{ headerShown: false }}
       />
-      <Stack.Screen
+      {/* <Stack.Screen
         name="HomeParent"
         component={HomeParent}
         options={{ headerShown: false }}
-      />
+      /> */}
       <Stack.Screen
         name="CHDollar"
         component={CHDollar}

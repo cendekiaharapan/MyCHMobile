@@ -166,54 +166,15 @@ const AllPost = () => {
             )}
           </View>
           <View style={styles.ButtonContainer}>
-            <TouchableOpacity style={styles.Button1}>
+            {/* <TouchableOpacity style={styles.Button1}>
               <Text style={styles.ButtonText} onPress={handleTemporaryButton}>
                 Temporary Button
               </Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
             <TouchableOpacity style={styles.Button2} onPress={handleLogout}>
               <Text style={styles.ButtonText}>Log Out</Text>
             </TouchableOpacity>
           </View>
-        </View>
-      </View>
-
-      <View style={styles.NavigateContainer}>
-        <View style={styles.ProductivityButtonContainer}>
-          <Image
-            style={styles.ProductivityLogo}
-            contentFit="cover"
-            source={require("../assets/images/homeButton.png")}
-          />
-        </View>
-        <View style={styles.ProductivityButtonContainer}>
-          <Image
-            style={styles.ProductivityLogo}
-            contentFit="cover"
-            source={require("../assets/images/childLogo.png")}
-          />
-        </View>
-        <View style={styles.ProductivityButtonContainer}>
-          <Image
-            style={styles.ProductivityLogo}
-            contentFit="cover"
-            source={require("../assets/images/contactLogo.png")}
-          />
-        </View>
-        <View style={styles.ProductivityButtonContainer}>
-          <Image
-            style={styles.ProductivityLogo}
-            contentFit="cover"
-            source={require("../assets/images/ProductivityLogo.png")}
-          />
-        </View>
-        <View style={styles.ProfileButtonContainer}>
-          <Image
-            style={styles.ProductivityLogo}
-            contentFit="cover"
-            source={require("../assets/images/profileImageLogo.png")}
-          />
-          <Text style={styles.profileStyle}>Profile</Text>
         </View>
       </View>
     </View>
