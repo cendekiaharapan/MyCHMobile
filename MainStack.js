@@ -3,6 +3,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Onboard from "./pages/Onboard";
 import AllPost from "./pages/AllPost";
 import PostDetails from "./pages/PostDetails";
+import CallMyChild from "./pages/CallMyChild";
 import Profile from "./pages/Profile";
 import HomeParent from "./pages/HomeParent";
 import PopUp from "./components/PopUp";
@@ -10,6 +11,7 @@ import CHDollar from "./components/CHDollar";
 import Attendance from "./components/Attendance";
 import AverageDailyScore from "./components/AverageDailyScore";
 import BottomNavbar from "./BottomNavbar";
+import Apps from "./pages/AppsList";
 
 const Stack = createNativeStackNavigator();
 
@@ -25,6 +27,11 @@ const MainStack = () => {
         name="Profile"
         component={Profile}
         options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Apps"
+        component={Apps}
+        options={{ headerShown: false }}
       /> */}
       <Stack.Screen
         name="PopUp"
@@ -36,6 +43,11 @@ const MainStack = () => {
         component={HomeParent}
         options={{ headerShown: false }}
       /> */}
+      <Stack.Screen
+        name="CallMyChild"
+        component={CallMyChild}
+        options={{ headerShown: false }}
+      />
       <Stack.Screen
         name="CHDollar"
         component={CHDollar}
