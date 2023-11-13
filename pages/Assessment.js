@@ -1,7 +1,6 @@
-import React, { useState, useCallback } from "react";
-import { Text, StyleSheet, View, Pressable, Modal } from "react-native";
+import React, { useState, useCallback, useEffect } from "react";
+import { Text, StyleSheet, View, Pressable, Modal, Image } from "react-native";
 import { NativeBaseProvider } from "native-base";
-import { Image } from "expo-image";
 import { useNavigation } from "@react-navigation/native";
 // import Calender from "./Calender";
 import DropDown from "../components/DropDown";
@@ -10,10 +9,16 @@ import { Color, FontFamily, FontSize, Border, Padding } from "../GlobalStyles";
 
 const Assessment = () => {
   const navigation = useNavigation();
-  const [isTextClicked, setIsTextClicked] = useState(false);
+  // const [isTextClicked, setIsTextClicked] = useState(false);
+  const [selectedSemester, setSelectedSemester] = useState(null);
 
-  const handleTextClick = () => {
-    setIsTextClicked(!isTextClicked);
+  useEffect(() => {
+    console.log("inside use effect Selected Semester: ", selectedSemester);
+  }, [selectedSemester]);
+
+  const handleTextClick = (event, semester) => {
+    // console.log("inside the selected Semester : ", selectedSemester);
+    setSelectedSemester(semester);
   };
 
   return (
@@ -48,25 +53,36 @@ const Assessment = () => {
               Select Semester
             </Text>
             <View style={[styles.groupContainer, styles.inputWrapperPosition]}>
-              <View style={[styles.groupView, styles.viewLayout]}>
+              <Pressable onPress={(e) => handleTextClick(e, "midSemester1")}>
                 <View style={[styles.groupView, styles.viewLayout]}>
                   <View style={[styles.groupView, styles.viewLayout]}>
-                    <View style={[styles.inputInner, styles.viewLayout]} />
+                    <View style={[styles.groupView, styles.viewLayout]}>
+                      <View
+                        style={[
+                          styles.inputInner,
+                          styles.viewLayout,
+                          selectedSemester === "midSemester1" &&
+                            styles.selectedSemester,
+                        ]}
+                      />
+                    </View>
                   </View>
+                  <Text style={styles.midSemester1}>Mid Semester 1</Text>
                 </View>
-                <Text style={styles.midSemester1}>Mid Semester 1</Text>
-              </View>
-              <View style={[styles.inputParent, styles.viewLayout]}>
-                <View style={[styles.groupView, styles.viewLayout]}>
-                  <View style={[styles.rectangleView, styles.viewLayout]} />
+              </Pressable>
+              <Pressable onPress={(e) => handleTextClick(e, "semester1")}>
+                <View style={[styles.inputParent, styles.viewLayout]}>
+                  <View style={[styles.groupView, styles.viewLayout]}>
+                    <View style={[styles.rectangleView, styles.viewLayout]} />
+                  </View>
+                  <Text style={[styles.semester1, styles.semesterPosition]}>
+                    Semester 1
+                  </Text>
                 </View>
-                <Text style={[styles.semester1, styles.semesterPosition]}>
-                  Semester 1
-                </Text>
-              </View>
+              </Pressable>
             </View>
-            <Pressable onPress={handleTextClick}>
-              <View style={[styles.groupParent1, styles.inputWrapperPosition]}>
+            <View style={[styles.groupParent1, styles.inputWrapperPosition]}>
+              <Pressable onPress={(e) => handleTextClick(e, "midSemester2")}>
                 <View style={[styles.groupView, styles.viewLayout]}>
                   <View style={[styles.groupView, styles.viewLayout]}>
                     <View style={[styles.groupView, styles.viewLayout]}>
@@ -75,6 +91,8 @@ const Assessment = () => {
                   </View>
                   <Text style={styles.midSemester1}>Mid Semester 2</Text>
                 </View>
+              </Pressable>
+              <Pressable onPress={(e) => handleTextClick(e, "semester2")}>
                 <View style={[styles.inputParent, styles.viewLayout]}>
                   <View style={[styles.groupView, styles.viewLayout]}>
                     <View style={[styles.inputInner, styles.viewLayout]} />
@@ -83,8 +101,8 @@ const Assessment = () => {
                     Semester 2
                   </Text>
                 </View>
-              </View>
-            </Pressable>
+              </Pressable>
+            </View>
           </View>
 
           <Text style={[styles.weeklyReport, styles.allFlexBox]}>
@@ -333,12 +351,15 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
   frameParent: {
+    flex: 1,
     height: 399,
     width: 322,
+    alignItems: "center",
+    justifyContent: "center",
   },
   assessment: {
     borderRadius: Border.br_xl,
-    backgroundColor: Color.colorGray_100,
+    // backgroundColor: Color.colorGray_100,
     flex: 1,
     width: "100%",
     height: 700,

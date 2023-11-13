@@ -8,8 +8,8 @@ import {
   TouchableOpacity,
   Modal,
   FormControl,
+  Image,
 } from "react-native";
-import { Image } from "expo-image";
 import { useNavigation } from "@react-navigation/native";
 // import Calender from "./Calender";
 import {
