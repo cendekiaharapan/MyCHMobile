@@ -26,29 +26,31 @@ import {
   CheckIcon,
   useToast,
 } from "native-base";
-import { useNavigation } from "@react-navigation/native"; // Import useNavigation
-import DateTimePicker from "@react-native-community/datetimepicker"; //date time picker
-import DatePickerComponent from "../components/DatePicker"; // date picker
-import DocumentPick from "../components/DocumentPick"; // document pick
+import { useNavigation } from "@react-navigation/native";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import DatePickerComponent from "../components/DatePicker";
+import DocumentPick from "../components/DocumentPick";
 import DropDown from "../components/DropDown";
 import axios from "axios";
+import { LoadingModal } from "react-native-loading-modal";
 
 const ChildPermissionViewHisto = ({ route, navigation }) => {
-  const leave = route?.params?.leave; // Retrieve the selected data from the navigation route 
-  const imageUri = route?.params?.imageUri; // Retrieve the selected data from the navigation route params
-  const imageUrl = route?.params?.imageUrl; // Retrieve the selected data from the navigation route params
+  const leave = route?.params?.leave;
+  const imageUri = route?.params?.imageUri;
+  const imageUrl = route?.params?.imageUrl;
   const name = route?.params?.name;
   const childId = route?.params?.childId;
   const studentGet = route?.params?.studentGet;
 
-  // State variables for the form fields
   const [student, setStudent] = useState("");
   const [type, setType] = useState("");
   const [fromDateTime, setFromDateTime] = useState(null);
   const [toDateTime, setToDateTime] = useState(null);
   const [note, setNote] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const fullImageUrl = `${imageUrl}${imageUri}`;
+  const toast = useToast();
 
   useEffect(() => {
     if (leave) {
@@ -59,14 +61,12 @@ const ChildPermissionViewHisto = ({ route, navigation }) => {
       setNote(leave.note);
     }
   }, [leave]);
-  
-  // Helper function to format date and time
+
   const formatDateTime = (year, month, day, time) => {
     if (!year || !month || !day || !time) {
       return null;
     }
 
-    // Assuming time is in "hh:mm" format
     const [hour, minute] = time.split(":");
     const date = new Date(year, month - 1, day, hour, minute);
 
@@ -96,56 +96,42 @@ const ChildPermissionViewHisto = ({ route, navigation }) => {
   };
 
   const handleUpdateData = () => {
-    // Format from_timestamp and to_timestamp
-    const fromTimestamp = formatTimestamp(fromDateTime);
-    const toTimestamp = formatTimestamp(toDateTime);
+    setIsLoading(true);
 
-    console.log("fromDateTime : ", fromDateTime);
-    console.log("toDateTime : ", toDateTime);
-    console.log("fromTimestamp : ", fromTimestamp);
-    console.log("toTimestamp : ", toTimestamp);
-
-  
     const data = {
       id: leave.id,
       student_id: student,
       apply_type: type,
-      from_timestamp: fromTimestamp,
-      to_timestamp: toTimestamp,
+      from_timestamp: fromDateTime,
+      to_timestamp: toDateTime,
       note: note,
     };
-  
-    console.log(data);
-  
+
     axios
       .patch("https://www.balichildrenshouse.com/myCHStaging/api/edit-leave", data)
       .then((response) => {
         console.log("API response:", response.data);
         navigation.goBack();
+
+        toast.show({
+          title: "Update Successful",
+          status: "success",
+          duration: 3000,
+        });
       })
       .catch((error) => {
         console.error("API request error:", error);
+
+        toast.show({
+          title: "Update Failed",
+          status: "error",
+          duration: 3000,
+        });
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   };
-  
-  // Helper function to format timestamp
-  const formatTimestamp = (timestamp) => {
-    if (!timestamp) {
-      return null;
-    }
-  
-    const date = new Date(timestamp);
-  
-    const yyyy = date.getFullYear();
-    const mm = String(date.getMonth() + 1).padStart(2, "0");
-    const dd = String(date.getDate()).padStart(2, "0");
-    const hh = String(date.getHours()).padStart(2, "0");
-    const min = String(date.getMinutes()).padStart(2, "0");
-  
-    return `${yyyy}-${mm}-${dd} ${hh}:${min}`;
-  };
-  
-  
 
   return (
     <NativeBaseProvider>
@@ -161,7 +147,7 @@ const ChildPermissionViewHisto = ({ route, navigation }) => {
             </TouchableOpacity>
             <Text style={styles.rufusStewart}>{name}</Text>
           </View>
-  
+
           <View style={styles.maincontent}>
             <ScrollView>
               <View style={styles.profilepictureParent}>
@@ -171,7 +157,7 @@ const ChildPermissionViewHisto = ({ route, navigation }) => {
                   source={
                     imageUri
                       ? { uri: fullImageUrl }
-                      : require("../assets/profilepic.png") // Default image source
+                      : require("../assets/profilepic.png")
                   }
                 />
                 <Text style={[styles.januari20231120, styles.lineIconSpaceBlock]}>{leave.created_at}</Text>
@@ -185,17 +171,14 @@ const ChildPermissionViewHisto = ({ route, navigation }) => {
                 <Text style={styles.permissionDetail}>Permission Detail</Text>
               </View>
               <View style={[styles.bodycontent, styles.bodycontentSpaceBlock]}>
-                {/* Form 1 ( Child ) */}
                 <DropDown
-                  label="Child" 
+                  label="Child"
                   leave={leave}
                   studentGet={studentGet}
                   childId={childId}
                   name={name}
                   onServiceChange={handleServiceChange}
                 />
-                {/* End Form 1 ( Child ) */}
-                {/* Form 2 ( Type Of Permission ) */}
                 <FormControl mb="3">
                   <FormControl.Label>Type Of Permission</FormControl.Label>
                   <Select
@@ -217,8 +200,6 @@ const ChildPermissionViewHisto = ({ route, navigation }) => {
                     <Select.Item label="Sick Leave" value="sick_leave" />
                   </Select>
                 </FormControl>
-                {/* End Form 2 ( Type Of Permission ) */}
-                {/* Form 3 ( Date Picker ) */}
                 <FormControl mb="3">
                   <FormControl.Label>From</FormControl.Label>
                   <DatePickerComponent
@@ -226,8 +207,6 @@ const ChildPermissionViewHisto = ({ route, navigation }) => {
                     dateTime={formatDateTime(leave.year, leave.month, leave.day, leave.from_time)}
                   />
                 </FormControl>
-                {/* End Form 3 ( Date Picker ) */}
-                {/* Form 4 ( Date Picker ) */}
                 <FormControl mb="3">
                   <FormControl.Label>To</FormControl.Label>
                   <DatePickerComponent
@@ -235,13 +214,10 @@ const ChildPermissionViewHisto = ({ route, navigation }) => {
                     dateTime={formatDateTime(leave.to_year, leave.to_month, leave.to_day, leave.to_time)}
                   />
                 </FormControl>
-                {/* End Form 4 ( Date Picker ) */}
-                {/* Form 5 ( Commment Box ) */}
                 <FormControl mb="3">
                   <FormControl.Label>Note</FormControl.Label>
                   <TextArea h={40} placeholder="Leave a note" value={note} onChangeText={handleNoteChange} />
                 </FormControl>
-                {/* End Form 5 ( Comment Box ) */}
               </View>
             </ScrollView>
           </View>
@@ -257,10 +233,12 @@ const ChildPermissionViewHisto = ({ route, navigation }) => {
               </View>
             </TouchableOpacity>
           </View>
+
+          <LoadingModal modalVisible={isLoading} color="red" />
         </View>
       </View>
     </NativeBaseProvider>
-  );  
+  );
 };
 
 const styles = StyleSheet.create({

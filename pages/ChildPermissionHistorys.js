@@ -13,7 +13,7 @@ import {
 import { Button, NativeBaseProvider } from "native-base";
 import { Color, Padding, FontFamily, FontSize, Border } from "../GlobalStyles";
 import PermissionHistory from "../components/PermissionHistory";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useFocusEffect } from "@react-navigation/native"; // Updated import
 import AddButton from "../components/AddButton";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -58,11 +58,13 @@ const ChildPermissionHistorys = () => {
     }
   };
 
-  useEffect(() => {
-    console.log("use Effect actived!");
-    fetchChildData();
-  }, [navigation]);
-
+  useFocusEffect(
+    React.useCallback(() => {
+      console.log("use Focus Effect activated!");
+      fetchChildData();
+    }, [navigation])
+  );
+  
   const fetchChildDataFromSQLite = () => {
     return new Promise((resolve, reject) => {
       db.transaction((tx) => {
