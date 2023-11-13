@@ -10,7 +10,7 @@ import { useState, useEffect } from "react";
 import { retrieveItem } from "../database/database";
 import { Linking } from "react-native";
 
-const PaymentInvoiceDetails = () => {
+const PaymentInvoiceDetails = ({ route }) => {
   const navigation = useNavigation();
   const [studentIds, setStudentIds] = React.useState([])
   const [studentNames, setStudentNames] = React.useState([]);
@@ -21,7 +21,7 @@ const PaymentInvoiceDetails = () => {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [apiResponse, setApiResponse] = useState(null);
-  const studentID = 2065;
+  const { paymentId, studentId } = route.params;
   
   React.useEffect(() => {
     // Retrieve student data from storage
@@ -52,7 +52,7 @@ const PaymentInvoiceDetails = () => {
   const fetchDescription = async (selectedPaymentId) => {
     try {
 
-      const response = await axios.get(`https://www.balichildrenshouse.com/myCH/api/get-payment-histories-by-student_id/${studentID}`);
+      const response = await axios.get(`https://www.balichildrenshouse.com/myCH/api/get-payment-histories-by-student_id/${studentId}`);
 
       console.log('Response Data:', response.data);
 
@@ -85,7 +85,7 @@ const PaymentInvoiceDetails = () => {
   const openPaymentUrl = async () => {
     try {
       // Fetch the payment ID from the first payment in the response
-      const paymentId = apiResponse.data.payments[0].id;
+      
 
       // Open the payment URL with the dynamic payment ID
       const paymentUrl = `https://www.balichildrenshouse.com/myCH/api/payment/midtrans/${paymentId}`;
@@ -102,10 +102,10 @@ const PaymentInvoiceDetails = () => {
   };
 
   useEffect(() => {
-    fetchDescription(8043).finally(() => {
+    fetchDescription(paymentId).finally(() => {
       setLoading(false);
     });
-  }, []);
+  }, [paymentId]);
 
   if (loading) {
     return (
@@ -136,7 +136,7 @@ const PaymentInvoiceDetails = () => {
           Student Name
         </Text>
         <Text style={[styles.textStudentName, styles.totalFlexBox]}>
-          {studentNames[studentIds.indexOf(studentID)]}
+          {studentNames[studentIds.indexOf(studentId)]}
         </Text>
       </View>
       <View style={[styles.description, styles.dateLayout]}>

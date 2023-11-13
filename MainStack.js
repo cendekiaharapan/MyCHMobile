@@ -10,6 +10,13 @@ import PopUp from "./components/PopUp";
 import CHDollar from "./components/CHDollar";
 import Attendance from "./components/Attendance";
 import AverageDailyScore from "./components/AverageDailyScore";
+import PageStart from "./pages/PageStart";
+import PaidInvoiceDetails from "./pages/PaidInvoiceDetails";
+import PaymentCHDAccount from "./pages/PaymentCHDAccount";
+import PaymentCHDHistory from "./pages/PaymentCHDHistory";
+import PaymentTopup from "./pages/PaymentTopup";
+import PaymentInvoiceDetails from "./pages/PaymentInvoiceDetails";
+
 
 const Stack = createNativeStackNavigator();
 
@@ -61,8 +68,40 @@ const MainStack = () => {
         component={AllPost}
         options={{ headerShown: false }}
       />
+      <Stack.Screen
+        name="PageStart"
+        component={PageStart}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="PaymentCHDAccount"
+        component={PaymentCHDAccount}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="PaidInvoiceDetails"
+        component={PaidInvoiceDetails}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="PaymentCHDHistory"
+        component={PaymentCHDHistory}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="PaymentInvoiceDetails"
+        component={PaymentInvoiceDetails}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="PaymentTopup"
+        component={PaymentTopup}
+        options={{ headerShown: false }}
+      />
     </Stack.Navigator>
   );
 };
+
+
 
 export default MainStack;

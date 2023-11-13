@@ -105,7 +105,7 @@ const AllPost = () => {
   const handleTemporaryButton = () => {
     console.log("this is handle temporary button");
     navigation.navigate("Main App Stack", {
-      screen: "PaymentInvoice", // change this with your screen name
+      screen: "PageStart", // change this with your screen name
     });
   };
   // const handleLogout = () => {
