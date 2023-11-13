@@ -29,10 +29,6 @@ export const FontSize = {
   size_8xs_9: 5,
   size_4xs: 9,
   bodyBodyXS_size: 12,
-  size_3xs: 10,
-  size_sm: 14,
-  size_xl: 20,
-  size_base: 16,
   size_lg: 18,
   size_6xl: 25,
   size_16xl: 35,
@@ -62,11 +58,9 @@ export const Color = {
   amberBlack: "#072d4b",
   colorGray_100: "#fcfcfc",
   colorGray_200: "#211b3d",
-  wireframesColorsTextLegibilityHighEmphasis: "#170e2b",
   colorDarkgray: "#979797",
   colorBlack: "#000",
   colorWhitesmoke_100: "#f6f6f6",
-  colorsBackgroundsLight: "#f5f5f5",
   colorWhite: "#fff",
   colorTomato_100: "#fe645b",
   colorTomato_200: "#fc4b41",
@@ -76,6 +70,13 @@ export const Color = {
   colorGainsboro: "#e5e5e5",
   blackL2: "#363939",
   colorSnow: "#fffcfc",
+  colorTomato: "#fc4b41",
+  colorDarkslateblue: "#11336d",
+  black20: "#949494",
+  colorGray_200: "#8c968c",
+  grey: "#909090",
+  colorGray_300: "rgba(255, 255, 255, 0)",
+  colorDimgray: "#65676d",
 };
 /* Paddings */
 export const Padding = {
@@ -110,4 +111,5 @@ export const Border = {
   br_81xl: 100,
   br_3xs_9: 10,
   br_5xs: 8,
+  br_26xl: 45,
 };
