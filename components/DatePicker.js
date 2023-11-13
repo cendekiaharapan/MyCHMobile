@@ -20,20 +20,16 @@ const DatePickerComponent = ({ onDateChange, dateTime, leave }) => {
     }
   }, [dateTime]);
 
-  // Inside DatePickerComponent
-
   const handleDateChange = (event, selected) => {
     if (selected !== undefined) {
       setSelectedDate(selected);
-      setShowDatePicker(Platform.OS === "ios"); // Close the picker on iOS
+      setShowDatePicker(Platform.OS === "ios");
 
-      // Format selected date
       const formattedDate = `${selected.getFullYear()}-${String(selected.getMonth() + 1).padStart(2, '0')}-${String(selected.getDate()).padStart(2, '0')}`;
+      const formattedTime = selectedTime || "00:00";
 
-      // Ensure onDateChange is a function before calling it
       if (typeof onDateChange === 'function') {
-        // Pass formatted date to the parent component
-        onDateChange({ date: formattedDate, time: selectedTime });
+        onDateChange(`${formattedDate} ${formattedTime}`);
       }
     }
   };
@@ -41,15 +37,16 @@ const DatePickerComponent = ({ onDateChange, dateTime, leave }) => {
   const handleTimeChange = (event, selected) => {
     if (selected !== undefined && selected !== null) {
       setSelectedTime(`${String(selected.getHours()).padStart(2, '0')}:${String(selected.getMinutes()).padStart(2, '0')}`);
-      setShowTimePicker(Platform.OS === "ios"); // Close the picker on iOS
+      setShowTimePicker(Platform.OS === "ios");
 
-      // Format selected time
+      const formattedDate = selectedDate
+        ? `${selectedDate.getFullYear()}-${String(selectedDate.getMonth() + 1).padStart(2, '0')}-${String(selectedDate.getDate()).padStart(2, '0')}`
+        : "Select Date";
+
       const formattedTime = `${String(selected.getHours()).padStart(2, '0')}:${String(selected.getMinutes()).padStart(2, '0')}`;
 
-      // Ensure onDateChange is a function before calling it
       if (typeof onDateChange === 'function') {
-        // Pass formatted time to the parent component
-        onDateChange({ date: selectedDate, time: formattedTime });
+        onDateChange(`${formattedDate} ${formattedTime}`);
       }
     }
   };

@@ -36,36 +36,32 @@ const ChildPermissionHistorys = () => {
   const [studentImg, setStudentImg] = useState(null);
   const [studentGet, setStudentGet] = useState(null);
 
+  const fetchChildData = async () => {
+    try {
+      const data = await retrieveItem("childData");
+
+      if (data) {
+        const student_ids = data.map((item) => item.id);
+        const student_name = data.map((item) => item.name);
+        const student_image = data.map((item) => item.image);
+
+        setStudentGet(data);
+        setChildId(student_ids);
+        setStudentName(student_name);
+        setStudentImg(student_image);
+        fetchMultipleStudentsData(student_ids);
+      } else {
+        console.log("No data found in SQLite.");
+      }
+    } catch (error) {
+      console.error("Error fetching response data from SQLite:", error);
+    }
+  };
+
   useEffect(() => {
     console.log("use Effect actived!");
-    retrieveItem("childData")
-      .then((data) => {
-        if (data) {
-          // Use the retrieved data
-          console.log("inside fetchChildData (data) : ", data);
-          const student_ids = data.map((item) => item.id);
-          const student_name = data.map((item) => item.name);
-          const student_image = data.map((item) => item.image);
-          console.log("Student id in fetch child : ", student_ids);
-          console.log("Student Name in fetch child : ", student_name);
-          console.log("Student Image in fetch child : ", student_image);
-
-          // Update your component state or data source with the new data
-          // For example, if you're using state in a functional component:
-          setStudentGet(data);
-          setChildId(student_ids);
-          setStudentName(student_name);
-          setStudentImg(student_image);
-          fetchMultipleStudentsData(student_ids);
-        } else {
-          // Handle the case when no data is found
-          console.log("No data found in SQLite.");
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching response data from SQLite:", error);
-      });
-  }, []);
+    fetchChildData();
+  }, [navigation]);
 
   const fetchChildDataFromSQLite = () => {
     return new Promise((resolve, reject) => {

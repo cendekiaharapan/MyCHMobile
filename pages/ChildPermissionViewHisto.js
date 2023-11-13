@@ -48,8 +48,6 @@ const ChildPermissionViewHisto = ({ route, navigation }) => {
   const [toDateTime, setToDateTime] = useState(null);
   const [note, setNote] = useState("");
 
-  const fromTimestamp = formatTimestamp(fromDateTime);
-  const toTimestamp = formatTimestamp(toDateTime);
   const fullImageUrl = `${imageUrl}${imageUri}`;
 
   useEffect(() => {
@@ -99,6 +97,14 @@ const ChildPermissionViewHisto = ({ route, navigation }) => {
 
   const handleUpdateData = () => {
     // Format from_timestamp and to_timestamp
+    const fromTimestamp = formatTimestamp(fromDateTime);
+    const toTimestamp = formatTimestamp(toDateTime);
+
+    console.log("fromDateTime : ", fromDateTime);
+    console.log("toDateTime : ", toDateTime);
+    console.log("fromTimestamp : ", fromTimestamp);
+    console.log("toTimestamp : ", toTimestamp);
+
   
     const data = {
       id: leave.id,
@@ -226,7 +232,7 @@ const ChildPermissionViewHisto = ({ route, navigation }) => {
                   <FormControl.Label>To</FormControl.Label>
                   <DatePickerComponent
                     onDateChange={(dateTime) => handleDateTimeChange(dateTime, "to")}
-                    dateTime={formatDateTime(leave.year, leave.month, leave.day, leave.from_time)}
+                    dateTime={formatDateTime(leave.to_year, leave.to_month, leave.to_day, leave.to_time)}
                   />
                 </FormControl>
                 {/* End Form 4 ( Date Picker ) */}
