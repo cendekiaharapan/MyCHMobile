@@ -1,23 +1,32 @@
 import * as React from "react";
-import { View, Text, StyleSheet, Image } from "react-native";
+import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { FontFamily, Color, FontSize, Border, Padding } from "../GlobalStyles";
 
 const AppsList = () => {
+  const navigation = useNavigation();
+
+  const handleCallMyChildButton = () => {
+    navigation.navigate("Main App Stack", {
+      screen: "CallMyChild", // change this with your screen name
+    });
+  };
   return (
     <View style={styles.mainContainer}>
       <View style={styles.bodyContainer}>
         <View style={styles.RowContainer}>
-          <View style={styles.BoxContainer}>
-            <View style={styles.ImageContainer}>
-              <Image
-                style={styles.StyleImage}
-                source={require("../assets/images/callMyChild.png")}
-                contentFit="cover"
-              />
+          <TouchableOpacity onPress={handleCallMyChildButton}>
+            <View style={styles.BoxContainer}>
+              <View style={styles.ImageContainer}>
+                <Image
+                  style={styles.StyleImage}
+                  source={require("../assets/images/callMyChild.png")}
+                  contentFit="cover"
+                />
+              </View>
+              <Text style={styles.StyleText}>CALL MY CHILD</Text>
             </View>
-            <Text style={styles.StyleText}>CALL MY CHILD</Text>
-          </View>
+          </TouchableOpacity>
           <View style={styles.BoxContainer}>
             <View style={styles.ImageContainer}>
               <Image
