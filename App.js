@@ -2,10 +2,10 @@ import * as React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import FrameScreen from "./pages/FrameScreen";
-import LoginScreen from "./pages/Login"; 
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import LoginScreen from "./pages/Login";
+import HomeParent from "./pages/HomeParent";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { View, Text, Pressable, TouchableOpacity } from "react-native";
-
 
 const App = () => {
   const [hideSplashScreen, setHideSplashScreen] = React.useState(false);
@@ -25,15 +25,12 @@ const App = () => {
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="FrameScreen" component={FrameScreen} />
         <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="HomeParent" component={HomeParent} />
       </Stack.Navigator>
     </NavigationContainer>
   );
-
 };
-
 
 const Stack = createNativeStackNavigator();
 
-
 export default App;
-
