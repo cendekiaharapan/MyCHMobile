@@ -11,8 +11,8 @@ const DropDown = ({ label, value }) => {
         selectedValue={service}
         height="10"
         minWidth="200"
-        accessibilityLabel="Choose Subject"
-        placeholder="Choose Subject"
+        accessibilityLabel="Choose Child"
+        placeholder="Choose Child"
         _selectedItem={{
           bg: "teal.600",
           endIcon: <CheckIcon size="3" />,

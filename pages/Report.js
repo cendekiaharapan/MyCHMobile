@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { NativeBaseProvider } from "native-base";
 import {
   Text,
@@ -20,6 +20,12 @@ import {
   Padding,
   Label,
 } from "../GlobalStyles";
+import {
+  storeItem,
+  retrieveItem,
+  deleteItem,
+  getAllKeys,
+} from "../database/database.js";
 import DropDown from "../components/DropDown";
 import DatePickerComponent from "../components/Calender";
 
@@ -27,6 +33,9 @@ const Report = () => {
   const navigation = useNavigation();
   const [groupContainer5Visible, setGroupContainer5Visible] = useState(false);
   const [groupContainer6Visible, setGroupContainer6Visible] = useState(false);
+  const [studentName, setStudentName] = React.useState("");
+  const [studentId, setStudentId] = React.useState(null);
+  const [selectedChild, setSelectedChild] = React.useState("");
 
   const openGroupContainer5 = useCallback(() => {
     setGroupContainer5Visible(true);
@@ -42,6 +51,29 @@ const Report = () => {
 
   const closeGroupContainer6 = useCallback(() => {
     setGroupContainer6Visible(false);
+  }, []);
+
+  useEffect(() => {
+    // This code will run after the component renders
+    retrieveItem("childData")
+      .then((data) => {
+        if (data) {
+          // Use the retrieved data
+          const student_ids = data.map((item) => item.id);
+          const student_name = data.map((item) => item.name);
+
+          setStudentId(student_ids);
+          setStudentName(student_name);
+          // Update your component state or data source with the new data
+          // For example, if you're using state in a functional component:
+        } else {
+          // Handle the case when no data is found
+          console.log("No data found in AsyncStorage.");
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching response data from SQLite:", error);
+      });
   }, []);
 
   return (
@@ -67,9 +99,17 @@ const Report = () => {
               <Text style={styles.submit}>Submit</Text>
             </View>
             <Text style={[styles.selectSubject, styles.selectTypo]}>
-              Select Subject
+              Select Child
             </Text>
-            <DropDown value="Sabrina" />
+            {studentId !== null ? (
+              (() => {
+                console.log("inside dropDown student ID = ", studentId);
+                return <DropDown value="Sabrina" />;
+              })()
+            ) : (
+              <Text>Loading...</Text>
+            )}
+
             <Text style={[styles.selectRangeDate, styles.selectTypo]}>
               Select Range Date
             </Text>
