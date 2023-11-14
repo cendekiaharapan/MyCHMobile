@@ -8,6 +8,9 @@ import PopUp from "./components/PopUp";
 import CHDollar from "./components/CHDollar";
 import Attendance from "./components/Attendance";
 import AverageDailyScore from "./components/AverageDailyScore";
+import PaymentCHDAccount from "./pages/PaymentCHDAccount";
+import PaymentTopup from "./pages/PaymentTopup";
+
 
 const Stack = createNativeStackNavigator();
 
@@ -49,6 +52,21 @@ const MainStack = () => {
         component={AllPost}
         options={{ headerShown: false }}
       />
+      <Stack.Screen
+        name="Onboard"
+        component={Onboard}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="PaymentCHDAccount"
+        component={PaymentCHDAccount}
+        options={{ headerShown: false }}
+      />   
+        <Stack.Screen
+        name="PaymentTopup"
+        component={PaymentTopup}
+        options={{ headerShown: false }}
+      />   
     </Stack.Navigator>
   );
 };

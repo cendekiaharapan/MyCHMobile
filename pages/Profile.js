@@ -104,9 +104,10 @@ const AllPost = () => {
 
   const handleTemporaryButton = () => {
     navigation.navigate("Main App Stack", {
-      screen: "AllPost", // change this with your screen name
+      screen: "PaymentCHDAccount",
     });
   };
+  
   // const handleLogout = () => {
   //   clearTokenFromSecureStore();
   //   clearResponseDataFromSecureStore();

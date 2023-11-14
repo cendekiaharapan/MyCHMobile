@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Text } from "react-native";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import Header from "../components/Header";
@@ -79,7 +79,7 @@ const PaymentCHDAccount = () => {
       <View style={styles.chdAccountArea}>
         {/* Use the chdBalance state variable in CHDAccountCard */}
         {studentIds.map((studentId, index) => (
-        <CHDAccountCard key={studentId} student_name={studentNames[index]} chd_balance={chdBalances[studentId]} />
+        <CHDAccountCard key={studentId} student_id={studentId} student_name={studentNames[index]} chd_balance={chdBalances[studentId]} />
         ))}
       </View>
     </View>

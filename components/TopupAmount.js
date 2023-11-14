@@ -1,20 +1,25 @@
 import * as React from "react";
-import { Text, StyleSheet, View } from "react-native";
-import TopUpForm from "./TopUpForm";
+import { Text, StyleSheet, View, TextInput } from "react-native";
 import { FontSize, FontFamily, Color } from "../GlobalStyles";
 
-const TopupAmount = () => {
+const TopupAmount = ({ onAmountChange }) => {
+  const [topupAmount, setTopupAmount] = React.useState("");
+
+  const handleAmountChange = (text) => {
+    // Pass the updated topupAmount value to the parent component
+    onAmountChange(text);
+  };
+
   return (
     <View style={[styles.topupAmount, styles.framePosition]}>
       <View style={[styles.frame, styles.framePosition]}>
         <Text style={styles.topUpAmountChd}>Top-up Amount (CHD):</Text>
       </View>
-      <TopUpForm
-        inputFieldPosition="absolute"
-        inputFieldTop={25}
-        inputFieldLeft={0}
-        inputFieldWidth={350}
-        inputFieldBackgroundColor="#fff"
+      <TextInput
+        style={styles.inputField}
+        onChangeText={handleAmountChange}
+        keyboardType="numeric"
+        placeholder="Enter CHD amount"
       />
     </View>
   );
@@ -42,6 +47,18 @@ const styles = StyleSheet.create({
   topupAmount: {
     top: 99,
     height: 59,
+  },
+  inputField: {
+    position: "absolute",
+    top: 25,
+    left: 0,
+    width: 350,
+    backgroundColor: "#fff",
+    borderWidth: 1,
+    borderColor: Color.colorGray_300,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 5,
   },
 });
 
