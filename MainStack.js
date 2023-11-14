@@ -24,6 +24,9 @@ import PaymentInvoiceDetails from "./pages/PaymentInvoiceDetails";
 import PaidInvoiceHistory from "./pages/PaidInvoiceHistory";
 import PaidInvoiceDetails from "./pages/PaidInvoiceDetails";
 
+//report card
+import ReportCard from "./pages/ReportCard";
+
 const Stack = createNativeStackNavigator();
 
 const MainStack = () => {
@@ -52,6 +55,11 @@ const MainStack = () => {
       <Stack.Screen
         name="PaymentInvoiceDetails"
         component={PaymentInvoiceDetails}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="ReportCard"
+        component={ReportCard}
         options={{ headerShown: false }}
       />
       <Stack.Screen

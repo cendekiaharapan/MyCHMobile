@@ -21,6 +21,11 @@ const AppsList = () => {
       screen: "PaymentCHDAccount", // change this with your screen name
     });
   };
+  const handleReportCardButton = () => {
+    navigation.navigate("Main App Stack", {
+      screen: "ReportCard", // change this with your screen name
+    });
+  };
   return (
     <View style={styles.mainContainer}>
       <View style={styles.bodyContainer}>
@@ -57,14 +62,16 @@ const AppsList = () => {
             />
             <Text style={styles.StyleText}>TERM ASSESSMENT REPORT</Text>
           </View>
-          <View style={styles.BoxContainer}>
-            <Image
-              style={styles.StyleImage}
-              source={require("../assets/images/ReportCard.png")}
-              contentFit="cover"
-            />
-            <Text style={styles.StyleText}>REPORT CARD</Text>
-          </View>
+          <TouchableOpacity onPress={handleReportCardButton}>
+            <View style={styles.BoxContainer}>
+              <Image
+                style={styles.StyleImage}
+                source={require("../assets/images/ReportCard.png")}
+                contentFit="cover"
+              />
+              <Text style={styles.StyleText}>REPORT CARD</Text>
+            </View>
+          </TouchableOpacity>
         </View>
         <View style={styles.RowContainer}>
           <View style={styles.BoxContainer}>

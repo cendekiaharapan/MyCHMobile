@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import { Image, Linking } from 'react-native';
-import { StyleSheet, Text, View } from 'react-native';
-import { Button, NativeBaseProvider, Box, Select, Center } from 'native-base';
-import { LinearGradient } from 'expo-linear-gradient';
-import axios from 'axios'; // Import Axios
-import { FontFamily, Color, FontSize, Padding, Border } from '../GlobalStyles';
-import Toast  from 'react-native-toast-message';
+import React, { useEffect, useState } from "react";
+import { Image, Linking } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import { Button, NativeBaseProvider, Box, Select, Center } from "native-base";
+import { LinearGradient } from "expo-linear-gradient";
+import axios from "axios"; // Import Axios
+import { FontFamily, Color, FontSize, Padding, Border } from "../GlobalStyles";
+import Toast from "react-native-toast-message";
 import { retrieveItem } from "../database/database";
+import { LoadingModal } from "react-native-loading-modal";
+import { useNavigation } from "@react-navigation/native";
 
 const ReportCard = () => {
   const [academicSessions, setAcademicSessions] = useState([]);
@@ -14,11 +16,14 @@ const ReportCard = () => {
   const [selectedSemester, setSelectedSemester] = useState("Semester 1");
   const [termSessions, setTermSessions] = useState([]);
   const [filteredTermSessions, setFilteredTermSessions] = useState([]);
-  const [reportCardUrl, setReportCardUrl] = useState('https://www.balichildrenshouse.com/myCH/student-report-card');
+  const [reportCardUrl, setReportCardUrl] = useState(
+    "https://www.balichildrenshouse.com/myCH/student-report-card"
+  );
   const [studentIds, setStudentIds] = React.useState([]); // State to store student IDs
   const [studentNames, setStudentNames] = React.useState([]);
   const [selectedStudent, setSelectedStudent] = useState("");
-  
+  const [loading, setLoading] = React.useState(true);
+  const navigation = useNavigation();
   React.useEffect(() => {
     // Retrieve student data from storage
     retrieveItem("childData")
@@ -35,90 +40,127 @@ const ReportCard = () => {
           // Log the retrieved student_ids and student_names
           console.log("Student IDssss:", studentIds);
           console.log("Student Names:", studentNames);
-
-
         } else {
           console.log("No data found in SQLite.");
         }
       })
       .catch((error) => {
         console.error("Error fetching response data from SQLite:", error);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }, []);
 
   const showToast = () => {
     Toast.show({
-      type: 'error',
-      text1: 'Academic Session',
-      text2: 'There are no terms for this academic session',
-      position: 'top', 
+      type: "error",
+      text1: "Academic Session",
+      text2: "There are no terms for this academic session",
+      position: "top",
+    });
+  };
+  const showToastError = () => {
+    Toast.show({
+      type: "error",
+      text1: "Academic Report",
+      text2: "No academic report, please select another option!",
+      position: "top",
+    });
+  };
+  const showToastSuccess = () => {
+    Toast.show({
+      type: "success",
+      text1: "Academic Report",
+      text2: "Report card has been retrieved!",
+      position: "top",
+      autoHide: false,
     });
   };
 
   useEffect(() => {
-    axios.get('https://www.balichildrenshouse.com/myCH/api/get-academic-sessions')
-      .then(response => {
+    axios
+      .get("https://www.balichildrenshouse.com/myCH/api/get-academic-sessions")
+      .then((response) => {
         setAcademicSessions(response.data);
       })
-      .catch(error => {
-        console.error('Error fetching academic sessions: ', error);
+      .catch((error) => {
+        console.error("Error fetching academic sessions: ", error);
       });
   }, []);
 
   function fetchAndSetTermSessions(selectedSession) {
-    console.log("inside ftech and set term session id : ",selectedSession);
+    console.log("inside ftech and set term session id : ", selectedSession);
     if (selectedSession) {
       console.log("SELECTED ACADEMIC SESSION NOT NULL!");
-      axios.get(`https://www.balichildrenshouse.com/myCH/api/get_session_terms/${selectedSession}`)
+      axios
+        .get(
+          `https://www.balichildrenshouse.com/myCH/api/get_session_terms/${selectedSession}`
+        )
         .then((termsResponse) => {
           if (termsResponse && termsResponse.data) {
             console.log("ini isi term response data", termsResponse.data);
             setFilteredTermSessions(termsResponse.data);
             setTermSessions(termsResponse.data);
-
-          } else {  
-            console.error('Error fetching term sessions: Response data is undefined');
+          } else {
+            console.error(
+              "Error fetching term sessions: Response data is undefined"
+            );
           }
         })
         .catch((error) => {
+          setLoading(false);
           showToast();
         });
-      }
     }
+  }
 
-    const handleAcademicSessionChange = (itemId) => {
-      setSelectedSession(itemId);
-      
-      console.log("set selected section (itemId) = ",itemId);
-    };  
+  const handleAcademicSessionChange = (itemId) => {
+    setSelectedSession(itemId);
+
+    console.log("set selected section (itemId) = ", itemId);
+  };
+
+  const handleBackButton = (itemId) => {
+    navigation.navigate("Main App Stack", {
+      screen: "BottomNavbar", // change this with your screen name
+    });
+  };
 
   const handleViewReportCard = () => {
+    setLoading(true);
     // You can change this to your desired student ID
     const url = `https://www.balichildrenshouse.com/myCH/api/getacademicreport/${selectedStudent}/${selectedSession}/${selectedSemester}`;
 
-    axios.get(url)
-      .then(response => {
+    axios
+      .get(url)
+      .then((response) => {
         // Handle the response data as needed
-        
-
+        setLoading(false);
+        showToastSuccess();
         // Open the URL in the default web browser
         Linking.openURL(url); // Replace 'url' with the actual response field that contains the URL
       })
-      .catch(error => {
-        console.error('Error fetching academic report: ', error);
+      .catch((error) => {
+        setLoading(false);
+        showToastError();
+        // console.error('Error fetching academic report: ', error);
       });
   };
   return (
     <NativeBaseProvider>
       <View style={styles.reportCard}>
+        <LoadingModal modalVisible={loading} color="red" />
         <View style={styles.frame}>
           <View style={styles.frame1}>
-            <Image
-              style={styles.frameIcon}
-              contentFit="cover"
-              source={require('../assets/frame.png')}
-            />
- <View style={styles.reportCardWrapper}>
+            <TouchableOpacity onPress={handleBackButton}>
+              <Image
+                style={styles.frameIcon}
+                contentFit="cover"
+                source={require("../assets/frame.png")}
+              />
+            </TouchableOpacity>
+            <View style={styles.reportCardWrapper}>
               <Text style={styles.reportCard1}>Report Card</Text>
             </View>
           </View>
@@ -127,75 +169,86 @@ const ReportCard = () => {
           <LinearGradient
             style={styles.menu}
             locations={[0, 1]}
-            colors={['#fff', 'rgba(255, 255, 255, 0)']}
+            colors={["#fff", "rgba(255, 255, 255, 0)"]}
           >
             <View style={styles.frame3}>
               <View style={styles.selectSessionParent}>
-              <Text style={styles.selectSession}>Select Student</Text>
-                  {/* New Select component for students */}
-                  <Select
-                    minWidth="275"
-                    accessibilityLabel="Choose Student"
-                    placeholder="Choose Student"
-                    onValueChange={(studentId) => {
-                      setSelectedStudent(studentId);
-                    }}
-                  >
-                    {studentNames.map((student, index) => (
-                      <Select.Item key={studentIds[index]} label={student} value={studentIds[index]} />
-                    ))}
-                  </Select>
-                </View>
+                <Text style={styles.selectSession}>Select Student</Text>
+                {/* New Select component for students */}
+                <Select
+                  minWidth="275"
+                  accessibilityLabel="Choose Student"
+                  placeholder="Choose Student"
+                  onValueChange={(studentId) => {
+                    setSelectedStudent(studentId);
+                  }}
+                >
+                  {studentNames.map((student, index) => (
+                    <Select.Item
+                      key={studentIds[index]}
+                      label={student}
+                      value={studentIds[index]}
+                    />
+                  ))}
+                </Select>
+              </View>
               <View style={styles.selectSessionParent}>
                 <Text style={styles.selectSession}>Select Session</Text>
-                <Center> 
-                <Select
-                
-                minWidth="275"
-                accessibilityLabel="Choose Session"
-                placeholder="Choose Session"
-                onValueChange={(itemId) => {
-                  // console.log("set selected session id : ",itemId);
-                  // console.log("value of selected session id : ",selectedSession);
-                  fetchAndSetTermSessions(itemId);
-                  setSelectedSession(itemId);
-                  }}>
-                {academicSessions.map(session => (
-                  <Select.Item key={session.id} label={session.name} value={session.id} />
-                ))}
-              </Select>
-              </Center>
+                <Center>
+                  <Select
+                    minWidth="275"
+                    accessibilityLabel="Choose Session"
+                    placeholder="Choose Session"
+                    onValueChange={(itemId) => {
+                      // console.log("set selected session id : ",itemId);
+                      // console.log("value of selected session id : ",selectedSession);
+                      fetchAndSetTermSessions(itemId);
+                      setSelectedSession(itemId);
+                    }}
+                  >
+                    {academicSessions.map((session) => (
+                      <Select.Item
+                        key={session.id}
+                        label={session.name}
+                        value={session.id}
+                      />
+                    ))}
+                  </Select>
+                </Center>
               </View>
               <Image
                 style={styles.frameChild}
                 contentFit="cover"
-                source={require('../assets/vector-8.png')}
+                source={require("../assets/vector-8.png")}
               />
             </View>
             <View style={styles.selectSemesterParent}>
               <Text style={styles.selectSession}>Select Semester</Text>
-              <Center> 
-              {academicSessions.length > 0 && (
-              <Select
-              selectedValue={selectedSemester}
-              minWidth="275"
-              accessibilityLabel="Choose Semester"
-              placeholder="Choose Semester"
-              onValueChange={(itemValue) => {
-                setSelectedSemester(itemValue);
-                console.log('Selected Semester:', itemValue);
-              }}
-            >
-              {filteredTermSessions.map((term) => (
-                <Select.Item key={term.id} label={term.name} value={term.id} />
-              ))}
-            </Select>
-            )}
-
+              <Center>
+                {academicSessions.length > 0 && (
+                  <Select
+                    selectedValue={selectedSemester}
+                    minWidth="275"
+                    accessibilityLabel="Choose Semester"
+                    placeholder="Choose Semester"
+                    onValueChange={(itemValue) => {
+                      setSelectedSemester(itemValue);
+                      console.log("Selected Semester:", itemValue);
+                    }}
+                  >
+                    {filteredTermSessions.map((term) => (
+                      <Select.Item
+                        key={term.id}
+                        label={term.name}
+                        value={term.id}
+                      />
+                    ))}
+                  </Select>
+                )}
               </Center>
             </View>
             <View style={styles.buttonCariTiket}>
-              <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+              <View style={{ alignItems: "center", justifyContent: "center" }}>
                 <Button
                   style={{
                     ...styles.viewReportCard,
@@ -205,13 +258,14 @@ const ReportCard = () => {
                   }}
                   onPress={handleViewReportCard}
                 >
-                  <Text style={{ color: Color.colorWhite }}>VIEW REPORT CARD</Text>
+                  <Text style={{ color: Color.colorWhite }}>
+                    VIEW REPORT CARD
+                  </Text>
                 </Button>
               </View>
             </View>
           </LinearGradient>
         </View>
-       
       </View>
     </NativeBaseProvider>
   );
@@ -251,7 +305,7 @@ const styles = StyleSheet.create({
   },
   frame: {
     width: 360,
-    height:50,
+    height: 50,
     overflow: "hidden",
     flexDirection: "column",
     alignItems: "center",
@@ -354,11 +408,11 @@ const styles = StyleSheet.create({
     backgroundColor: Color.colorTomato,
     width: 182,
     height: 37,
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
     marginTop: 16,
-  },  
+  },
   menu: {
     borderRadius: 7,
     shadowColor: "rgba(0, 0, 0, 0.25)",
