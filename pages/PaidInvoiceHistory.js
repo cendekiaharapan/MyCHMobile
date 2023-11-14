@@ -18,6 +18,7 @@ import {
 import axios from "axios";
 import { useFocusEffect } from "@react-navigation/native";
 import { ScrollView } from "react-native";
+import { LoadingModal } from "react-native-loading-modal";
 const PaidInvoiceHistory = () => {
   const navigation = useNavigation();
   const [studentId, setStudentId] = useState(null);
@@ -172,7 +173,7 @@ const PaidInvoiceHistory = () => {
               <Text>No Paid Payments</Text>
             )
           ) : (
-            <Text>Loading </Text>
+            <LoadingModal modalVisible={true} color="red" />
           )}
         </View>
       </ScrollView>

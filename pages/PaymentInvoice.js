@@ -19,6 +19,7 @@ import {
   getRespDataFromSecureStore,
 } from "../database/database";
 import { useFocusEffect } from "@react-navigation/native";
+import { LoadingModal } from "react-native-loading-modal";
 
 const PaymentInvoice = () => {
   const navigation = useNavigation();
@@ -171,7 +172,7 @@ const PaymentInvoice = () => {
               <Text>No unpaid payments</Text>
             )
           ) : (
-            <Text>Loading </Text>
+            <LoadingModal modalVisible={true} color="red" />
           )}
         </View>
       </ScrollView>

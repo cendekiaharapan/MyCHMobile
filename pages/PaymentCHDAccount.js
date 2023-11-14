@@ -6,12 +6,14 @@ import CHDAccountCard from "../components/CHDAccountCard";
 import { Color } from "../GlobalStyles";
 import axios from "axios";
 import { retrieveItem } from "../database/database";
+import { LoadingModal } from "react-native-loading-modal";
 
 const PaymentCHDAccount = () => {
   const navigation = useNavigation();
   const [chdBalances, setChdBalances] = React.useState({}); // State to store the balance
   const [studentIds, setStudentIds] = React.useState([]); // State to store student IDs
   const [studentNames, setStudentNames] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
     // Retrieve student data from storage
@@ -37,9 +39,20 @@ const PaymentCHDAccount = () => {
       })
       .catch((error) => {
         console.error("Error fetching response data from SQLite:", error);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }, []);
 
+  if (loading) {
+    return (
+      <View>
+        {/* Render a loading indicator or placeholder while data is being fetched */}
+        <LoadingModal modalVisible={true} color="red" />
+      </View>
+    );
+  }
   const fetchStudentBalances = async (studentIds) => {
     try {
       const balances = {};

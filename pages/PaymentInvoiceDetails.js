@@ -9,20 +9,21 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { retrieveItem } from "../database/database";
 import { Linking } from "react-native";
+import { LoadingModal } from "react-native-loading-modal";
 
 const PaymentInvoiceDetails = ({ route }) => {
   const navigation = useNavigation();
-  const [studentIds, setStudentIds] = React.useState([])
+  const [studentIds, setStudentIds] = React.useState([]);
   const [studentNames, setStudentNames] = React.useState([]);
-  const [description, setDescription] = useState('');
-  const [date, setDate] = useState('');
-  const [dueDate, setDueDate] = useState('');
-  const [total, setTotal] = useState('');
+  const [description, setDescription] = useState("");
+  const [date, setDate] = useState("");
+  const [dueDate, setDueDate] = useState("");
+  const [total, setTotal] = useState("");
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [apiResponse, setApiResponse] = useState(null);
   const { paymentId, studentId } = route.params;
-  
+
   React.useEffect(() => {
     // Retrieve student data from storage
     retrieveItem("childData")
@@ -39,7 +40,6 @@ const PaymentInvoiceDetails = ({ route }) => {
           // Log the retrieved student_ids and student_names
           console.log("Student IDssss:", studentIds);
           console.log("Student Names:", studentNames);
-
         } else {
           console.log("No data found in SQLite.");
         }
@@ -51,26 +51,29 @@ const PaymentInvoiceDetails = ({ route }) => {
 
   const fetchDescription = async (selectedPaymentId) => {
     try {
+      const response = await axios.get(
+        `https://www.balichildrenshouse.com/myCH/api/get-payment-histories-by-student_id/${studentId}`
+      );
 
-      const response = await axios.get(`https://www.balichildrenshouse.com/myCH/api/get-payment-histories-by-student_id/${studentId}`);
-
-      console.log('Response Data:', response.data);
+      console.log("Response Data:", response.data);
 
       if (response.data.payments && response.data.payments.length > 0) {
-        const selectedPayment = response.data.payments.find(payment => payment.id === selectedPaymentId);
+        const selectedPayment = response.data.payments.find(
+          (payment) => payment.id === selectedPaymentId
+        );
 
         if (selectedPayment) {
           setDescription(selectedPayment.description);
           setDate(selectedPayment.date);
           setDueDate(selectedPayment.due_date);
           setTotal(selectedPayment.total);
-  
-          const itemsArray = selectedPayment.invoice_items.map(item => ({
+
+          const itemsArray = selectedPayment.invoice_items.map((item) => ({
             itemName: item.item_title,
             qty: item.item_qty,
             rate: item.item_rate,
           }));
-  
+
           setItems(itemsArray);
           setApiResponse(response);
         } else {
@@ -78,21 +81,20 @@ const PaymentInvoiceDetails = ({ route }) => {
         }
       }
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error:", error);
     }
   };
 
   const openPaymentUrl = async () => {
     try {
       // Fetch the payment ID from the first payment in the response
-      
 
       // Open the payment URL with the dynamic payment ID
       const paymentUrl = `https://www.balichildrenshouse.com/myCH/api/payment/midtrans/${paymentId}`;
       // Use Linking to open the URL in the device's default browser
       await Linking.openURL(paymentUrl);
     } catch (error) {
-      console.error('Error opening payment URL:', error);
+      console.error("Error opening payment URL:", error);
     }
   };
 
@@ -111,26 +113,29 @@ const PaymentInvoiceDetails = ({ route }) => {
     return (
       <View>
         {/* Render a loading indicator or placeholder while data is being fetched */}
-        <Text>Loading...</Text>
+        <LoadingModal modalVisible={true} color="red" />
       </View>
     );
   }
 
-  const formattedTotal = parseFloat(total).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 3 });
+  const formattedTotal = parseFloat(total).toLocaleString(undefined, {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 3,
+  });
 
   return (
     <View style={styles.paymentInvoiceDetails}>
-        <View style={styles.header}>
-      <Header
-        invoiceTitle="INVOICE DETAILS"
-        backButtonPosition="unset"
-        backButtonTop="unset"
-        backButtonLeft="unset"
-        iNVOICESAlignItems="flex-start"
-        iNVOICESWidth="unset"
-        onBackButtonPress={() => navigation.navigate("PaymentInvoice")}
-      />
-    </View>
+      <View style={styles.header}>
+        <Header
+          invoiceTitle="INVOICE DETAILS"
+          backButtonPosition="unset"
+          backButtonTop="unset"
+          backButtonLeft="unset"
+          iNVOICESAlignItems="flex-start"
+          iNVOICESWidth="unset"
+          onBackButtonPress={() => navigation.navigate("PaymentInvoice")}
+        />
+      </View>
       <View style={[styles.studentName, styles.dateLayout]}>
         <Text style={[styles.studentName1, styles.totalFlexBox]}>
           Student Name
@@ -166,9 +171,14 @@ const PaymentInvoiceDetails = ({ route }) => {
       </View>
 
       {items.map((item, index) => (
-        <InvoiceDetailItems key={index} itemName={item.itemName} qty={item.qty} rate={item.rate} />
+        <InvoiceDetailItems
+          key={index}
+          itemName={item.itemName}
+          qty={item.qty}
+          rate={item.rate}
+        />
       ))}
-      
+
       <View style={[styles.totalAmounts, styles.footerFlexBox]}>
         <Text style={[styles.totalAmount, styles.totalFlexBox]}>
           Total Amount
@@ -178,9 +188,11 @@ const PaymentInvoiceDetails = ({ route }) => {
         </Text>
       </View>
       <View style={[styles.footer, styles.footerFlexBox]}>
-      <Button ButtonType={1} actionButtonText="PAY NOW" onButtonPress={handlePayNowPress} />
-
-
+        <Button
+          ButtonType={1}
+          actionButtonText="PAY NOW"
+          onButtonPress={handlePayNowPress}
+        />
       </View>
     </View>
   );

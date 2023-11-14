@@ -10,6 +10,7 @@ import {
   getAllKeys,
 } from "../database/database";
 import Toast from "react-native-toast-message";
+import { LoadingModal } from "react-native-loading-modal";
 
 const CallMyChild = forwardRef(({ navigation }, ref) => {
   const { width } = Dimensions.get("window");
@@ -21,6 +22,7 @@ const CallMyChild = forwardRef(({ navigation }, ref) => {
   const [selectedChild, setSelectedChild] = React.useState("");
   const [selectedLanguage, setSelectedLanguage] = React.useState(null);
   const [selectedPlace, setSelectedPlace] = React.useState(null);
+  const [loading, setLoading] = React.useState(true);
   useEffect(() => {
     // This code will run after the component renders
     retrieveItem("childData")
@@ -41,6 +43,9 @@ const CallMyChild = forwardRef(({ navigation }, ref) => {
       })
       .catch((error) => {
         console.error("Error fetching response data from SQLite:", error);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }, []);
   // const studentId = [1774, 2065];
@@ -120,6 +125,7 @@ const CallMyChild = forwardRef(({ navigation }, ref) => {
   const callMyChildAPI = () => {
     if (!selectedChild || !selectedPlace || !selectedLanguage) {
       // Handle error, show a message to the user, or prevent the request.
+      setLoading(false);
       showToastErrorRequired();
       return;
     }
@@ -140,8 +146,10 @@ const CallMyChild = forwardRef(({ navigation }, ref) => {
     })
       .then((response) => {
         if (response.status === 200) {
+          setLoading(false);
           showToastSuccess(); // Show success toast
         } else {
+          setLoading(false);
           showToastError(); // Show error toast for non-200 status
         }
         return response.json();
@@ -174,6 +182,12 @@ const CallMyChild = forwardRef(({ navigation }, ref) => {
     });
   };
 
+  const handleCallButton = async () => {
+    setLoading(true);
+    callMyChildAPI();
+    console.log("API Triggered!");
+  };
+
   const handleBackButtonClick = () => {
     navigation.navigate("Main App Stack", {
       screen: "BottomNavbar", // change this with your screen name
@@ -183,6 +197,7 @@ const CallMyChild = forwardRef(({ navigation }, ref) => {
     <View
       style={[styles.callMyChild, styles.callMyChildFlexBox, styles.container]}
     >
+      <LoadingModal modalVisible={loading} color="red" />
       <View style={styles.ictwotoneArrowBackParent}>
         <TouchableOpacity onPress={handleBackButtonClick}>
           <Image
@@ -281,14 +296,7 @@ const CallMyChild = forwardRef(({ navigation }, ref) => {
         <TouchableOpacity
           ref={ref}
           style={styles.btnprimary}
-          onPress={() => {
-            // Tampilkan toast di sini
-            console.log("selected child : ", selectedChild);
-            console.log("selected language : ", selectedLanguage);
-            console.log("selected place : ", selectedPlace);
-            callMyChildAPI();
-            console.log("API Triggered!");
-          }}
+          onPress={handleCallButton}
         >
           <Text style={[styles.call, styles.callTypo]}>CALL</Text>
         </TouchableOpacity>

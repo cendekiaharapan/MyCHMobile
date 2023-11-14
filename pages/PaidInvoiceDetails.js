@@ -9,6 +9,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { retrieveItem } from "../database/database";
 import { Linking } from "react-native";
+import { LoadingModal } from "react-native-loading-modal";
 
 const PaidInvoiceDetails = ({ route }) => {
   const navigation = useNavigation();
@@ -112,7 +113,7 @@ const PaidInvoiceDetails = ({ route }) => {
     return (
       <View>
         {/* Render a loading indicator or placeholder while data is being fetched */}
-        <Text>Loading...</Text>
+        <LoadingModal modalVisible={true} color="red" />
       </View>
     );
   }
