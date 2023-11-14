@@ -3,15 +3,25 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Onboard from "./pages/Onboard";
 import AllPost from "./pages/AllPost";
 import PostDetails from "./pages/PostDetails";
-import CallMyChild from "./pages/CallMyChild";
 import Profile from "./pages/Profile";
 import HomeParent from "./pages/HomeParent";
 import PopUp from "./components/PopUp";
-import CHDollar from "./components/CHDollar";
 import Attendance from "./components/Attendance";
 import AverageDailyScore from "./components/AverageDailyScore";
 import BottomNavbar from "./BottomNavbar";
 import Apps from "./pages/AppsList";
+
+// Call My Child
+import CallMyChild from "./pages/CallMyChild";
+
+// CH Dollar
+import CHDollar from "./components/CHDollar";
+
+// Payment
+import PaymentInvoice from "./pages/PaymentInvoice";
+import PaymentInvoiceDetails from "./pages/PaymentInvoiceDetails";
+import PaidInvoiceHistory from "./pages/PaidInvoiceHistory";
+import PaidInvoiceDetails from "./pages/PaidInvoiceDetails";
 
 const Stack = createNativeStackNavigator();
 
@@ -23,26 +33,31 @@ const MainStack = () => {
         component={BottomNavbar}
         options={{ headerShown: false }}
       />
-      {/* <Stack.Screen
-        name="Profile"
-        component={Profile}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="Apps"
-        component={Apps}
-        options={{ headerShown: false }}
-      /> */}
       <Stack.Screen
         name="PopUp"
         component={PopUp}
         options={{ headerShown: false }}
       />
-      {/* <Stack.Screen
-        name="HomeParent"
-        component={HomeParent}
+      <Stack.Screen
+        name="PaymentInvoice"
+        component={PaymentInvoice}
         options={{ headerShown: false }}
-      /> */}
+      />
+      <Stack.Screen
+        name="PaymentInvoiceDetails"
+        component={PaymentInvoiceDetails}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="PaidInvoiceHistory"
+        component={PaidInvoiceHistory}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="PaidInvoiceDetails"
+        component={PaidInvoiceDetails}
+        options={{ headerShown: false }}
+      />
       <Stack.Screen
         name="CallMyChild"
         component={CallMyChild}

@@ -471,7 +471,7 @@ const styles = StyleSheet.create({
   call: {
     top: 15,
     left: 50,
-    color: Color.global09White,
+    color: "white",
     textAlign: "center",
     width: 202,
     fontSize: 15,

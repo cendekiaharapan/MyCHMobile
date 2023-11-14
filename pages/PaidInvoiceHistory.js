@@ -22,14 +22,12 @@ const PaidInvoiceHistory = () => {
   const navigation = useNavigation();
   const [studentId, setStudentId] = useState(null);
   const [studentName, setStudentName] = useState(null);
-  const [paidPayment, setPaidPayment] = useState(null);
+  const [unpaidPayment, setUnpaidPayment] = useState(null);
 
   useFocusEffect(
     React.useCallback(() => {
       // Your effect to run when the screen comes into focus
-      console.log(
-        "Screen Paid Invoice History is focused, perform tasks here."
-      );
+      console.log("Screen is focused, perform tasks here.");
 
       // For example, you might want to fetch data
       fetchDataStudent();
@@ -40,32 +38,15 @@ const PaidInvoiceHistory = () => {
       };
     }, [])
   );
-  const fetchDataStudent = async () => {
-    retrieveItem("childData")
-      .then((data) => {
-        if (data) {
-          // Use the retrieved data
-          const student_ids = data.map((item) => item.id);
-          const student_name = data.map((item) => item.name);
-          getAllPaymentHistories(student_ids);
-          // Update your component state or data source with the new data
-          // For example, if you're using state in a functional component:
-          setStudentId(student_ids);
-          console.log(student_ids);
-          setStudentName(student_name);
-        } else {
-          // Handle the case when no data is found
-          console.log("No data found in AsyncStorage.");
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching response data from SQLite:", error);
-      });
-  };
+
+  // useEffect(() => {
+  //   fetchDataStudent();
+  //   getAllPaymentHistories();
+  // }, []); // Dependency array
 
   const fetchPaymentHistories = async (studentId) => {
+    console.log("inside fetch payment histories");
     try {
-      console.log("inside fetch payment histories");
       const response = await axios.get(
         `https://www.balichildrenshouse.com/myCH/api/get-payment-histories-by-student_id/${studentId}`
       );
@@ -83,6 +64,28 @@ const PaidInvoiceHistory = () => {
       // );
       return null;
     }
+  };
+
+  const fetchDataStudent = async () => {
+    retrieveItem("childData")
+      .then((data) => {
+        if (data) {
+          // Use the retrieved data
+          const student_ids = data.map((item) => item.id);
+          const student_name = data.map((item) => item.name);
+          getAllPaymentHistories(student_ids);
+          // Update your component state or data source with the new data
+          // For example, if you're using state in a functional component:
+          setStudentId(student_ids);
+          setStudentName(student_name);
+        } else {
+          // Handle the case when no data is found
+          console.log("No data found in AsyncStorage.");
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching response data from SQLite:", error);
+      });
   };
 
   const getAllPaymentHistories = async (studentId) => {
@@ -113,8 +116,8 @@ const PaidInvoiceHistory = () => {
         (payment) => payment.status === "paid"
       );
 
-      console.log("Paid Payments History:", unpaidPayments);
-      setPaidPayment(unpaidPayments);
+      console.log("Unpaid Payments:", unpaidPayments);
+      setUnpaidPayment(unpaidPayments);
     } catch (error) {
       console.error(
         "Error fetching payment histories for all students:",
@@ -136,9 +139,9 @@ const PaidInvoiceHistory = () => {
       />
       <ScrollView contentContainerStyle={styles.historyInvoiceContainer}>
         <View style={styles.historyInvoiceInnerContainer}>
-          {paidPayment != null ? (
-            paidPayment.length > 0 ? (
-              paidPayment.map((payment) => {
+          {unpaidPayment != null ? (
+            unpaidPayment.length > 0 ? (
+              unpaidPayment.map((payment) => {
                 const formatter = new Intl.NumberFormat("id-ID", {
                   style: "currency",
                   currency: "IDR",
@@ -146,15 +149,20 @@ const PaidInvoiceHistory = () => {
 
                 const formattedTotalRate = formatter.format(payment.total);
                 const studentIdIndex = studentId.indexOf(payment.student_id);
+                const paymentId = payment.id;
                 console.log(payment.student_id);
                 console.log(studentName[studentIdIndex]);
                 return (
                   <InvoiceLists
                     InvoiceListType={1}
-                    onPressNavigation="PaidInvoiceDetails"
-                    studentName={studentName[studentIdIndex]}
-                    description={payment.description}
-                    paidDate={payment.paid_at}
+                    onPressNavigation={() =>
+                      navigation.navigate("PaidInvoiceDetails", {
+                        paymentId,
+                        studentId: payment.student_id,
+                      })
+                    }
+                    studentName={studentName[studentIdIndex]} // Assuming studentName is based on the student_id
+                    description={payment.title}
                     dueDate={payment.due_date}
                     totalRate={formattedTotalRate}
                   />

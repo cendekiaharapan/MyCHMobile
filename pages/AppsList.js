@@ -11,6 +11,11 @@ const AppsList = () => {
       screen: "CallMyChild", // change this with your screen name
     });
   };
+  const handlePaymentButton = () => {
+    navigation.navigate("Main App Stack", {
+      screen: "PaymentInvoice", // change this with your screen name
+    });
+  };
   return (
     <View style={styles.mainContainer}>
       <View style={styles.bodyContainer}>
@@ -75,14 +80,16 @@ const AppsList = () => {
           </View>
         </View>
         <View style={styles.RowContainer}>
-          <View style={styles.BoxContainer}>
-            <Image
-              style={styles.StyleImage}
-              source={require("../assets/images/Payment.png")}
-              contentFit="cover"
-            />
-            <Text style={styles.StyleText}>PAYMENT</Text>
-          </View>
+          <TouchableOpacity onPress={handlePaymentButton}>
+            <View style={styles.BoxContainer}>
+              <Image
+                style={styles.StyleImage}
+                source={require("../assets/images/Payment.png")}
+                contentFit="cover"
+              />
+              <Text style={styles.StyleText}>PAYMENT</Text>
+            </View>
+          </TouchableOpacity>
           <View style={styles.BoxContainer}>
             <Image
               style={styles.StyleImage}

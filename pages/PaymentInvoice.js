@@ -128,12 +128,12 @@ const PaymentInvoice = () => {
       return null;
     }
   };
-  
+
   return (
     <View style={[styles.paymentInvoice, styles.footerFlexBox]}>
       <Header
         invoiceTitle="INVOICES"
-        onBackButtonPress={() => navigation.navigate("PageStart")}
+        onBackButtonPress={() => navigation.navigate("BottomNavbar")}
       />
       <ScrollView contentContainerStyle={styles.invoicelistarea}>
         <View style={styles.invoicelistarea}>
@@ -147,15 +147,19 @@ const PaymentInvoice = () => {
 
                 const formattedTotalRate = formatter.format(payment.total);
                 const studentIdIndex = studentId.indexOf(payment.student_id);
-                
+
                 const paymentId = payment.id;
-                console.log("Payment IDsss:", paymentId);
+                console.log("Payment IDsss:", payment.title);
                 return (
-                  
                   <InvoiceLists
                     key={payment.id} // Make sure to use a unique key for each component
                     InvoiceListType={2}
-                    onPressNavigation={() => navigation.navigate("PaymentInvoiceDetails", { paymentId, studentId: payment.student_id })}
+                    onPressNavigation={() =>
+                      navigation.navigate("PaymentInvoiceDetails", {
+                        paymentId,
+                        studentId: payment.student_id,
+                      })
+                    }
                     studentName={studentName[studentIdIndex]} // Assuming studentName is based on the student_id
                     description={payment.title}
                     dueDate={payment.due_date}
