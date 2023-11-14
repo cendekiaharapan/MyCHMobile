@@ -86,8 +86,8 @@ const ChildPermissionAddPermis = () => {
   };
 
   // Function to update the service state
-  const handleServiceChange = (selectedService) => {
-    setService(selectedService);
+  const handleServiceChange = (selectedStudent) => {
+    setStudentIds(selectedStudent);
   };
 
   // Function to handle changes in the text area
@@ -99,7 +99,7 @@ const ChildPermissionAddPermis = () => {
     console.log("inside from date : ",fromDate);
     // Create a data object with the data to send in the request
     const data = {
-      student_id: service,
+      student_id: selectedStudent,
       type: type,
       from_date: fromDate,
       to_date: toDate,
