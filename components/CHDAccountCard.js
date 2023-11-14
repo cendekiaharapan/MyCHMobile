@@ -26,7 +26,7 @@ const CHDCard = ({ student_name, chd_balance }) => {
         <View style={styles.frame}>
           <Text style={styles.chdValueTypo}>{chd_balance} </Text>
           <Text style={[styles.currrentBalance, styles.chdValueTypo]}>
-            CHD  | Current Balance
+            CHD | Current Balance
           </Text>
         </View>
       </ImageBackground>
@@ -45,6 +45,7 @@ const styles = StyleSheet.create({
     textTransform: "uppercase",
   },
   textStudentName: {
+    width: 245,
     fontSize: FontSize.size_mini,
     letterSpacing: -0.1,
     fontFamily: FontFamily.poppinsRegular,
@@ -56,6 +57,9 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   frame: {
+    top: 73,
+    left: 35,
+    position: "absolute",
     width: 300,
     height: 24,
     overflow: "hidden",

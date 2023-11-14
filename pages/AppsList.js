@@ -16,6 +16,11 @@ const AppsList = () => {
       screen: "PaymentInvoice", // change this with your screen name
     });
   };
+  const handleCHDollarButton = () => {
+    navigation.navigate("Main App Stack", {
+      screen: "PaymentCHDAccount", // change this with your screen name
+    });
+  };
   return (
     <View style={styles.mainContainer}>
       <View style={styles.bodyContainer}>
@@ -90,14 +95,16 @@ const AppsList = () => {
               <Text style={styles.StyleText}>PAYMENT</Text>
             </View>
           </TouchableOpacity>
-          <View style={styles.BoxContainer}>
-            <Image
-              style={styles.StyleImage}
-              source={require("../assets/images/CHDollar.png")}
-              contentFit="cover"
-            />
-            <Text style={styles.StyleText}>CH DOLLAR</Text>
-          </View>
+          <TouchableOpacity onPress={handleCHDollarButton}>
+            <View style={styles.BoxContainer}>
+              <Image
+                style={styles.StyleImage}
+                source={require("../assets/images/CHDollar.png")}
+                contentFit="cover"
+              />
+              <Text style={styles.StyleText}>CH DOLLAR</Text>
+            </View>
+          </TouchableOpacity>
         </View>
       </View>
     </View>

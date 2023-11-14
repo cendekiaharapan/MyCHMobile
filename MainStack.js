@@ -4,18 +4,19 @@ import Onboard from "./pages/Onboard";
 import AllPost from "./pages/AllPost";
 import PostDetails from "./pages/PostDetails";
 import Profile from "./pages/Profile";
-import HomeParent from "./pages/HomeParent";
 import PopUp from "./components/PopUp";
 import Attendance from "./components/Attendance";
 import AverageDailyScore from "./components/AverageDailyScore";
 import BottomNavbar from "./BottomNavbar";
 import Apps from "./pages/AppsList";
+import HomeParent from "./pages/HomeParent";
 
 // Call My Child
 import CallMyChild from "./pages/CallMyChild";
 
 // CH Dollar
 import CHDollar from "./components/CHDollar";
+import PaymentCHDAccount from "./pages/PaymentCHDAccount";
 
 // Payment
 import PaymentInvoice from "./pages/PaymentInvoice";
@@ -41,6 +42,11 @@ const MainStack = () => {
       <Stack.Screen
         name="PaymentInvoice"
         component={PaymentInvoice}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="PaymentCHDAccount"
+        component={PaymentCHDAccount}
         options={{ headerShown: false }}
       />
       <Stack.Screen
