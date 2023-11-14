@@ -1,4 +1,4 @@
-import { Storage } from "@react-native-async-storage/async-storage";
+import { Storage } from "expo-storage";
 import * as SecureStore from "expo-secure-store";
 
 const storeItem = async (key, data) => {
