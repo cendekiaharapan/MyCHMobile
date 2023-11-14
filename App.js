@@ -11,7 +11,7 @@ import AverageDailyScore from "./components/AverageDailyScore";
 import PostDetails from "./pages/PostDetails";
 import AllPost from "./pages/AllPost";
 import Password from "./pages/Password";
-import Coba from "./components/Coba";
+import Toast from 'react-native-toast-message';
 
 // permission history
 import ChildPermissionAddPermis from "./pages/ChildPermissionAddPermis";
@@ -130,6 +130,7 @@ const App = () => {
           <Onboard />
         )}
       </NavigationContainer>
+      <Toast />
     </>
   );
 };

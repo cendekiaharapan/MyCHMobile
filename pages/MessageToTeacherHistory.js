@@ -6,6 +6,7 @@ import { Padding, Color, FontSize, FontFamily, Border } from "../GlobalStyles";
 import HeroContent from "../components/MessageToTeacherHistory/HeroContentMessageToTeacherHis";
 import MessageHistory from "../components/MessageToTeacherHistory/MessageHistory";
 import axios from "axios";
+import { useFocusEffect } from '@react-navigation/native';
 import { useEffect, useState } from "react";
 import * as SQLite from "expo-sqlite";
 import * as SecureStore from "expo-secure-store";
@@ -80,41 +81,54 @@ const MessageToTeacherHistory = () => {
     }
   };
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    // Fetch teacher names for each message
-    if (responseData) {
-      const teacherIds = responseData.history_communication.map(
-        (message) => message.teacher_id
-      );
-      const uniqueTeacherIds = [...new Set(teacherIds)]; // Get unique teacher IDs
-
-      // Fetch teacher names for each unique teacher ID
-      const fetchTeacherNames = async () => {
-        const names = {};
-        for (const teacherId of uniqueTeacherIds) {
-          try {
-            const response = await axios.get(
-              `https://www.balichildrenshouse.com/myCHStaging/api/get-teacher/${teacherId}`
-            );
-            const teacherNameExtracted = response.data.map((item) => item.name);
-            console.log(teacherNameExtracted);
-            names[teacherId] = teacherNameExtracted;
-            console.log("teacher names : ", names);
-          } catch (error) {
-            console.error("Error fetching teacher data:", error);
-            names[teacherId] = "Unknown Teacher"; // Set a default name in case of an error
-          }
-        }
-        setTeacherNames(names);
+  useFocusEffect(
+    React.useCallback(() => {
+      console.log("useFocuseEffect Actived!");
+      fetchData();
+      return () => {
+        // Cleanup or unsubscribe logic if needed
       };
+    }, [])
+  );
 
-      fetchTeacherNames();
-    }
-  }, [responseData]);
+  useFocusEffect(
+    React.useCallback(() => {
+      // Fetch teacher names for each message
+      if (responseData) {
+        const teacherIds = responseData.history_communication.map(
+          (message) => message.teacher_id
+        );
+        const uniqueTeacherIds = [...new Set(teacherIds)]; // Get unique teacher IDs
+  
+        // Fetch teacher names for each unique teacher ID
+        const fetchTeacherNames = async () => {
+          const names = {};
+          for (const teacherId of uniqueTeacherIds) {
+            try {
+              const response = await axios.get(
+                `https://www.balichildrenshouse.com/myCHStaging/api/get-teacher/${teacherId}`
+              );
+              const teacherNameExtracted = response.data.map((item) => item.name);
+              console.log(teacherNameExtracted);
+              names[teacherId] = teacherNameExtracted;
+              console.log("teacher names : ", names);
+            } catch (error) {
+              console.error("Error fetching teacher data:", error);
+              names[teacherId] = "Unknown Teacher"; // Set a default name in case of an error
+            }
+          }
+          setTeacherNames(names);
+        };
+  
+        fetchTeacherNames();
+      }
+  
+      // Cleanup logic, if needed
+      return () => {
+        // Add any cleanup logic here
+      };
+    }, [responseData])
+  );
 
   const fetchChildDataFromSQLite = () => {
     return new Promise((resolve, reject) => {

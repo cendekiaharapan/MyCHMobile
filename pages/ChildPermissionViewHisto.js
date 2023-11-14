@@ -33,6 +33,7 @@ import DocumentPick from "../components/DocumentPick";
 import DropDown from "../components/DropDown";
 import axios from "axios";
 import { LoadingModal } from "react-native-loading-modal";
+import Toast from 'react-native-toast-message';
 
 const ChildPermissionViewHisto = ({ route, navigation }) => {
   const leave = route?.params?.leave;
@@ -52,7 +53,33 @@ const ChildPermissionViewHisto = ({ route, navigation }) => {
   const fullImageUrl = `${imageUrl}${imageUri}`;
   const toast = useToast();
 
+  const showToastEditSuccess = () => {
+    Toast.show({
+      type: 'success',
+      text1: 'Update Successful',
+    });
+  }
+  const showToastEditError = () => {
+    Toast.show({
+      type: 'error',
+      text1: 'Update Failed',
+    });
+  }
+  const showToastDeleteSuccess = () => {
+    Toast.show({
+      type: 'success',
+      text1: 'Delete Successful',
+    });
+  }
+  const showToastDeleteError = () => {
+    Toast.show({
+      type: 'error',
+      text1: 'Delete Failed',
+    });
+  }
+
   useEffect(() => {
+    console.log("inside use effect : ", leave.id);
     if (leave) {
       setStudent(leave.student_id);
       setType(leave.apply_type);
@@ -113,20 +140,35 @@ const ChildPermissionViewHisto = ({ route, navigation }) => {
         console.log("API response:", response.data);
         navigation.goBack();
 
-        toast.show({
-          title: "Update Successful",
-          status: "success",
-          duration: 3000,
-        });
+        showToastEditSuccess();
       })
       .catch((error) => {
         console.error("API request error:", error);
 
-        toast.show({
-          title: "Update Failed",
-          status: "error",
-          duration: 3000,
-        });
+        showToastEditError();
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
+
+  const handleDeleteData = () => {
+    setIsLoading(true);
+    console.log("Inside Handle Delete : ", leave.id);
+    const idToDelete = leave.id;
+
+    axios
+      .delete(`https://www.balichildrenshouse.com/myCHStaging/api/delete_excused/${idToDelete}`)
+      .then((response) => {
+        console.log("API response:", response.data);
+        navigation.goBack();
+
+        showToastDeleteSuccess();
+      })
+      .catch((error) => {
+        console.error("API request error:", error);
+
+        showToastDeleteError();
       })
       .finally(() => {
         setIsLoading(false);
@@ -227,11 +269,11 @@ const ChildPermissionViewHisto = ({ route, navigation }) => {
                 <Text style={{ color: Color.colorWhite }}>Save</Text>
               </View>
             </Button>
-            <TouchableOpacity onPress={handleUpdateData} style={[styles.btndelete, styles.btnsaveFlexBox]}>
-              <View>
-                <Text style={[styles.delete, styles.deleteTypo]}>Delete</Text>
-              </View>
-            </TouchableOpacity>
+            <TouchableOpacity onPress={handleDeleteData} style={[styles.btndelete, styles.btnsaveFlexBox]}>
+            <View>
+              <Text style={[styles.delete, styles.deleteTypo]}>Delete</Text>
+            </View>
+          </TouchableOpacity>
           </View>
 
           <LoadingModal modalVisible={isLoading} color="red" />

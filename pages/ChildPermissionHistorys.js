@@ -135,7 +135,7 @@ const ChildPermissionHistorys = () => {
     }
   };
 
-  const imageUrl = `https://www.balichildrenshouse.com/myCH/ev-assets/uploads/avatars/`;
+  const imageUrl = `https://www.balichildrenshouse.com/myCHStaging/ev-assets/uploads/avatars/`;
 
   return (
     <NativeBaseProvider>
