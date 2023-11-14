@@ -161,7 +161,7 @@ const PaymentInvoice = () => {
                       })
                     }
                     studentName={studentName[studentIdIndex]} // Assuming studentName is based on the student_id
-                    description={payment.title}
+                    description={payment.description}
                     dueDate={payment.due_date}
                     totalRate={formattedTotalRate} // Convert total to string if it's not already
                   />

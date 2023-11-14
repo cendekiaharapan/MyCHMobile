@@ -162,7 +162,7 @@ const PaidInvoiceHistory = () => {
                       })
                     }
                     studentName={studentName[studentIdIndex]} // Assuming studentName is based on the student_id
-                    description={payment.title}
+                    description={payment.description}
                     dueDate={payment.due_date}
                     totalRate={formattedTotalRate}
                   />
