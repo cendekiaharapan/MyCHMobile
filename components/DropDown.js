@@ -2,17 +2,17 @@ import * as React from "react";
 import { FormControl, Select, CheckIcon } from "native-base";
 import { Text, StyleSheet, View, Pressable, Modal } from "react-native";
 import { Color, FontFamily, FontSize, Border, Padding } from "../GlobalStyles";
-const DropDown = ({ label, value }) => {
+const DropDown = ({ label, value, placeholder }) => {
   const [service, setService] = React.useState("");
   return (
-    <FormControl mt="3" mb="3">
+    <FormControl mb="3">
       <FormControl.Label>{label}</FormControl.Label>
       <Select
         selectedValue={service}
         height="10"
         minWidth="200"
         accessibilityLabel="Choose Subject"
-        placeholder="Choose Subject"
+        placeholder={placeholder}
         _selectedItem={{
           bg: "teal.600",
           endIcon: <CheckIcon size="3" />,

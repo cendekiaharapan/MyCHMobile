@@ -5,6 +5,8 @@ import AllPost from "./pages/AllPost";
 import PostDetails from "./pages/PostDetails";
 import Profile from "./pages/Profile";
 import Assessment from "./pages/Assessment";
+import NewAssessment from "./pages/NewAssessment";
+import ListOfSubjectAssessment from "./pages/ListOfSubjectAssessment";
 import PopUp from "./components/PopUp";
 import CHDollar from "./components/CHDollar";
 import Attendance from "./components/Attendance";
@@ -26,8 +28,18 @@ const MainStack = () => {
         options={{ headerShown: false }}
       />
       <Stack.Screen
+        name="ListOfSubjectAssessment"
+        component={ListOfSubjectAssessment}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
         name="Assessment"
         component={Assessment}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="NewAssessment"
+        component={NewAssessment}
         options={{ headerShown: false }}
       />
       <Stack.Screen
