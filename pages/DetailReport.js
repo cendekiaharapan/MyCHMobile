@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState, useEffect } from "react";
 import { Image } from "expo-image";
 import { StyleSheet, Pressable, Text, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
@@ -6,6 +6,27 @@ import { Color, FontFamily, FontSize, Border, Padding } from "../GlobalStyles";
 
 const DetailReport = () => {
   const navigation = useNavigation();
+  const [scores, setScores] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          "https://www.balichildrenshouse.com/myCHStaging/api/scoresByDateRange"
+        );
+
+        const responseText = await response.text();
+        console.log("Response Text:", responseText);
+
+        const data = await response.json();
+        setScores(data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <View style={[styles.detailNew, styles.iconLayout]}>
@@ -26,20 +47,15 @@ const DetailReport = () => {
           </View>
         </View>
         <View style={styles.mathematicParent}>
-          <Text style={[styles.mathematic, styles.score90Typo]}>
-            Mathematic
-          </Text>
-          <Text style={[styles.oct2023, styles.oct2023Typo]}>03 Oct 2023</Text>
-          <Text
-            style={[styles.score90, styles.score90Typo]}
-          >{`Score : 90 `}</Text>
-          <Text style={[styles.topic, styles.fileTypo]}>{`Topic `}</Text>
-          <Text style={[styles.remark, styles.fileTypo]}>Remark</Text>
-          <Text style={[styles.comment, styles.fileTypo]}>{`Comment `}</Text>
-          <Text
-            style={[styles.dailyQuizStatus, styles.fileTypo]}
-          >{`Daily Quiz Status `}</Text>
-          <Text style={[styles.file, styles.fileTypo]}>{`File  `}</Text>
+        {scores.map((score) => (
+          <View key={score.id}>
+          <Text style={[styles.mathematic, styles.score90Typo]}>{score.subject}</Text>
+          <Text style={[styles.oct2023, styles.oct2023Typo]}>{score.date}</Text>
+          <Text style={[styles.score90, styles.score90Typo]}>{`Score : ${score.score}`}</Text>
+          <Text style={[styles.topic, styles.fileTypo]}>{`Topic: ${score.topic}`}</Text>
+          <Text style={[styles.remark, styles.fileTypo]}>{`Remark: ${score.remark}`}</Text>
+          <Text style={[styles.comment, styles.fileTypo]}>{`Comment: ${score.comment}`}</Text>
+          <Text style={[styles.file, styles.fileTypo]}>{`File: ${score.file}`}</Text>
           <View style={[styles.rectangleParent, styles.groupChildLayout]}>
             <View style={[styles.groupChild, styles.groupLayout1]} />
             <Text style={[styles.download, styles.yesTypo]}>Download</Text>
@@ -92,11 +108,9 @@ const DetailReport = () => {
               ipsum
             </Text>
           </View>
-          <View style={[styles.rectangleGroup, styles.groupLayout]}>
-            <View style={[styles.groupItem, styles.groupLayout]} />
-            <Text style={[styles.yes, styles.yesTypo]}>Yes</Text>
           </View>
-        </View>
+          ))}
+      </View>
       </View>
     </View>
   );
@@ -198,6 +212,7 @@ const styles = StyleSheet.create({
     width: 115,
     height: 18,
     position: "absolute",
+    backgroundColor: "yellow",
   },
   groupLayout: {
     width: 65,
@@ -277,7 +292,7 @@ const styles = StyleSheet.create({
     textAlign: "left",
   },
   file: {
-    top: "85.81%",
+    top: "72%",
     left: "5.59%",
     textAlign: "center",
   },
@@ -376,6 +391,7 @@ const styles = StyleSheet.create({
     fontSize: FontSize.bodyBodyXS_size,
     position: "absolute",
     textAlign: "left",
+    top: "72%",
   },
   proquirmentTcdocWrapper: {
     left: 0,

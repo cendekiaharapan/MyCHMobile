@@ -102,10 +102,14 @@ const AllPost = () => {
     }
   };
 
+  // const handleTemporaryButton = () => {
+  //   navigation.navigate("Main App Stack", {
+  //     screen: "Report", // change this with your screen name
+  //   });
+  // };
+
   const handleTemporaryButton = () => {
-    navigation.navigate("Main App Stack", {
-      screen: "Report", // change this with your screen name
-    });
+    navigation.navigate('DetailReport'); // Navigate to the DetailReport screen
   };
   // const handleLogout = () => {
   //   clearTokenFromSecureStore();
