@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import {
   Text,
   StyleSheet,
@@ -17,6 +17,20 @@ import { Color, FontFamily, FontSize, Border, Padding } from "../GlobalStyles";
 const HomeParent = () => {
   const [mensahContainerVisible, setMensahContainerVisible] = useState(false);
   const [mensahContainer1Visible, setMensahContainer1Visible] = useState(false);
+  const [eventsData, setEventsData] = useState(null);
+
+  useEffect(() => {
+    fetch("https://www.balichildrenshouse.com/myCHStaging/api/events/227")
+      .then((response) => response.json())
+      .then((data) => setEventsData(data))
+      .catch((error) => console.error("Error fetching data:", error));
+  }, []);
+
+  const getFormattedDate = (timestamp) => {
+    if (!timestamp) return "";
+    const date = new Date(timestamp);
+    return date.toDateString(); 
+  };
 
   const openMensahContainer = useCallback(() => {
     setMensahContainerVisible(true);
@@ -98,6 +112,7 @@ const HomeParent = () => {
                 <Text style={styles.mintaDonor}>AVERAGE DAILY SCORE</Text>
               </Pressable>
             </View>
+
             <View style={[styles.frameReport2, styles.frameFlexBox]}>
               <View style={styles.mensahShadowBox}>
                 <View style={[styles.frame3, styles.parentFlexBox]}>
@@ -110,20 +125,29 @@ const HomeParent = () => {
                 </View>
                 <Text style={styles.mintaDonor}>CH DOLLAR</Text>
               </View>
+
               <View style={[styles.mensah3, styles.mensahShadowBox]}>
-                <View style={[styles.wed29Parent, styles.parentFlexBox]}>
-                  <Text style={styles.wedTypo}>{`Wed`}</Text>
-                  <Text style={styles.text1Clr}>
-                    <Text style={[styles.text2, styles.textTypo2]}>29</Text>
+              <View style={[styles.wed29Parent, styles.parentFlexBox]}>
+                <Text style={styles.wedTypo}>
+                  {eventsData && eventsData.start_timestamp ? getFormattedDate(eventsData.start_timestamp) : ""}
+                </Text>
+                <Text style={styles.text1Clr}>
+                  {/* You can remove this part if you don't need to display the day */}
+                  <Text style={[styles.text2, styles.textTypo2]}>
+                    {eventsData &&
+                    eventsData.start_timestamp &&
+                    eventsData.start_timestamp.split("-")[2]
+                      ? eventsData.start_timestamp.split("-")[2].split(" ")[0]
+                      : ""}
                   </Text>
-                  <Text style={[styles.independenceDay, styles.wedTypo]}>
-                    Independence Day
-                  </Text>
-                </View>
-                <Text style={[styles.mintaDonor3, styles.wedTypo]}>
-                  UPCOMING EVENTS
+                </Text>
+                <Text style={[styles.independenceDay, styles.wedTypo]}>
+                  {eventsData && eventsData.title ? eventsData.title : ""}
                 </Text>
               </View>
+              <Text style={[styles.mintaDonor3, styles.wedTypo]}>UPCOMING EVENTS</Text>
+            </View>
+
             </View>
           </View>
           <View style={[styles.frame4, styles.frameFlexBox1]}>
