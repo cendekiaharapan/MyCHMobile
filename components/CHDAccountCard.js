@@ -12,10 +12,17 @@ import { Color, FontFamily, FontSize, Border, Padding } from "../GlobalStyles";
 const CHDCard = ({ student_name, chd_balance }) => {
   const navigation = useNavigation();
 
+  const handleCHDBalance = () => {
+    navigation.navigate("PaymentTopup", {
+      student_name: student_name,
+      chd_balance: chd_balance
+    });
+  };
+
   return (
     <Pressable
       style={styles.chdCard}
-      onPress={() => navigation.navigate("PaymentTopup")}
+      onPress={handleCHDBalance}
     >
       <ImageBackground
         style={styles.icon}
