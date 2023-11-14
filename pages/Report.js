@@ -34,8 +34,10 @@ const Report = () => {
   const [groupContainer5Visible, setGroupContainer5Visible] = useState(false);
   const [groupContainer6Visible, setGroupContainer6Visible] = useState(false);
   const [studentName, setStudentName] = React.useState("");
-  const [studentId, setStudentId] = React.useState(null);
+  const [studentId, setStudentId] = React.useState("");
   const [selectedChild, setSelectedChild] = React.useState("");
+
+  console.log(studentName);
 
   const openGroupContainer5 = useCallback(() => {
     setGroupContainer5Visible(true);
@@ -101,15 +103,7 @@ const Report = () => {
             <Text style={[styles.selectSubject, styles.selectTypo]}>
               Select Child
             </Text>
-            {studentId !== null ? (
-              (() => {
-                console.log("inside dropDown student ID = ", studentId);
-                return <DropDown value="Sabrina" />;
-              })()
-            ) : (
-              <Text>Loading...</Text>
-            )}
-
+            <DropDown label="Select Child" studentNames={studentName} />
             <Text style={[styles.selectRangeDate, styles.selectTypo]}>
               Select Range Date
             </Text>

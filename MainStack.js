@@ -8,6 +8,7 @@ import PopUp from "./components/PopUp";
 import CHDollar from "./components/CHDollar";
 import Attendance from "./components/Attendance";
 import AverageDailyScore from "./components/AverageDailyScore";
+import Report from "./pages/Report";
 
 const Stack = createNativeStackNavigator();
 
@@ -42,6 +43,11 @@ const MainStack = () => {
       <Stack.Screen
         name="PostDetails"
         component={PostDetails}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Report"
+        component={Report}
         options={{ headerShown: false }}
       />
       <Stack.Screen

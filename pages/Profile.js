@@ -104,7 +104,7 @@ const AllPost = () => {
 
   const handleTemporaryButton = () => {
     navigation.navigate("Main App Stack", {
-      screen: "AllPost", // change this with your screen name
+      screen: "Report", // change this with your screen name
     });
   };
   // const handleLogout = () => {

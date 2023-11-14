@@ -2,13 +2,15 @@ import * as React from "react";
 import { FormControl, Select, CheckIcon } from "native-base";
 import { Text, StyleSheet, View, Pressable, Modal } from "react-native";
 import { Color, FontFamily, FontSize, Border, Padding } from "../GlobalStyles";
-const DropDown = ({ label, value }) => {
-  const [service, setService] = React.useState("");
+
+const DropDown = ({ label, studentNames }) => {
+  const [selectedStudent, setSelectedStudent] = React.useState("");
+
   return (
     <FormControl mt="3" mb="3">
       <FormControl.Label>{label}</FormControl.Label>
       <Select
-        selectedValue={service}
+        selectedValue={selectedStudent}
         height="10"
         minWidth="200"
         accessibilityLabel="Choose Child"
@@ -18,13 +20,19 @@ const DropDown = ({ label, value }) => {
           endIcon: <CheckIcon size="3" />,
         }}
         mt={1}
-        onValueChange={(itemValue) => setService(itemValue)}
+        onValueChange={(itemValue) => setSelectedStudent(itemValue)}
         borderRadius="full"
         isReadOnly={true}
         style={[styles.start, styles.endTypo]}
       >
-        <Select.Item style={[styles.option]} label={value} value="excused" />
-        <Select.Item label="Andrew" value="sick" />
+        {studentNames.map((name, index) => (
+          <Select.Item
+            key={index}
+            style={[styles.option]}
+            label={name}
+            value={name}
+          />
+        ))}
       </Select>
     </FormControl>
   );
