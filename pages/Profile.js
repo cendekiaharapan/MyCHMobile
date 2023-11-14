@@ -27,6 +27,7 @@ import {
   clearResponseDataFromSecureStore,
 } from "../database/database";
 import { useFocusEffect } from "@react-navigation/native";
+import { LoadingModal } from "react-native-loading-modal";
 const AllPost = () => {
   const navigation = useNavigation();
   const [hasFocus, setHasFocus] = useState(false);
@@ -34,7 +35,7 @@ const AllPost = () => {
   const [emailProfile, setEmailProfile] = useState(null);
   const [nameProfile, setNameProfile] = useState(null);
   const [addressProfile, setAddressProfile] = useState(null);
-
+  const [loading, setLoading] = useState(false);
   useFocusEffect(
     React.useCallback(() => {
       if (hasFocus) {
@@ -79,6 +80,7 @@ const AllPost = () => {
   const handleLogout = async () => {
     try {
       // Clear the user tokenr
+      setLoading(true);
       await clearTokenFromSecureStore();
       await clearResponseDataFromSecureStore();
       console.log("User token cleared from SecureStore.");
@@ -90,6 +92,7 @@ const AllPost = () => {
 
       // Navigate to your login screen or perform any other actions as needed
       navigation.navigate("Login Stack", { screen: "SignIn" }); // Replace "LoginStack" with the actual name of your login screen
+      setLoading(false);
       Toast.show({
         type: "success",
         position: "top",
@@ -119,6 +122,7 @@ const AllPost = () => {
 
   return (
     <View style={styles.MainContainer}>
+      <LoadingModal modalVisible={loading} color="red" />
       <View style={styles.HeaderContainer}>
         {imageProfile != null ? (
           <View style={styles.TitleContainer}>

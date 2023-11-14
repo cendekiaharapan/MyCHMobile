@@ -20,11 +20,14 @@ import {
   getRespDataFromSecureStore,
 } from "../database/database";
 import Toast from "react-native-toast-message";
+import { LoadingModal } from "react-native-loading-modal";
+
 const SignIn = () => {
   const [childData, setChildData] = useState(null);
   const navigation = useNavigation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const sendLoginRequest = async () => {
     console.log("this is inside send login request function");
@@ -83,6 +86,7 @@ const SignIn = () => {
         }
         // You can navigate to another screen after successful login
         navigation.navigate("Main App Stack", { screen: "BottomNavbar" });
+        setLoading(false);
         Toast.show({
           type: "success",
           position: "top",
@@ -95,6 +99,7 @@ const SignIn = () => {
       // Check if the error message contains information about invalid email or password
       if (error.response && error.response.status === 401) {
         if (error.response.data.error === "email not found") {
+          setLoading(false);
           Toast.show({
             type: "error",
             position: "top",
@@ -107,6 +112,7 @@ const SignIn = () => {
         } else if (
           error.response.data.error === "email and password do not match"
         ) {
+          setLoading(false);
           Toast.show({
             type: "error",
             position: "top",
@@ -117,10 +123,12 @@ const SignIn = () => {
           // console.error("Email and password do not match");
           // Show an error message to the user that email and password do not match
         } else {
+          setLoading(false);
           console.error("Login Error", error);
           // Show a generic error message
         }
       } else {
+        setLoading(false);
         console.error("Login Error", error);
         // Show a generic error message
       }
@@ -135,6 +143,7 @@ const SignIn = () => {
 
   const handleButtonClick = () => {
     sendLoginRequest();
+    setLoading(true);
   };
 
   const handleEmailChange = (text) => {
@@ -143,6 +152,7 @@ const SignIn = () => {
 
   return (
     <View style={[styles.signIn, styles.signInFlexBox]}>
+      <LoadingModal modalVisible={loading} color="red" />
       <View style={styles.signInFlexBox}>
         <Text style={styles.login}>LOGIN</Text>
         <Image
