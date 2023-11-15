@@ -15,7 +15,7 @@ const ListOfReport = () => {
     selectedStudentId,
     selectedStartDate,
     selectedEndDate,
-    selectedStudentName,
+    studentName,
     apiResponse,
   } = route.params;
 
@@ -23,16 +23,13 @@ const ListOfReport = () => {
   const [endDate, setEndDate] = useState(selectedEndDate);
 
   // You can now use postData and other parameters in your component
-  console.log("ini teh", selectedStudentName);
 
-  const reportData = apiResponse.map((data) => ({
-    id: data?.id || "",
-    date: data?.date ? new Date(data.date) : null,
-    subject: data?.subject?.title || "",
-    topic: data?.topic || "",
-    comment: data?.comment || "",
-    score: data?.score || "",
-  }));
+  console.log("reportData:", apiResponse);
+  
+  const reportData = apiResponse;
+
+  console.log("reportData:", reportData);
+
   return (
     <NativeBaseProvider>
       <View style={[styles.listOfReport, styles.iconLayout]}>
@@ -83,7 +80,7 @@ const ListOfReport = () => {
                     style={[styles.inputContainer, styles.inputGroupLayout]}
                   >
                     <View style={[styles.inputItem, styles.inputGroupLayout]} />
-                    <Text style={[styles.all1, styles.allTypo]}>hei</Text>
+                    <Text style={[styles.all1, styles.allTypo]}>{studentName}</Text>
                   </View>
                 </View>
               </View>
@@ -149,7 +146,7 @@ const ListOfReport = () => {
                 <ReportEntry
                   key={report.id}
                   date={report.date}
-                  subject={report.subject}
+                  subject={report.subject.title}
                   topic={report.topic}
                   comment={report.comment}
                   score={report.score}

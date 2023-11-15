@@ -16,8 +16,38 @@ const Report = () => {
   const [selectedEndDate, setSelectedEndDate] = useState(null);
   const [selectedStudentId, setSelectedStudentId] = useState(null);
   const [studentId, setStudentId] = useState("");
-  const [apiResponse, setApiResponse] = useState(null);
+  // const [apiResponse, setApiResponse] = useState(null);
   const [selectedStudentName, setSelectedStudentName] = useState("");
+
+  const handlePressSubmit = () => {
+    // Check if all required data is available
+    if (selectedStudentId && selectedStartDate && selectedEndDate) {
+      // Create the JSON object
+      const postData = {
+        student_id: selectedStudentId,
+        start_date: selectedStartDate.toISOString(),
+        end_date: selectedEndDate.toISOString(),
+      };
+
+      // Send the POST request using Axios
+      axios
+        .post(
+          "https://www.balichildrenshouse.com/myCH/api/student/scores",
+          postData,
+          {}
+        )
+        .then((response) => {
+          console.log("Success:", response.data);
+          // setApiResponse(response.data);
+          handleNavigateSubmit(response.data);
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    } else {
+      console.log("Please select all required data.");
+    }
+  };
 
   const handleSelectStudent = (studentId) => {
     setSelectedStudentId(studentId);
@@ -27,22 +57,28 @@ const Report = () => {
     setSelectedStartDate(selected);
   };
 
-  const handleNavigateSubmit = () => {
+  const handleNavigateSubmit = (apiResponse) => {
     // Assuming you're using React Navigation
     const postData = {
       student_id: selectedStudentId,
       start_date: selectedStartDate.toISOString(),
       end_date: selectedEndDate.toISOString(),
     };
+
+    console.log("API gg:", apiResponse);
+
+
     navigation.navigate("ListOfReport", {
       postData,
       selectedStudentId,
       selectedStartDate,
       selectedEndDate,
-      selectedStudentName,
+      studentName,
       apiResponse,
     });
   };
+
+  // console.log("API gg:", apiResponse);
 
   const handleEndDateChange = (selected) => {
     setSelectedEndDate(selected);
@@ -65,37 +101,9 @@ const Report = () => {
       });
   }, []);
 
-  const handlePressSubmit = () => {
-    // Check if all required data is available
-    if (selectedStudentId && selectedStartDate && selectedEndDate) {
-      // Create the JSON object
-      const postData = {
-        student_id: selectedStudentId,
-        start_date: selectedStartDate.toISOString(),
-        end_date: selectedEndDate.toISOString(),
-      };
 
-      // Send the POST request using Axios
-      axios
-        .post(
-          "https://www.balichildrenshouse.com/myCH/api/student/scores",
-          postData,
-          {}
-        )
-        .then((response) => {
-          console.log("Success:", response.data);
-          setApiResponse(response.data);
-          handleNavigateSubmit();
-        })
-        .catch((error) => {
-          console.error("Error:", error);
-        });
-    } else {
-      console.log("Please select all required data.");
-    }
-  };
 
-  console.log("API Response:", apiResponse);
+  // console.log("API Response:", apiResponse);
 
   return (
     <NativeBaseProvider>
