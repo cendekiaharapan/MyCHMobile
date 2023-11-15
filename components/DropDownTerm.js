@@ -2,7 +2,7 @@ import * as React from "react";
 import { FormControl, Select, CheckIcon } from "native-base";
 import { Text, StyleSheet, View, Pressable, Modal } from "react-native";
 import { Color, FontFamily, FontSize, Border, Padding } from "../GlobalStyles";
-const DropDown = ({ label, value, placeholder }) => {
+const DropDownTerm = ({ label, value, placeholder }) => {
   const [service, setService] = React.useState("");
   return (
     <FormControl mb="3">
@@ -48,4 +48,4 @@ const styles = StyleSheet.create({
     fontSize: FontSize.bodyBodyXS_size,
   },
 });
-export default DropDown;
+export default DropDownTerm;

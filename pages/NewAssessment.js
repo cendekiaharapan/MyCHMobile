@@ -8,9 +8,9 @@ import {
   Image,
   TouchableOpacity,
 } from "react-native";
-import { Button, NativeBaseProvider, Box, Select, Center } from 'native-base';
+import { Button, NativeBaseProvider, Box, Select, Center } from "native-base";
 import { useNavigation } from "@react-navigation/native";
-import DropDown from "../components/DropDown";
+import DropDown from "../components/DropDownTerm";
 import { Color, FontFamily, FontSize, Border, Padding } from "../GlobalStyles";
 import { retrieveItem } from "../database/database";
 
@@ -40,11 +40,15 @@ const NewAssessment = () => {
         id: selectedStudent,
       };
 
-      axios.post('https://www.balichildrenshouse.com/myCH/api/get-semester-assessment-report', postData)
-        .then(response => {
-          console.log('XXXXXXXXXXXXXX', selectedSemesterName);
+      axios
+        .post(
+          "https://www.balichildrenshouse.com/myCH/api/get-semester-assessment-report",
+          postData
+        )
+        .then((response) => {
+          console.log("XXXXXXXXXXXXXX", selectedSemesterName);
           // Navigate to AssessmentList and pass parameters
-          navigation.navigate('AssessmentList', {
+          navigation.navigate("AssessmentList", {
             selectedStudent,
             selectedSession,
             selectedStudentName,
@@ -53,23 +57,24 @@ const NewAssessment = () => {
             selectedSemester,
           });
         })
-        .catch(error => {
-          console.error('Error fetching semester assessment report:', error);
+        .catch((error) => {
+          console.error("Error fetching semester assessment report:", error);
         });
     } else {
-      console.warn('Please select both student and session before submitting.');
+      console.warn("Please select both student and session before submitting.");
     }
   };
   useEffect(() => {
     // Fetch semester name based on selectedSemester
-    const selectedSemesterData = termSessions.find((semester) => semester.id === selectedSemester);
+    const selectedSemesterData = termSessions.find(
+      (semester) => semester.id === selectedSemester
+    );
     if (selectedSemesterData) {
       setSelectedSemesterName(selectedSemesterData.name);
     } else {
       console.error("Selected semester data not found.");
     }
   }, [selectedSemester, termSessions]);
-
 
   React.useEffect(() => {
     // Retrieve student data from storage
@@ -80,9 +85,11 @@ const NewAssessment = () => {
           const studentNames = data.map((item) => item.name);
           setStudentIds(studentIds);
           setStudentNames(studentNames);
-  
+
           // Assuming that the response structure is { name: "StudentName" }
-          const selectedStudentData = data.find((student) => student.id === selectedStudent);
+          const selectedStudentData = data.find(
+            (student) => student.id === selectedStudent
+          );
           if (selectedStudentData) {
             setSelectedStudentName(selectedStudentData.name);
           } else {
@@ -96,15 +103,18 @@ const NewAssessment = () => {
         console.error("Error fetching response data from SQLite:", error);
       });
   }, [selectedStudent]);
-  
+
   useEffect(() => {
-    axios.get('https://www.balichildrenshouse.com/myCH/api/get-academic-sessions')
-      .then(response => {
+    axios
+      .get("https://www.balichildrenshouse.com/myCH/api/get-academic-sessions")
+      .then((response) => {
         setAcademicSessions(response.data);
-  
+
         // Assuming that the response structure is { name: "SemesterName" }
         const sessions = response.data;
-        const selectedSessionIndex = sessions.findIndex((session) => session.id === selectedSession);
+        const selectedSessionIndex = sessions.findIndex(
+          (session) => session.id === selectedSession
+        );
         if (selectedSessionIndex !== -1) {
           setSelectedSessionName(sessions[selectedSessionIndex].name);
         }
@@ -114,37 +124,36 @@ const NewAssessment = () => {
       });
   }, [selectedSession]);
 
-
   function fetchAndSetTermSessions(selectedSession) {
-    console.log("inside ftech and set term session id : ",selectedSession);
+    console.log("inside ftech and set term session id : ", selectedSession);
     if (selectedSession) {
       console.log("SELECTED ACADEMIC SESSION NOT NULL!");
-      axios.get(`https://www.balichildrenshouse.com/myCH/api/get_session_terms/${selectedSession}`)
+      axios
+        .get(
+          `https://www.balichildrenshouse.com/myCH/api/get_session_terms/${selectedSession}`
+        )
         .then((termsResponse) => {
           if (termsResponse && termsResponse.data) {
             console.log("ini isi term response dataXXXXXX", termsResponse.data);
             setFilteredTermSessions(termsResponse.data);
             setTermSessions(termsResponse.data);
-
-          } else {  
-            console.error('Error fetching term sessions: Response data is undefined');
+          } else {
+            console.error(
+              "Error fetching term sessions: Response data is undefined"
+            );
           }
         })
         .catch((error) => {
           showToast();
         });
-      }
     }
+  }
 
-    const handleAcademicSessionChange = (itemId) => {
-      setSelectedSession(itemId);
-      
-      console.log("set selected section (itemId) = ",itemId);
-    
-      
+  const handleAcademicSessionChange = (itemId) => {
+    setSelectedSession(itemId);
 
-    
-    };
+    console.log("set selected section (itemId) = ", itemId);
+  };
 
   return (
     <NativeBaseProvider>
@@ -164,9 +173,9 @@ const NewAssessment = () => {
           </View>
           <View style={styles.contentContainer}>
             <View style={styles.dropDownContainer}>
-            <View style={styles.frame3}>
-              <View style={styles.selectSessionParent}>
-              <Text style={styles.selectSession}>Select Student</Text>
+              <View style={styles.frame3}>
+                <View style={styles.selectSessionParent}>
+                  <Text style={styles.selectSession}>Select Student</Text>
                   {/* New Select component for students */}
                   <Select
                     minWidth="100%"
@@ -177,62 +186,74 @@ const NewAssessment = () => {
                     }}
                   >
                     {studentNames.map((student, index) => (
-                      <Select.Item key={studentIds[index]} label={student} value={studentIds[index]} />
+                      <Select.Item
+                        key={studentIds[index]}
+                        label={student}
+                        value={studentIds[index]}
+                      />
                     ))}
                   </Select>
                 </View>
-                      
-              <View style={styles.selectSessionParent}>
-                <Text style={styles.selectSession}>Select Session</Text>
-                  <Center> 
-                  <Select
-                  
-                  minWidth="100%"
-                  accessibilityLabel="Choose Session"
-                  placeholder="Choose Session"
-                  onValueChange={(itemId) => {
-                    // console.log("set selected session id : ",itemId);
-                    // console.log("value of selected session id : ",selectedSession);
-                    fetchAndSetTermSessions(itemId);
-                    setSelectedSession(itemId);
-                    }}>
-                  {academicSessions.map(session => (
-                    <Select.Item key={session.id} label={session.name} value={session.id} />
-                  ))}
-                </Select>
-                </Center>
-              </View>
 
-              <View style={styles.selectSessionParent}>
-              <Text style={styles.selectSession}>Select Semester</Text>
-              <Center> 
-              {academicSessions.length > 0 && (
-              <Select
-              selectedValue={selectedSemester}
-              minWidth="100%"
-              accessibilityLabel="Choose Semester"
-              placeholder="Choose Semester"
-              onValueChange={(itemValue) => {
-                setSelectedSemester(itemValue);
-                console.log('Selected Semester:', itemValue);
-              }}
-            >
-              {filteredTermSessions.map((term) => (
-                <Select.Item key={term.id} label={term.name} value={term.id} />
-              ))}
-            </Select>
-            )}
-
-              </Center>
-            </View>
-
+                <View style={styles.selectSessionParent}>
+                  <Text style={styles.selectSession}>Select Session</Text>
+                  <Center>
+                    <Select
+                      minWidth="100%"
+                      accessibilityLabel="Choose Session"
+                      placeholder="Choose Session"
+                      onValueChange={(itemId) => {
+                        // console.log("set selected session id : ",itemId);
+                        // console.log("value of selected session id : ",selectedSession);
+                        fetchAndSetTermSessions(itemId);
+                        setSelectedSession(itemId);
+                      }}
+                    >
+                      {academicSessions.map((session) => (
+                        <Select.Item
+                          key={session.id}
+                          label={session.name}
+                          value={session.id}
+                        />
+                      ))}
+                    </Select>
+                  </Center>
                 </View>
-              
+
+                <View style={styles.selectSessionParent}>
+                  <Text style={styles.selectSession}>Select Semester</Text>
+                  <Center>
+                    {academicSessions.length > 0 && (
+                      <Select
+                        selectedValue={selectedSemester}
+                        minWidth="100%"
+                        accessibilityLabel="Choose Semester"
+                        placeholder="Choose Semester"
+                        onValueChange={(itemValue) => {
+                          setSelectedSemester(itemValue);
+                          console.log("Selected Semester:", itemValue);
+                        }}
+                      >
+                        {filteredTermSessions.map((term) => (
+                          <Select.Item
+                            key={term.id}
+                            label={term.name}
+                            value={term.id}
+                          />
+                        ))}
+                      </Select>
+                    )}
+                  </Center>
+                </View>
+              </View>
             </View>
             <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.roundedButton} onPress={handleSubmit}>
-              <Text style={styles.buttonText}>Submit</Text>
-            </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.roundedButton}
+                onPress={handleSubmit}
+              >
+                <Text style={styles.buttonText}>Submit</Text>
+              </TouchableOpacity>
             </View>
           </View>
         </View>
