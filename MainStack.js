@@ -10,6 +10,8 @@ import Attendance from "./components/Attendance";
 import AverageDailyScore from "./components/AverageDailyScore";
 import Report from "./pages/Report";
 import DetailReport from "./pages/DetailReport";
+import DetailReports from "./pages/DetailReports";
+import ListOfReport from "./pages/ListOfReport";
 
 const Stack = createNativeStackNavigator();
 
@@ -59,6 +61,16 @@ const MainStack = () => {
       <Stack.Screen
         name="DetailReport"
         component={DetailReport}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="DetailReports"
+        component={DetailReports}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="ListOfReport"
+        component={ListOfReport}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>

@@ -109,7 +109,7 @@ const AllPost = () => {
   // };
 
   const handleTemporaryButton = () => {
-    navigation.navigate('DetailReport'); // Navigate to the DetailReport screen
+    navigation.navigate('DetailReports'); // Navigate to the DetailReport screen
   };
   // const handleLogout = () => {
   //   clearTokenFromSecureStore();

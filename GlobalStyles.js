@@ -151,7 +151,7 @@ export const Border = {
   br_69xl: 88,
   br_xl: 20,
   br_59xl_6: 79,
-  br_31xl: 50,
+  br1: 15,
   br_81xl: 100,
   br_3xs_9: 10,
   br_5xs: 8,
