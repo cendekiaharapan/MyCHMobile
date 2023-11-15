@@ -26,6 +26,11 @@ const AppsList = () => {
       screen: "ReportCard", // change this with your screen name
     });
   };
+  const handleExcuseButton = () => {
+    navigation.navigate("Main App Stack", {
+      screen: "ChildPermissionAddPermis", // change this with your screen name
+    });
+  };
   return (
     <View style={styles.mainContainer}>
       <View style={styles.bodyContainer}>
@@ -74,14 +79,16 @@ const AppsList = () => {
           </TouchableOpacity>
         </View>
         <View style={styles.RowContainer}>
-          <View style={styles.BoxContainer}>
-            <Image
-              style={styles.StyleImage}
-              source={require("../assets/images/excuse.png")}
-              contentFit="cover"
-            />
-            <Text style={styles.StyleText}>EXCUSE</Text>
-          </View>
+          <TouchableOpacity onPress={handleExcuseButton}>
+            <View style={styles.BoxContainer}>
+              <Image
+                style={styles.StyleImage}
+                source={require("../assets/images/excuse.png")}
+                contentFit="cover"
+              />
+              <Text style={styles.StyleText}>EXCUSE</Text>
+            </View>
+          </TouchableOpacity>
           <View style={styles.BoxContainer}>
             <Image
               style={styles.StyleImage}

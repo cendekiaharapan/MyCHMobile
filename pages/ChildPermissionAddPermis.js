@@ -26,14 +26,15 @@ import {
   CheckIcon,
   useToast,
 } from "native-base";
+import { LoadingModal } from "react-native-loading-modal";
 import { useNavigation } from "@react-navigation/native"; // Import useNavigation
 
 // date picker
 import DocumentPick from "../components/DocumentPick"; // document pick
 import DropDown from "../components/DropDown";
 import axios from "axios";
-import DateTimePicker from "../components/DateTimePicker"; 
-
+import DateTimePicker from "../components/DateTimePicker";
+import Toast from "react-native-toast-message";
 import { retrieveItem } from "../database/database";
 import { useState } from "react";
 
@@ -41,14 +42,32 @@ const ChildPermissionAddPermis = () => {
   const navigation = useNavigation();
   const [studentIds, setStudentIds] = React.useState([]); // State to store student IDs
   const [studentNames, setStudentNames] = React.useState([]);
-  const [selectedStudent, setSelectedStudent] = useState("");
+  const [selectedStudent, setSelectedStudent] = useState(null);
 
-
-  const [service, setService] = React.useState(""); // Initialize service state
-  const [type, setType] = React.useState(""); // Initialize service state
+  const [service, setService] = React.useState(null); // Initialize service state
+  const [type, setType] = React.useState(null); // Initialize service state
   const [fromDate, setFromDate] = React.useState(null);
   const [toDate, setToDate] = React.useState(null);
   const [note, setNote] = React.useState("");
+  const [loading, setLoading] = React.useState(true);
+
+  const showToastSuccess = () => {
+    Toast.show({
+      text1: "Successfully, added permission!",
+      text1Style: { fontSize: 15 },
+      text2Style: { fontSize: 13 },
+      type: "success",
+    });
+  };
+
+  const showToastErrorRequired = () => {
+    Toast.show({
+      text1: "Please select all required fields!",
+      text1Style: { fontSize: 15 },
+      text2Style: { fontSize: 13 },
+      type: "error",
+    });
+  };
 
   React.useEffect(() => {
     // Retrieve student data from storage
@@ -66,14 +85,15 @@ const ChildPermissionAddPermis = () => {
           // Log the retrieved student_ids and student_names
           console.log("Student IDssss:", studentIds);
           console.log("Student Names:", studentNames);
-
-
         } else {
           console.log("No data found in SQLite.");
         }
       })
       .catch((error) => {
         console.error("Error fetching response data from SQLite:", error);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }, []);
   // Function to handle the selected date
@@ -96,7 +116,8 @@ const ChildPermissionAddPermis = () => {
   };
 
   const handleSubmitButton = async () => {
-    console.log("inside from date : ",fromDate);
+    console.log("inside from date : ", fromDate);
+    setLoading(true);
     // Create a data object with the data to send in the request
     const data = {
       student_id: selectedStudent,
@@ -105,75 +126,113 @@ const ChildPermissionAddPermis = () => {
       to_date: toDate,
       note: note,
     };
-    console.log("inside data : ",data);
+    console.log("inside data : ", data);
 
-    // Make a POST request to the API
-    axios
-      .post(
-        "https://www.balichildrenshouse.com/myCHStaging/api/addChildPermission",
-        data
-      )
-      .then((response) => {
-        // Handle the success response here, e.g., show a success message or navigate to a different screen
-        console.log("API response:", response.data);
-      })
-      .catch((error) => {
-        // Handle any errors that occur during the request
-        console.error("API request error:", error);
-      });
+    if (
+      selectedStudent != null &&
+      type != null &&
+      fromDate != null &&
+      toDate != null
+    ) {
+      // Make a POST request to the API
+      axios
+        .post(
+          "https://www.balichildrenshouse.com/myCH/api/addChildPermission",
+          data
+        )
+        .then((response) => {
+          setLoading(false);
+          showToastSuccess();
+          // Handle the success response here, e.g., show a success message or navigate to a different screen
+          console.log("API response:", response.data);
+          navigation.navigate("ChildPermissionHistorys");
+        })
+        .catch((error) => {
+          // Handle any errors that occur during the request
+          console.error("API request error:", error);
+        });
+    } else {
+      setLoading(false);
+      showToastErrorRequired();
+    }
+  };
 
-    navigation.navigate("ChildPermissionHistorys");
+  const handleBackButton = () => {
+    navigation.navigate("Main App Stack", {
+      screen: "BottomNavbar", // change this with your screen name
+    });
+  };
+
+  const handleHistoryButton = () => {
+    navigation.navigate("Main App Stack", {
+      screen: "ChildPermissionHistorys", // change this with your screen name
+    });
   };
 
   return (
     <NativeBaseProvider>
+      <LoadingModal modalVisible={loading} color="red" />
       <View
         style={[styles.childPermissionAddPermis, styles.submitbuttonLayout]}
       >
         <View style={styles.content}>
           {/* Hero Content */}
           <View style={[styles.herocontent, styles.inputformFlexBox]}>
-            <Image
-              style={styles.backicon}
-              contentFit="cover"
-              source={require("../assets/backicon1.png")}
-            />
+            <TouchableOpacity onPress={handleBackButton}>
+              <Image
+                style={styles.backicon}
+                contentFit="cover"
+                source={require("../assets/backicon1.png")}
+              />
+            </TouchableOpacity>
             <View style={styles.permission}>
               <Text style={styles.permission1}>Permission</Text>
             </View>
-            <Image
-              style={styles.historyicon}
-              contentFit="cover"
-              source={require("../assets/historyicon.png")}
-            />
+            <TouchableOpacity onPress={handleHistoryButton}>
+              <Image
+                style={styles.historyicon}
+                contentFit="cover"
+                source={require("../assets/historyicon.png")}
+              />
+            </TouchableOpacity>
           </View>
           {/* End Hero Content */}
           <ScrollView>
             {/* Form 1 ( Child ) */}
             <FormControl mb="3">
-              <FormControl.Label>Select Student</FormControl.Label>
-                  {/* New Select component for students */}
-                  <Select
-                     height="10"
-                    minWidth="200"
-                    accessibilityLabel="Choose Student"
-                    placeholder="Choose Student"
-                    onValueChange={(studentId) => {
-                      setSelectedStudent(studentId);
-                    }}
-                    borderRadius="full"
-                    isReadOnly={true}
-                  >
-                    {studentNames.map((student, index) => (
-                      <Select.Item key={studentIds[index]} label={student} value={studentIds[index]} />
-                    ))}
-                  </Select>
-                </FormControl>
+              <View style={styles.requireContainer}>
+                <FormControl.Label>Select Student</FormControl.Label>
+                <Text style={styles.required}> *</Text>
+              </View>
+              {/* New Select component for students */}
+              <Select
+                height="10"
+                minWidth="200"
+                accessibilityLabel="Choose Student"
+                placeholder="Choose Student"
+                onValueChange={(studentId) => {
+                  setSelectedStudent(studentId);
+                }}
+                borderRadius="full"
+                isReadOnly={true}
+              >
+                {studentNames.map((student, index) => (
+                  <Select.Item
+                    key={studentIds[index]}
+                    label={student}
+                    value={studentIds[index]}
+                  />
+                ))}
+              </Select>
+            </FormControl>
             {/* End Form 1 ( Child ) */}
 
             {/* Form 2 ( Type Of Permission ) */}
             <FormControl mb="3">
-              <FormControl.Label>Type Of Permission</FormControl.Label>
+              <View style={styles.requireContainer}>
+                <FormControl.Label>Type Of Permission</FormControl.Label>
+                <Text style={styles.required}> *</Text>
+              </View>
               <Select
                 selectedValue={type}
                 height="10"
@@ -197,7 +256,10 @@ const ChildPermissionAddPermis = () => {
 
             {/* Form 3 ( Date Picker ) */}
             <FormControl mb="3">
-              <FormControl.Label>From</FormControl.Label>
+              <View style={styles.requireContainer}>
+                <FormControl.Label>From</FormControl.Label>
+                <Text style={styles.required}> *</Text>
+              </View>
               <DateTimePicker
                 onDateChange={(date) => handleDateChange(date, "from")}
               />
@@ -205,7 +267,10 @@ const ChildPermissionAddPermis = () => {
             {/* End Form 3 ( Date Picker ) */}
             {/* Form 4 ( Date Picker ) */}
             <FormControl mb="3">
-              <FormControl.Label>To</FormControl.Label>
+              <View style={styles.requireContainer}>
+                <FormControl.Label>To</FormControl.Label>
+                <Text style={styles.required}> *</Text>
+              </View>
               <DateTimePicker
                 onDateChange={(date) => handleDateChange(date, "to")}
               />
@@ -299,6 +364,12 @@ const styles = StyleSheet.create({
     height: 16,
     width: 16,
     overflow: "hidden",
+  },
+  requireContainer: {
+    flexDirection: "row",
+  },
+  required: {
+    color: "red",
   },
   placeholderTypo1: {
     fontFamily: FontFamily.textRegularSm14,
@@ -522,6 +593,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   content: {
+    top: 50,
     height: "100%",
     maxHeight: 750,
     flex: 1,

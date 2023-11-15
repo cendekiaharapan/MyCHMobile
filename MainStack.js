@@ -24,8 +24,13 @@ import PaymentInvoiceDetails from "./pages/PaymentInvoiceDetails";
 import PaidInvoiceHistory from "./pages/PaidInvoiceHistory";
 import PaidInvoiceDetails from "./pages/PaidInvoiceDetails";
 
-//report card
+// Report Card
 import ReportCard from "./pages/ReportCard";
+
+// Excuse
+import ChildPermissionAddPermis from "./pages/ChildPermissionAddPermis";
+import ChildPermissionHistorys from "./pages/ChildPermissionHistorys";
+import ChildPermissionViewHisto from "./pages/ChildPermissionViewHisto";
 
 const Stack = createNativeStackNavigator();
 
@@ -50,6 +55,21 @@ const MainStack = () => {
       <Stack.Screen
         name="PaymentCHDAccount"
         component={PaymentCHDAccount}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="ChildPermissionAddPermis"
+        component={ChildPermissionAddPermis}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="ChildPermissionHistorys"
+        component={ChildPermissionHistorys}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="ChildPermissionViewHisto"
+        component={ChildPermissionViewHisto}
         options={{ headerShown: false }}
       />
       <Stack.Screen
