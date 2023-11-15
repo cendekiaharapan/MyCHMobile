@@ -33,7 +33,7 @@ import DocumentPick from "../components/DocumentPick";
 import DropDown from "../components/DropDown";
 import axios from "axios";
 import { LoadingModal } from "react-native-loading-modal";
-import Toast from 'react-native-toast-message';
+import Toast from "react-native-toast-message";
 
 const ChildPermissionViewHisto = ({ route, navigation }) => {
   const leave = route?.params?.leave;
@@ -55,36 +55,45 @@ const ChildPermissionViewHisto = ({ route, navigation }) => {
 
   const showToastEditSuccess = () => {
     Toast.show({
-      type: 'success',
-      text1: 'Update Successful',
+      type: "success",
+      text1: "Update Successful",
     });
-  }
+  };
   const showToastEditError = () => {
     Toast.show({
-      type: 'error',
-      text1: 'Update Failed',
+      type: "error",
+      text1: "Update Failed",
     });
-  }
+  };
   const showToastDeleteSuccess = () => {
     Toast.show({
-      type: 'success',
-      text1: 'Delete Successful',
+      type: "success",
+      text1: "Delete Successful",
     });
-  }
+  };
   const showToastDeleteError = () => {
     Toast.show({
-      type: 'error',
-      text1: 'Delete Failed',
+      type: "error",
+      text1: "Delete Failed",
     });
-  }
+  };
 
   useEffect(() => {
     console.log("inside use effect : ", leave.id);
     if (leave) {
       setStudent(leave.student_id);
       setType(leave.apply_type);
-      setFromDateTime(formatDateTime(leave.year, leave.month, leave.day, leave.from_time));
-      setToDateTime(formatDateTime(leave.to_year, leave.to_month, leave.to_day, leave.to_time));
+      setFromDateTime(
+        formatDateTime(leave.year, leave.month, leave.day, leave.from_time)
+      );
+      setToDateTime(
+        formatDateTime(
+          leave.to_year,
+          leave.to_month,
+          leave.to_day,
+          leave.to_time
+        )
+      );
       setNote(leave.note);
     }
   }, [leave]);
@@ -133,9 +142,9 @@ const ChildPermissionViewHisto = ({ route, navigation }) => {
       to_timestamp: toDateTime,
       note: note,
     };
-
+    console.log("inside handle update data : ", data);
     axios
-      .patch("https://www.balichildrenshouse.com/myCHStaging/api/edit-leave", data)
+      .patch("https://www.balichildrenshouse.com/myCH/api/edit-leave", data)
       .then((response) => {
         console.log("API response:", response.data);
         navigation.goBack();
@@ -158,7 +167,9 @@ const ChildPermissionViewHisto = ({ route, navigation }) => {
     const idToDelete = leave.id;
 
     axios
-      .delete(`https://www.balichildrenshouse.com/myCHStaging/api/delete_excused/${idToDelete}`)
+      .delete(
+        `https://www.balichildrenshouse.com/myCH/api/delete_excused/${idToDelete}`
+      )
       .then((response) => {
         console.log("API response:", response.data);
         navigation.goBack();
@@ -180,7 +191,9 @@ const ChildPermissionViewHisto = ({ route, navigation }) => {
       <View style={[styles.childPermissionViewHisto, styles.lineIconLayout]}>
         <View style={[styles.content, styles.contentFlexBox]}>
           <View style={styles.backbuttonParent}>
-            <TouchableOpacity onPress={() => navigation.navigate("ChildPermissionHistorys")}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate("ChildPermissionHistorys")}
+            >
               <Image
                 style={styles.iconLayout}
                 contentFit="cover"
@@ -202,14 +215,23 @@ const ChildPermissionViewHisto = ({ route, navigation }) => {
                       : require("../assets/profilepic.png")
                   }
                 />
-                <Text style={[styles.januari20231120, styles.lineIconSpaceBlock]}>{leave.created_at}</Text>
+                <Text
+                  style={[styles.januari20231120, styles.lineIconSpaceBlock]}
+                >
+                  {leave.created_at}
+                </Text>
                 <Image
                   style={[styles.lineIcon, styles.lineIconSpaceBlock]}
                   contentFit="cover"
                   source={require("../assets/line.png")}
                 />
               </View>
-              <View style={[styles.permissionDetailWrapper, styles.bodycontentSpaceBlock]}>
+              <View
+                style={[
+                  styles.permissionDetailWrapper,
+                  styles.bodycontentSpaceBlock,
+                ]}
+              >
                 <Text style={styles.permissionDetail}>Permission Detail</Text>
               </View>
               <View style={[styles.bodycontent, styles.bodycontentSpaceBlock]}>
@@ -245,35 +267,61 @@ const ChildPermissionViewHisto = ({ route, navigation }) => {
                 <FormControl mb="3">
                   <FormControl.Label>From</FormControl.Label>
                   <DatePickerComponent
-                    onDateChange={(dateTime) => handleDateTimeChange(dateTime, "from")}
-                    dateTime={formatDateTime(leave.year, leave.month, leave.day, leave.from_time)}
+                    onDateChange={(dateTime) =>
+                      handleDateTimeChange(dateTime, "from")
+                    }
+                    dateTime={formatDateTime(
+                      leave.year,
+                      leave.month,
+                      leave.day,
+                      leave.from_time
+                    )}
                   />
                 </FormControl>
                 <FormControl mb="3">
                   <FormControl.Label>To</FormControl.Label>
                   <DatePickerComponent
-                    onDateChange={(dateTime) => handleDateTimeChange(dateTime, "to")}
-                    dateTime={formatDateTime(leave.to_year, leave.to_month, leave.to_day, leave.to_time)}
+                    onDateChange={(dateTime) =>
+                      handleDateTimeChange(dateTime, "to")
+                    }
+                    dateTime={formatDateTime(
+                      leave.to_year,
+                      leave.to_month,
+                      leave.to_day,
+                      leave.to_time
+                    )}
                   />
                 </FormControl>
                 <FormControl mb="3">
                   <FormControl.Label>Note</FormControl.Label>
-                  <TextArea h={40} placeholder="Leave a note" value={note} onChangeText={handleNoteChange} />
+                  <TextArea
+                    h={40}
+                    placeholder="Leave a note"
+                    value={note}
+                    onChangeText={handleNoteChange}
+                  />
                 </FormControl>
               </View>
             </ScrollView>
           </View>
           <View style={styles.btnsaveParent}>
-            <Button onPress={handleUpdateData} borderRadius="full" style={[styles.btnsave, styles.btnsaveFlexBox]}>
+            <Button
+              onPress={handleUpdateData}
+              borderRadius="full"
+              style={[styles.btnsave, styles.btnsaveFlexBox]}
+            >
               <View>
                 <Text style={{ color: Color.colorWhite }}>Save</Text>
               </View>
             </Button>
-            <TouchableOpacity onPress={handleDeleteData} style={[styles.btndelete, styles.btnsaveFlexBox]}>
-            <View>
-              <Text style={[styles.delete, styles.deleteTypo]}>Delete</Text>
-            </View>
-          </TouchableOpacity>
+            <TouchableOpacity
+              onPress={handleDeleteData}
+              style={[styles.btndelete, styles.btnsaveFlexBox]}
+            >
+              <View>
+                <Text style={[styles.delete, styles.deleteTypo]}>Delete</Text>
+              </View>
+            </TouchableOpacity>
           </View>
 
           <LoadingModal modalVisible={isLoading} color="red" />
@@ -355,11 +403,8 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.textRegularSm14,
   },
   btnsaveFlexBox: {
-    padding: Padding.p_3xs,
     justifyContent: "center",
     alignItems: "center",
-    flexDirection: "row",
-    overflow: "hidden",
     flex: 1,
     borderRadius: Border.br_xl,
   },
@@ -380,6 +425,7 @@ const styles = StyleSheet.create({
     fontWeight: "700",
   },
   backbuttonParent: {
+    top: 50,
     alignSelf: "stretch",
     flexDirection: "row",
   },
@@ -575,11 +621,10 @@ const styles = StyleSheet.create({
     marginLeft: 23,
     borderWidth: 1,
     borderStyle: "solid",
-    backgroundColor: Color.singleToneWhite,
-    padding: Padding.p_3xs,
-    justifyContent: "center",
+    paddingTop: 10,
   },
   btnsaveParent: {
+    bottom: 30,
     height: 41,
     alignSelf: "stretch",
     flexDirection: "row",

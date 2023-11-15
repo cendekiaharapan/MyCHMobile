@@ -35,9 +35,12 @@ const ChildPermissionHistorys = () => {
   const [studentData, setStudentData] = useState(null);
   const [studentImg, setStudentImg] = useState(null);
   const [studentGet, setStudentGet] = useState(null);
+  const [loading, setLoading] = React.useState(false);
 
   const fetchChildData = async () => {
     try {
+      setLoading(true);
+
       const data = await retrieveItem("childData");
 
       if (data) {
@@ -50,11 +53,14 @@ const ChildPermissionHistorys = () => {
         setStudentName(student_name);
         setStudentImg(student_image);
         fetchMultipleStudentsData(student_ids);
+        // setLoading(false);
       } else {
         console.log("No data found in SQLite.");
+        setLoading(false);
       }
     } catch (error) {
       console.error("Error fetching response data from SQLite:", error);
+      setLoading(false);
     }
   };
 
@@ -64,7 +70,7 @@ const ChildPermissionHistorys = () => {
       fetchChildData();
     }, [navigation])
   );
-  
+
   const fetchChildDataFromSQLite = () => {
     return new Promise((resolve, reject) => {
       db.transaction((tx) => {
@@ -86,7 +92,7 @@ const ChildPermissionHistorys = () => {
   const fetchChildPermissionData = async (studentId) => {
     try {
       const response = await axios.get(
-        `https://www.balichildrenshouse.com/myCHStaging/api/get-leave-by-student-id/${studentId}`
+        `https://www.balichildrenshouse.com/myCH/api/get-leave-by-student-id/${studentId}`
       );
 
       // Handle the response data
@@ -128,17 +134,20 @@ const ChildPermissionHistorys = () => {
       });
 
       setStudentData(flattenedLeaves);
+      setLoading(false);
       // You can set the data to your state or do any necessary processing
     } catch (error) {
       // Handle errors if any of the requests fail
+      setLoading(false);
       console.error("Error:", error);
     }
   };
 
-  const imageUrl = `https://www.balichildrenshouse.com/myCHStaging/ev-assets/uploads/avatars/`;
+  const imageUrl = `https://www.balichildrenshouse.com/myCH/ev-assets/uploads/avatars/`;
 
   return (
     <NativeBaseProvider>
+      <LoadingModal modalVisible={loading} color="red" />
       <View style={styles.contact}>
         <View style={[styles.herocontainerParent, styles.herocontainerLayout]}>
           <View style={[styles.herocontainer, styles.herocontainerLayout]}>

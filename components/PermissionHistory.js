@@ -4,25 +4,48 @@ import { StyleSheet, Text, View } from "react-native";
 import { Button } from "native-base";
 import { Color, Padding, FontFamily, FontSize, Border } from "../GlobalStyles";
 import { useNavigation } from "@react-navigation/native";
+import { LoadingModal } from "react-native-loading-modal";
 
-const PermissionHistory = ({ name, type, time, imageUri, imageUrl, leave, childId, studentGet}) => {
+const PermissionHistory = ({
+  name,
+  type,
+  time,
+  imageUri,
+  imageUrl,
+  leave,
+  childId,
+  studentGet,
+}) => {
   const navigation = useNavigation();
+  const [loading, setLoading] = React.useState(false);
 
-  const handleViewHisto = () => {
-    navigation.navigate("ChildPermissionViewHisto", {
-      studentGet: studentGet,
-      leave: leave,
-      imageUri: imageUri,
-      imageUrl: imageUrl,
-      name: name,
-      childId: childId
-    });
+  const handleViewHisto = async () => {
+    try {
+      setLoading(true);
+
+      // Simulate an asynchronous operation, replace with your actual logic
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+
+      navigation.navigate("ChildPermissionViewHisto", {
+        studentGet: studentGet,
+        leave: leave,
+        imageUri: imageUri,
+        imageUrl: imageUrl,
+        name: name,
+        childId: childId,
+      });
+    } catch (error) {
+      console.error("Error:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const fullImageUrl = `${imageUrl}${imageUri}`;
 
   return (
     <View style={styles.history1}>
+      <LoadingModal modalVisible={loading} color="red" />
       <View style={styles.profilepicParent}>
         <Image
           style={styles.profilepicIcon}
@@ -147,7 +170,7 @@ const styles = StyleSheet.create({
   rufusStewart: {
     fontWeight: "600",
     fontFamily: FontFamily.poppinsSemiBold,
-    color: Color.colorGray_300,
+    color: "#211B3D",
     height: 18,
     width: 240,
     fontSize: FontSize.textRegularXs12_size,
