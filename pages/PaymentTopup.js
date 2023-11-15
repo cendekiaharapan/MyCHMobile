@@ -18,7 +18,7 @@ import {
 import { Color, Padding } from "../GlobalStyles";
 import { LoadingModal } from "react-native-loading-modal";
 import { Linking } from "react-native";
-import axios from 'axios';
+import axios from "axios";
 
 const PaymentTopup = ({ route, navigation }) => {
   const { student_id, student_name, chd_balance } = route.params;
@@ -27,7 +27,7 @@ const PaymentTopup = ({ route, navigation }) => {
   const [idParent, setIDParent] = useState([]);
   const [chdBalance, setCHDBalance] = useState(chd_balance);
   const [topUpAmount, setTopUpAmount] = useState("");
-  
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -50,9 +50,11 @@ const PaymentTopup = ({ route, navigation }) => {
         return;
       }
 
-      const exchangeRatesResponse = await axios.get('https://www.balichildrenshouse.com/myCH/api/exchange-rates');
+      const exchangeRatesResponse = await axios.get(
+        "https://www.balichildrenshouse.com/myCH/api/exchange-rates"
+      );
       const exchangeRates = exchangeRatesResponse.data;
-    
+
       if (exchangeRates.success) {
         const buyRate = exchangeRates.buy;
         const total = topUpAmount * buyRate; // Calculate the total based on the 'buy' value
@@ -63,13 +65,12 @@ const PaymentTopup = ({ route, navigation }) => {
 
         await Linking.openURL(paymentUrl);
       } else {
-        console.error('Failed to retrieve exchange rates.');
+        console.error("Failed to retrieve exchange rates.");
       }
     } catch (error) {
-      console.error('Error opening payment URL:', error);
+      console.error("Error opening payment URL:", error);
     }
   };
-
 
   return (
     <View style={styles.container}>
@@ -84,12 +85,8 @@ const PaymentTopup = ({ route, navigation }) => {
       />
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.chdDetails}>
-          <Balance 
-            chdBalance={chd_balance}
-          />
-          <TopupAmount 
-            onAmountChange={setTopUpAmount}
-          />
+          <Balance chdBalance={chd_balance} />
+          <TopupAmount onAmountChange={setTopUpAmount} />
         </View>
       </ScrollView>
       <View style={styles.footer}>
@@ -98,7 +95,17 @@ const PaymentTopup = ({ route, navigation }) => {
           actionButtonText="TOP UP"
           onButtonPress={openPaymentUrl}
         />
-        <Button ButtonType={2} actionButtonText="HISTORY" onButtonPress={() => navigation.navigate("PaymentCHDHistory")} />
+        <Button
+          ButtonType={2}
+          actionButtonText="HISTORY"
+          onButtonPress={() =>
+            navigation.navigate("PaymentCHDHistory", {
+              student_id,
+              student_name,
+              chd_balance,
+            })
+          }
+        />
       </View>
     </View>
   );

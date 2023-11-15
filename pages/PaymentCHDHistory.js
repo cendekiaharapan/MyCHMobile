@@ -6,7 +6,8 @@ import CHDHistoryCard from "../components/CHDHistoryCard";
 
 import { Color } from "../GlobalStyles";
 
-const PaymentCHDHistory = () => {
+const PaymentCHDHistory = ({ route }) => {
+  const { student_id, student_name, chd_balance } = route.params;
   const navigation = useNavigation();
 
   return (
@@ -18,10 +19,15 @@ const PaymentCHDHistory = () => {
         backButtonLeft="unset"
         iNVOICESAlignItems="flex-start"
         iNVOICESWidth="unset"
-        onBackButtonPress={() => navigation.navigate("PaymentTopup")}
+        onBackButtonPress={() =>
+          navigation.navigate("PaymentTopup", {
+            student_id,
+            student_name,
+            chd_balance,
+          })
+        }
       />
-      
-      
+
       {/* First Component with ChdCardHistoryType set to 1 */}
       <CHDHistoryCard ChdCardHistoryType={1} />
       <CHDHistoryCard ChdCardHistoryType={0} />
@@ -38,7 +44,6 @@ const styles = StyleSheet.create({
     height: 844,
     overflow: "hidden",
     alignItems: "center",
-    
   },
 });
 

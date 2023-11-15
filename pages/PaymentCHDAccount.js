@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, View, Text, ScrollView } from "react-native";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import Header from "../components/Header";
 import CHDAccountCard from "../components/CHDAccountCard";
@@ -13,14 +13,16 @@ const PaymentCHDAccount = () => {
   const [studentIds, setStudentIds] = React.useState([]); // State to store student IDs
   const [studentNames, setStudentNames] = React.useState([]);
   const [studentGet, setStudentGet] = useState(null);
-  
+
   const fetchStudentBalances = async (studentIds) => {
     try {
       const balances = {};
 
       // Fetch balances for each student
       for (const studentId of studentIds) {
-        const response = await axios.get(`http://penjemputan.balichildrenshouse.com/api/get_flashpay_balance_by_student_id_get/${studentId}`);
+        const response = await axios.get(
+          `http://penjemputan.balichildrenshouse.com/api/get_flashpay_balance_by_student_id_get/${studentId}`
+        );
         balances[studentId] = response.data.balance;
       }
 
@@ -64,7 +66,6 @@ const PaymentCHDAccount = () => {
     }, [])
   );
 
-
   return (
     <View style={styles.paymentChdAccount}>
       <Header
@@ -74,13 +75,20 @@ const PaymentCHDAccount = () => {
         backButtonLeft="unset"
         iNVOICESAlignItems="flex-start"
         iNVOICESWidth="unset"
-        onBackButtonPress={() => navigation.navigate("PaymentTopup")}
+        onBackButtonPress={() => navigation.navigate("BottomNavbar")}
       />
       <View style={styles.chdAccountArea}>
-        {/* Use the chdBalance state variable in CHDAccountCard */}
-        {studentIds.map((studentId, index) => (
-        <CHDAccountCard key={studentId} student_id={studentId} student_name={studentNames[index]} chd_balance={chdBalances[studentId]} />
-        ))}
+        <ScrollView>
+          {/* Use the chdBalance state variable in CHDAccountCard */}
+          {studentIds.map((studentId, index) => (
+            <CHDAccountCard
+              key={studentId}
+              student_id={studentId}
+              student_name={studentNames[index]}
+              chd_balance={chdBalances[studentId]}
+            />
+          ))}
+        </ScrollView>
       </View>
     </View>
   );
@@ -89,7 +97,7 @@ const PaymentCHDAccount = () => {
 const styles = StyleSheet.create({
   chdAccountArea: {
     width: 350,
-    height: 704,
+    height: 500,
     marginTop: 20,
   },
   paymentChdAccount: {

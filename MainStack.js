@@ -17,6 +17,8 @@ import CallMyChild from "./pages/CallMyChild";
 // CH Dollar
 import CHDollar from "./components/CHDollar";
 import PaymentCHDAccount from "./pages/PaymentCHDAccount";
+import PaymentTopup from "./pages/PaymentTopup";
+import PaymentCHDHistory from "./pages/PaymentCHDHistory";
 
 // Payment
 import PaymentInvoice from "./pages/PaymentInvoice";
@@ -59,6 +61,16 @@ const MainStack = () => {
       <Stack.Screen
         name="PaymentCHDAccount"
         component={PaymentCHDAccount}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="PaymentCHDHistory"
+        component={PaymentCHDHistory}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="PaymentTopup"
+        component={PaymentTopup}
         options={{ headerShown: false }}
       />
       <Stack.Screen
