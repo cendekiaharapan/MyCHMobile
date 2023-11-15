@@ -6,14 +6,19 @@ import { Padding, Color, FontSize, FontFamily, Border } from "../GlobalStyles";
 import HeroContent from "../components/MessageToTeacherHistory/HeroContentMessageToTeacherHis";
 import MessageHistory from "../components/MessageToTeacherHistory/MessageHistory";
 import axios from "axios";
-import { useFocusEffect } from '@react-navigation/native';
 import { useEffect, useState } from "react";
 import * as SQLite from "expo-sqlite";
 import * as SecureStore from "expo-secure-store";
+import {
+  storeItem,
+  retrieveItem,
+  deleteItem,
+  getAllKeys,
+} from "../database/database";
+import { LoadingModal } from "react-native-loading-modal";
 
 const MessageToTeacherHistory = () => {
   const [responseData, setResponseData] = useState(null);
-  const db = SQLite.openDatabase("login.db");
   const [studentId, setStudentId] = useState(null);
   const [studentName, setStudentName] = useState(null);
   const [parentId, setParentId] = useState(null);
@@ -38,11 +43,12 @@ const MessageToTeacherHistory = () => {
   const fetchData = async () => {
     const parentData = await getRespDataFromSecureStore();
     console.log("inside FetchData");
-    console.log(parentData);
+    console.log("fetchdata = ", parentData);
     if (parentData) {
       const parent_id = parentData.user.id;
+      console.log("parent_id = ", parent_id);
       // Define the API URL
-      const apiUrl = `https://www.balichildrenshouse.com/myCHStaging/api/history-communicate/${parent_id}`;
+      const apiUrl = `https://www.balichildrenshouse.com/myCH/api/history-communicate/${parent_id}`;
 
       // Make a GET request to the API
       axios
@@ -55,16 +61,13 @@ const MessageToTeacherHistory = () => {
           // Handle any errors that occurred during the request
           console.error("Error fetching data:", error);
         });
-
-      fetchChildDataFromSQLite()
+      console.log("setelah axios");
+      retrieveItem("childData")
         .then((data) => {
           if (data) {
             // Use the retrieved data
-            console.log("inside fetchChildData");
             const student_ids = data.map((item) => item.id);
             const student_name = data.map((item) => item.name);
-            console.log("Student id : ", student_ids);
-            console.log("Student Name : ", student_name);
 
             // Update your component state or data source with the new data
             // For example, if you're using state in a functional component:
@@ -72,7 +75,7 @@ const MessageToTeacherHistory = () => {
             setStudentName(student_name);
           } else {
             // Handle the case when no data is found
-            console.log("No data found in SQLite.");
+            console.log("No data found in AsyncStorage.");
           }
         })
         .catch((error) => {
@@ -81,72 +84,59 @@ const MessageToTeacherHistory = () => {
     }
   };
 
-  useFocusEffect(
-    React.useCallback(() => {
-      console.log("useFocuseEffect Actived!");
-      fetchData();
-      return () => {
-        // Cleanup or unsubscribe logic if needed
-      };
-    }, [])
-  );
+  useEffect(() => {
+    fetchData();
+  }, []);
 
-  useFocusEffect(
-    React.useCallback(() => {
-      // Fetch teacher names for each message
-      if (responseData) {
-        const teacherIds = responseData.history_communication.map(
-          (message) => message.teacher_id
-        );
-        const uniqueTeacherIds = [...new Set(teacherIds)]; // Get unique teacher IDs
-  
-        // Fetch teacher names for each unique teacher ID
-        const fetchTeacherNames = async () => {
-          const names = {};
-          for (const teacherId of uniqueTeacherIds) {
-            try {
-              const response = await axios.get(
-                `https://www.balichildrenshouse.com/myCHStaging/api/get-teacher/${teacherId}`
-              );
-              const teacherNameExtracted = response.data.map((item) => item.name);
-              console.log(teacherNameExtracted);
-              names[teacherId] = teacherNameExtracted;
-              console.log("teacher names : ", names);
-            } catch (error) {
-              console.error("Error fetching teacher data:", error);
-              names[teacherId] = "Unknown Teacher"; // Set a default name in case of an error
-            }
-          }
-          setTeacherNames(names);
-        };
-  
-        fetchTeacherNames();
-      }
-  
-      // Cleanup logic, if needed
-      return () => {
-        // Add any cleanup logic here
-      };
-    }, [responseData])
-  );
+  useEffect(() => {
+    // Fetch teacher names for each message
+    if (responseData) {
+      const teacherIds = responseData.history_communication.map(
+        (message) => message.teacher_id
+      );
+      const uniqueTeacherIds = [...new Set(teacherIds)]; // Get unique teacher IDs
 
-  const fetchChildDataFromSQLite = () => {
-    return new Promise((resolve, reject) => {
-      db.transaction((tx) => {
-        tx.executeSql("SELECT data FROM child_data", [], (tx, results) => {
-          const len = results.rows.length;
-          if (len > 0) {
-            const responseDataString = results.rows.item(0).data;
-            const responseData = JSON.parse(responseDataString);
-            resolve(responseData);
-          } else {
-            console.log("No response data found in SQLite.");
-            resolve(null);
+      // Fetch teacher names for each unique teacher ID
+      const fetchTeacherNames = async () => {
+        const data = {};
+
+        for (const teacherId of uniqueTeacherIds) {
+          try {
+            const response = await axios.get(
+              `https://www.balichildrenshouse.com/myCH/api/get-teacher/${teacherId}`
+            );
+
+            const teacherName = response.data[0]?.name || "Unknown Teacher";
+            const teacherImage =
+              response.data[0]?.image || "default-image-url.jpg";
+
+            data[teacherId] = {
+              name: teacherName,
+              image: teacherImage,
+            };
+
+            console.log(
+              "Teacher data for teacher ID",
+              teacherId,
+              ":",
+              data[teacherId]
+            );
+          } catch (error) {
+            console.error("Error fetching teacher data:", error);
+            data[teacherId] = {
+              name: "Unknown Teacher",
+              image: "default-image-url.jpg",
+            };
           }
-        });
-      });
-    });
-  };
+        }
+
+        setTeacherNames(data);
+      };
+
+      fetchTeacherNames();
+    }
+  }, [responseData]);
+
   return (
     <NativeBaseProvider>
       <SafeAreaView style={styles.AndroidSafeArea}>
@@ -183,7 +173,7 @@ const MessageToTeacherHistory = () => {
                           note={message.message}
                           teacher={
                             teacherNames[message.teacher_id]
-                              ? teacherNames[message.teacher_id][0] // Assuming you want the first name if available
+                              ? teacherNames[message.teacher_id].name
                               : "Other Teacher"
                           }
                           student={
@@ -192,14 +182,21 @@ const MessageToTeacherHistory = () => {
                               : "Other Student"
                           }
                           timestamp={message.created_at}
+                          image={
+                            teacherNames[message.teacher_id] &&
+                            teacherNames[message.teacher_id].image
+                              ? teacherNames[message.teacher_id].image
+                              : "53613.png" // Provide a default image URL
+                          }
+                          imageUrl="https://www.balichildrenshouse.com/myCH/ev-assets/uploads/avatars/"
                         />
                       );
                     })
                   ) : (
-                    <Text>Loading...</Text> // Or any other loading indicator
+                    <LoadingModal modalVisible={true} color="red" />
                   )
                 ) : (
-                  <Text>Loading Student Data...</Text> // Or any other loading indicator
+                  <LoadingModal modalVisible={true} color="red" />
                 )}
               </ScrollView>
             </View>
