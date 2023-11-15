@@ -109,6 +109,18 @@ const MessageToTeacherSendMes = () => {
     setChildData(childData);
   };
 
+  const handleBackButton = () => {
+    navigation.navigate("Main App Stack", {
+      screen: "BottomNavbar", // change this with your screen name
+    });
+  };
+
+  const handleHistoryButton = () => {
+    navigation.navigate("Main App Stack", {
+      screen: "BottomNavbar", // change this with your screen name
+    });
+  };
+
   const handleSubmitButton = () => {
     setLoading(true);
     console.log("submitted button student id : ", studentId);
@@ -162,7 +174,24 @@ const MessageToTeacherSendMes = () => {
       <SafeAreaView style={styles.AndroidSafeArea}>
         <View style={styles.messageToTeacherSendMes}>
           <View style={styles.content}>
-            <HeroContent />
+            {/* <HeroContent /> */}
+            <View style={styles.HeroContent}>
+              <TouchableOpacity onPress={handleBackButton}>
+                <Image
+                  style={styles.buttonbackIcon}
+                  contentFit="cover"
+                  source={require("../assets/images/buttonback.png")}
+                />
+              </TouchableOpacity>
+              <Text style={styles.titleStyles}>Communication</Text>
+              <TouchableOpacity onPress={handleHistoryButton}>
+                <Image
+                  style={styles.historyicon}
+                  contentFit="cover"
+                  source={require("../assets/images/historyicon.png")}
+                />
+              </TouchableOpacity>
+            </View>
             <View style={styles.maincontent}>
               <DropDown
                 label="Choose Your Child"
@@ -286,6 +315,10 @@ const styles = StyleSheet.create({
     zIndex: 1,
     overflow: "hidden",
   },
+  historyicon: {
+    width: 26,
+    height: 26,
+  },
   profilepictIcon: {
     borderRadius: 100,
     width: 50,
@@ -321,14 +354,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   buttonbackIcon: {
-    marginTop: -7.5,
-    width: "4.44%",
-    top: "50%",
-    right: "89.44%",
-    left: "6.11%",
-    zIndex: 3,
-    maxWidth: "100%",
-    position: "absolute",
+    width: 20,
+    height: 20,
   },
   herocontent: {
     height: 125,
@@ -441,6 +468,14 @@ const styles = StyleSheet.create({
     height: 375,
     marginTop: 71,
   },
+  HeroContent: {
+    justifyContent: "space-between",
+    flexDirection: "row",
+    alignItems: "center",
+    top: 30,
+    width: 300,
+    height: 50,
+  },
   sendMessage: {
     color: Color.singleToneWhite,
     fontSize: FontSize.textMediumSm14_size,
@@ -464,6 +499,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignSelf: "stretch",
     flex: 1,
+  },
+  titleStyles: {
+    color: "#241856",
+    fontFamily: FontFamily.poppinsBold,
+    fontSize: 20,
   },
   messageToTeacherSendMes: {
     borderRadius: Border.br_xl,

@@ -6,6 +6,7 @@ const DropDown = ({ label, data, selected, setSelected }) => {
     <FormControl mt="3" mb="3">
       <FormControl.Label>{label}</FormControl.Label>
       <Select
+        isReadOnly
         selectedValue={selected} // Set the selected value to the name
         height="10"
         minWidth="200"

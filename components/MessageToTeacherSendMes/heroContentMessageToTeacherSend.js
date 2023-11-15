@@ -16,7 +16,9 @@ const HeroContent = () => {
       <View style={styles.rectangleuiParent}>
         <View style={styles.profileteacher}>
           <View style={styles.buSekarParent}>
-            <Text style={[styles.buSekar, styles.buSekarLayout]}>Bu Sekar</Text>
+            <Text style={[styles.buSekar, styles.buSekarLayout]}>
+              Communication
+            </Text>
             <Text style={[styles.mathTeacher, styles.buSekarLayout]}>
               Math Teacher
             </Text>
