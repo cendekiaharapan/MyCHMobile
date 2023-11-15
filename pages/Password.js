@@ -16,7 +16,7 @@ const Password = () => {
           <Image
             style={styles.vectorIcon}
             contentFit="cover"
-            source={require("../assets/images/backicon1.png")}
+            source={require("../assets/images/vector5.png")}
           />
         </Pressable>
         <View style={styles.resetpassframe}>

@@ -1,59 +1,126 @@
 import * as React from "react";
-import {
-  StyleSheet,
-  View,
-  Text,
-  SafeAreaView,
-  StatusBar,
-  TouchableOpacity,
-} from "react-native";
+import { StyleSheet, View, Text, SafeAreaView, StatusBar, TouchableOpacity } from "react-native";
 import { Image } from "expo-image";
 import { Color, FontFamily, FontSize, Border, Padding } from "../GlobalStyles";
 import HeroContent from "../components/MessageToTeacherSendMes/heroContentMessageToTeacherSend";
-import {
-  Button,
-  NativeBaseProvider,
-  FormControl,
-  Input,
-  TextArea,
-} from "native-base";
+import { Button, NativeBaseProvider, FormControl, Input, TextArea } from "native-base";
 import DocumentPick from "../components/DocumentPick";
 import { useNavigation } from "@react-navigation/native";
 import DropDown from "../components/DropDown";
+import axios from "axios";
+import { useRoute } from "@react-navigation/native";
+import {
+  storeItem,
+  retrieveItem,
+  deleteItem,
+  getAllKeys,
+} from "../database/database";
+import { useEffect } from 'react';
+
+
 const MessageToTeacherSendMes = () => {
   const navigation = useNavigation();
+  const route = useRoute();
+  const { parentId } = route.params;
+  const [selectedChild, setSelectedChild] = React.useState("");
+  const [note, setNote] = React.useState("");
+  const [studentId, setStudentId] = React.useState("");
+  const [studentName, setStudentName] = React.useState("");
+  const [childData, setChildData] = React.useState("");
+  
+  useEffect(() => {
+    console.log("use effect actived!");
+    retrieveItem("childData")
+    .then((data) => {
+      if (data) {
+        // Use the retrieved data
+        const student_ids = data.map((item) => item.id);
+        const student_name = data.map((item) => item.name);
+
+        // Update your component state or data source with the new data
+        // For example, if you're using state in a functional component:
+        fetchChildData(student_ids, student_name);
+        setStudentId(student_ids);
+        setStudentName(student_name);
+        console.log("set finished!");
+      } else {
+        // Handle the case when no data is found
+        console.log("No data found in AsyncStorage.");
+      }
+    })
+    .catch((error) => {
+      console.error("Error fetching response data from SQLite:", error);
+    });
+    console.log("use effect finished!");
+  }, []);
+
+  const fetchChildData = (studentId, studentName) => {
+    const childData = studentId.map((id, index) => ({
+      id,
+      name: studentName[index],
+    }));
+
+    setChildData(childData);
+  }
+
+  const handleSubmitButton = () => {
+    console.log("submitted button student id : ", studentId);
+    console.log("Selected child:", selectedChild);
+    if (!selectedChild) {
+      alert('Please select a child.');
+      return;
+    }
+  
+    const selectedChildData = childData.find((child) => child.name === selectedChild);
+  
+    if (selectedChildData) {
+      const data = {
+        student_id: selectedChildData.id,
+        sender_id: parentId,
+        message: note,
+      };
+  
+      axios
+        .post("https://www.balichildrenshouse.com/myCH/api/parent-communicate", data)
+        .then((response) => {
+          console.log("API response:", response.data);
+          navigation.navigate("MessageToTeacherHistory");
+        })
+        .catch((error) => {
+          if (error.response) {
+            console.error("API response error:", error.response.data);
+          } else {
+            console.error("API request error:", error.message);
+          }
+        });
+    } else {
+      alert('Selected child not found in the data.');
+    }
+  };
+  
+
   return (
     <NativeBaseProvider>
       <SafeAreaView style={styles.AndroidSafeArea}>
         <View style={styles.messageToTeacherSendMes}>
           <View style={styles.content}>
             <HeroContent />
-            {/* Main Content */}
             <View style={styles.maincontent}>
-              {/* Child Form */}
-              <DropDown label="Child" />
-              {/* End Child Form */}
+            <DropDown label="Choose Your Child" data={childData} selected={selectedChild} setSelected={setSelectedChild} />
 
-              {/* Document Picker */}
+
               <View style={styles.inputfield2}>
                 <FormControl>
                   <FormControl.Label>Letter (Optional)</FormControl.Label>
                   <DocumentPick />
                 </FormControl>
               </View>
-              {/* End Document Picker */}
-
-              {/* Message Form */}
               <FormControl mb="3">
                 <FormControl.Label>Note</FormControl.Label>
-                <TextArea h={40} placeholder="Leave a note" />
+                <TextArea h={40} placeholder="Leave a note" onChangeText={(text) => setNote(text)} value={note} />
               </FormControl>
-              {/* End Message Form */}
             </View>
-            <TouchableOpacity
-              onPress={() => navigation.navigate("MessageToTeacherHistory")}
-              style={styles.buttonsend}
-            >
+            <TouchableOpacity onPress={handleSubmitButton} style={styles.buttonsend}>
               <View>
                 <Text style={styles.sendMessage}>Send Message</Text>
               </View>
