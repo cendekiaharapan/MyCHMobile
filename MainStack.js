@@ -11,6 +11,7 @@ import PopUp from "./components/PopUp";
 import CHDollar from "./components/CHDollar";
 import Attendance from "./components/Attendance";
 import AverageDailyScore from "./components/AverageDailyScore";
+import AssessmentList from "./pages/AssessmentList";
 
 const Stack = createNativeStackNavigator();
 
@@ -20,6 +21,11 @@ const MainStack = () => {
       <Stack.Screen
         name="Profile"
         component={Profile}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="AssessmentList"
+        component={AssessmentList}
         options={{ headerShown: false }}
       />
       <Stack.Screen
