@@ -182,7 +182,7 @@ const ChildPermissionAddPermis = () => {
               <Image
                 style={styles.backicon}
                 contentFit="cover"
-                source={require("../assets/backicon1.png")}
+                source={require("../assets/images/backicon1.png")}
               />
             </TouchableOpacity>
             <View style={styles.permission}>
@@ -192,7 +192,7 @@ const ChildPermissionAddPermis = () => {
               <Image
                 style={styles.historyicon}
                 contentFit="cover"
-                source={require("../assets/historyicon.png")}
+                source={require("../assets/images/historyicon.png")}
               />
             </TouchableOpacity>
           </View>

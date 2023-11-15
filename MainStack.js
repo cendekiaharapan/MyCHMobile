@@ -32,6 +32,9 @@ import ChildPermissionAddPermis from "./pages/ChildPermissionAddPermis";
 import ChildPermissionHistorys from "./pages/ChildPermissionHistorys";
 import ChildPermissionViewHisto from "./pages/ChildPermissionViewHisto";
 
+// Communication
+import MessageToTeacherSendMes from "./pages/MessageToTeacherSendMes";
+
 const Stack = createNativeStackNavigator();
 
 const MainStack = () => {
@@ -70,6 +73,11 @@ const MainStack = () => {
       <Stack.Screen
         name="ChildPermissionViewHisto"
         component={ChildPermissionViewHisto}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="MessageToTeacherSendMes"
+        component={MessageToTeacherSendMes}
         options={{ headerShown: false }}
       />
       <Stack.Screen

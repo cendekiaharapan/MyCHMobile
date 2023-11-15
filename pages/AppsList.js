@@ -31,6 +31,11 @@ const AppsList = () => {
       screen: "ChildPermissionAddPermis", // change this with your screen name
     });
   };
+  const handleCommunicationButton = () => {
+    navigation.navigate("Main App Stack", {
+      screen: "MessageToTeacherSendMes", // change this with your screen name
+    });
+  };
   return (
     <View style={styles.mainContainer}>
       <View style={styles.bodyContainer}>
@@ -89,14 +94,16 @@ const AppsList = () => {
               <Text style={styles.StyleText}>EXCUSE</Text>
             </View>
           </TouchableOpacity>
-          <View style={styles.BoxContainer}>
-            <Image
-              style={styles.StyleImage}
-              source={require("../assets/images/Communication.png")}
-              contentFit="cover"
-            />
-            <Text style={styles.StyleText}>COMMUNICATION</Text>
-          </View>
+          <TouchableOpacity onPress={handleCommunicationButton}>
+            <View style={styles.BoxContainer}>
+              <Image
+                style={styles.StyleImage}
+                source={require("../assets/images/Communication.png")}
+                contentFit="cover"
+              />
+              <Text style={styles.StyleText}>COMMUNICATION</Text>
+            </View>
+          </TouchableOpacity>
         </View>
         <View style={styles.RowContainer}>
           <TouchableOpacity onPress={handlePaymentButton}>

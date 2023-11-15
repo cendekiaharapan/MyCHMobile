@@ -25,10 +25,12 @@ const DateTimePicker = ({ onDateChange, dateTime }) => {
       setSelectedDate(selected);
       setShowDatePicker(Platform.OS === "ios");
 
-      const formattedDate = `${selected.getFullYear()}-${String(selected.getMonth() + 1).padStart(2, '0')}-${String(selected.getDate()).padStart(2, '0')}`;
+      const formattedDate = `${selected.getFullYear()}-${String(
+        selected.getMonth() + 1
+      ).padStart(2, "0")}-${String(selected.getDate()).padStart(2, "0")}`;
       const formattedTime = selectedTime || "00:00";
 
-      if (typeof onDateChange === 'function') {
+      if (typeof onDateChange === "function") {
         onDateChange(`${formattedDate} ${formattedTime}`);
       }
     }
@@ -36,16 +38,28 @@ const DateTimePicker = ({ onDateChange, dateTime }) => {
 
   const handleTimeChange = (event, selected) => {
     if (selected !== undefined && selected !== null) {
-      setSelectedTime(`${String(selected.getHours()).padStart(2, '0')}:${String(selected.getMinutes()).padStart(2, '0')}`);
+      setSelectedTime(
+        `${String(selected.getHours()).padStart(2, "0")}:${String(
+          selected.getMinutes()
+        ).padStart(2, "0")}`
+      );
       setShowTimePicker(Platform.OS === "ios");
 
       const formattedDate = selectedDate
-        ? `${selectedDate.getFullYear()}-${String(selectedDate.getMonth() + 1).padStart(2, '0')}-${String(selectedDate.getDate()).padStart(2, '0')}`
+        ? `${selectedDate.getFullYear()}-${String(
+            selectedDate.getMonth() + 1
+          ).padStart(2, "0")}-${String(selectedDate.getDate()).padStart(
+            2,
+            "0"
+          )}`
         : "Select Date";
 
-      const formattedTime = `${String(selected.getHours()).padStart(2, '0')}:${String(selected.getMinutes()).padStart(2, '0')}`;
+      const formattedTime = `${String(selected.getHours()).padStart(
+        2,
+        "0"
+      )}:${String(selected.getMinutes()).padStart(2, "0")}`;
 
-      if (typeof onDateChange === 'function') {
+      if (typeof onDateChange === "function") {
         onDateChange(`${formattedDate} ${formattedTime}`);
       }
     }
@@ -60,7 +74,9 @@ const DateTimePicker = ({ onDateChange, dateTime }) => {
   };
 
   const formattedDate = selectedDate
-    ? `${selectedDate.getFullYear()}-${String(selectedDate.getMonth() + 1).padStart(2, '0')}-${String(selectedDate.getDate()).padStart(2, '0')}`
+    ? `${selectedDate.getFullYear()}-${String(
+        selectedDate.getMonth() + 1
+      ).padStart(2, "0")}-${String(selectedDate.getDate()).padStart(2, "0")}`
     : "Select Date";
 
   const formattedTime = selectedTime || "Select Time";
@@ -80,12 +96,15 @@ const DateTimePicker = ({ onDateChange, dateTime }) => {
           mode="date"
           display="default"
           onChange={handleDateChange}
+          style={styles.dateMode}
         />
       )}
 
       {showTimePicker && (
         <DateTime
-          value={selectedTime ? new Date(`2000-01-01T${selectedTime}`) : new Date()}
+          value={
+            selectedTime ? new Date(`2000-01-01T${selectedTime}`) : new Date()
+          }
           mode="time"
           display="default"
           onChange={handleTimeChange}
@@ -106,8 +125,6 @@ const styles = StyleSheet.create({
     padding: 10,
     margin: 5,
     marginLeft: 0,
-    
-    
   },
   dateText: {
     fontFamily: FontFamily.poppinsLight,

@@ -1,9 +1,22 @@
 import * as React from "react";
-import { StyleSheet, View, Text, SafeAreaView, StatusBar, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Text,
+  SafeAreaView,
+  StatusBar,
+  TouchableOpacity,
+} from "react-native";
 import { Image } from "expo-image";
 import { Color, FontFamily, FontSize, Border, Padding } from "../GlobalStyles";
 import HeroContent from "../components/MessageToTeacherSendMes/heroContentMessageToTeacherSend";
-import { Button, NativeBaseProvider, FormControl, Input, TextArea } from "native-base";
+import {
+  Button,
+  NativeBaseProvider,
+  FormControl,
+  Input,
+  TextArea,
+} from "native-base";
 import DocumentPick from "../components/DocumentPick";
 import { useNavigation } from "@react-navigation/native";
 import DropDown from "../components/DropDown";
@@ -14,43 +27,76 @@ import {
   retrieveItem,
   deleteItem,
   getAllKeys,
+  saveTokenToSecureStore,
+  getTokenFromSecureStore,
+  saveRespDataSecureStore,
+  getRespDataFromSecureStore,
+  clearTokenFromSecureStore,
+  clearResponseDataFromSecureStore,
 } from "../database/database";
-import { useEffect } from 'react';
-
+import { useEffect } from "react";
+import { LoadingModal } from "react-native-loading-modal";
+import Toast from "react-native-toast-message";
 
 const MessageToTeacherSendMes = () => {
   const navigation = useNavigation();
   const route = useRoute();
-  const { parentId } = route.params;
+  // const { parentId } = route.params;
+  const [parentId, setParentId] = React.useState("");
   const [selectedChild, setSelectedChild] = React.useState("");
   const [note, setNote] = React.useState("");
   const [studentId, setStudentId] = React.useState("");
   const [studentName, setStudentName] = React.useState("");
   const [childData, setChildData] = React.useState("");
-  
-  useEffect(() => {
-    console.log("use effect actived!");
-    retrieveItem("childData")
-    .then((data) => {
-      if (data) {
-        // Use the retrieved data
-        const student_ids = data.map((item) => item.id);
-        const student_name = data.map((item) => item.name);
+  const [loading, setLoading] = React.useState(false);
 
-        // Update your component state or data source with the new data
-        // For example, if you're using state in a functional component:
-        fetchChildData(student_ids, student_name);
-        setStudentId(student_ids);
-        setStudentName(student_name);
-        console.log("set finished!");
-      } else {
-        // Handle the case when no data is found
-        console.log("No data found in AsyncStorage.");
-      }
-    })
-    .catch((error) => {
-      console.error("Error fetching response data from SQLite:", error);
+  const showToastSuccess = () => {
+    Toast.show({
+      text1: "Successfully, send message!",
+      text1Style: { fontSize: 15 },
+      text2Style: { fontSize: 13 },
+      type: "success",
     });
+  };
+
+  const showToastErrorRequired = (message) => {
+    Toast.show({
+      text1: message,
+      text1Style: { fontSize: 15 },
+      text2Style: { fontSize: 13 },
+      type: "error",
+    });
+  };
+
+  useEffect(() => {
+    getRespDataFromSecureStore().then((data) => {
+      if (data) {
+        setParentId(data.user.id);
+      } else {
+        console.log("no response data in secure store");
+      }
+    });
+    retrieveItem("childData")
+      .then((data) => {
+        if (data) {
+          // Use the retrieved data
+          const student_ids = data.map((item) => item.id);
+          const student_name = data.map((item) => item.name);
+
+          // Update your component state or data source with the new data
+          // For example, if you're using state in a functional component:
+          fetchChildData(student_ids, student_name);
+          setStudentId(student_ids);
+          setStudentName(student_name);
+          console.log("set finished!");
+        } else {
+          // Handle the case when no data is found
+          console.log("No data found in AsyncStorage.");
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching response data from SQLite:", error);
+      });
     console.log("use effect finished!");
   }, []);
 
@@ -61,53 +107,70 @@ const MessageToTeacherSendMes = () => {
     }));
 
     setChildData(childData);
-  }
+  };
 
   const handleSubmitButton = () => {
+    setLoading(true);
     console.log("submitted button student id : ", studentId);
     console.log("Selected child:", selectedChild);
     if (!selectedChild) {
-      alert('Please select a child.');
+      showToastErrorRequired("Please select your child!");
+      setLoading(false);
       return;
     }
-  
-    const selectedChildData = childData.find((child) => child.name === selectedChild);
-  
+
+    const selectedChildData = childData.find(
+      (child) => child.name === selectedChild
+    );
+
     if (selectedChildData) {
       const data = {
         student_id: selectedChildData.id,
         sender_id: parentId,
         message: note,
       };
-  
+
       axios
-        .post("https://www.balichildrenshouse.com/myCH/api/parent-communicate", data)
+        .post(
+          "https://www.balichildrenshouse.com/myCH/api/parent-communicate",
+          data
+        )
         .then((response) => {
-          console.log("API response:", response.data);
+          setLoading(false);
+          showToastSuccess();
           navigation.navigate("MessageToTeacherHistory");
         })
         .catch((error) => {
           if (error.response) {
+            setLoading(false);
+            showToastErrorRequired("Please make sure note field is filled!");
             console.error("API response error:", error.response.data);
           } else {
+            setLoading(false);
+            showToastErrorRequired(error.message);
             console.error("API request error:", error.message);
           }
         });
     } else {
-      alert('Selected child not found in the data.');
+      alert("Selected child not found in the data.");
     }
   };
-  
 
   return (
     <NativeBaseProvider>
+      <LoadingModal modalVisible={loading} color="red" />
       <SafeAreaView style={styles.AndroidSafeArea}>
         <View style={styles.messageToTeacherSendMes}>
           <View style={styles.content}>
             <HeroContent />
             <View style={styles.maincontent}>
-            <DropDown label="Choose Your Child" data={childData} selected={selectedChild} setSelected={setSelectedChild} />
-
+              <DropDown
+                label="Choose Your Child"
+                data={childData}
+                selected={selectedChild}
+                setSelected={setSelectedChild}
+                isReadOnly
+              />
 
               <View style={styles.inputfield2}>
                 <FormControl>
@@ -117,10 +180,18 @@ const MessageToTeacherSendMes = () => {
               </View>
               <FormControl mb="3">
                 <FormControl.Label>Note</FormControl.Label>
-                <TextArea h={40} placeholder="Leave a note" onChangeText={(text) => setNote(text)} value={note} />
+                <TextArea
+                  h={40}
+                  placeholder="Leave a note"
+                  onChangeText={(text) => setNote(text)}
+                  value={note}
+                />
               </FormControl>
             </View>
-            <TouchableOpacity onPress={handleSubmitButton} style={styles.buttonsend}>
+            <TouchableOpacity
+              onPress={handleSubmitButton}
+              style={styles.buttonsend}
+            >
               <View>
                 <Text style={styles.sendMessage}>Send Message</Text>
               </View>
