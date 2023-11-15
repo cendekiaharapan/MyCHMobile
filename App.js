@@ -12,6 +12,7 @@ import PostDetails from "./pages/PostDetails";
 import AllPost from "./pages/AllPost";
 import Password from "./pages/Password";
 import Coba from "./components/Coba";
+import Button from "./components/Button";
 
 // permission history
 import ChildPermissionAddPermis from "./pages/ChildPermissionAddPermis";
@@ -93,6 +94,11 @@ const App = () => {
             <Stack.Screen
               name="Password"
               component={Password}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Button"
+              component={Button}
               options={{ headerShown: false }}
             />
             <Stack.Screen

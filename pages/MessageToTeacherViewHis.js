@@ -1,25 +1,83 @@
-import * as React from "react";
-import { StyleSheet, View, Text } from "react-native";
-import { Input, NativeBaseProvider, FormControl, TextArea } from "native-base";
+import React, { useState, useEffect } from "react";
+import { TouchableOpacity, Alert, StyleSheet, View, Text, Linking } from "react-native";
 import { Image } from "expo-image";
-
 import { Color, FontFamily, FontSize, Padding, Border } from "../GlobalStyles";
+import { NativeBaseProvider, Input, FormControl, TextArea } from "native-base";
+import Button from "../components/Button";
 import HeroContent from "../components/MessageToTeacherViewHis/HeroContentMessageToTeacherViewHis";
-const MessageToTeacherViewHis = () => {
+
+const MessageToTeacherViewHis = ({ route, navigation }) => {
+  const { message_id, message_file, note, teacher, student, timestamp, image, imageUrl } = route.params;
+
+  const [messageID, setMessageID] = useState(message_id);
+  const [messagefile, setMessageFile] = useState(message_file);
+  const [noteText, setNoteText] = useState(note);
+  const [teacherName, setTeacherName] = useState(teacher);
+  const [studentName, setStudentName] = useState(student);
+  const [timestampDetail, setTimestampDetail] = useState(timestamp);
+  const [teacherImage, setTeacherImage] = useState(image);
+  const [imageUrlPath, setImageUrlPath] = useState(imageUrl);
+  const [showFile, setShowFile] = useState(true);
+  const [formattedTimestamp, setFormattedTimestamp] = useState('');
+
+  const formatTimestamp = (timestamp) => {
+    const date = new Date(timestamp);
+    const options = {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+      second: "numeric",
+    };
+    return date.toLocaleDateString('en-GB', options); // Adjust locale according to your preference
+  };
+  
+  useEffect(() => {
+    console.log("Message ID get", messageID);
+    console.log("File get", messagefile);
+    console.log("Note get:", noteText);
+    console.log("Teacher Name get:", teacherName);
+    console.log("Student Name get:", studentName);
+    console.log("Timestamp get:", timestampDetail);
+    console.log("Teacher Image get:", teacherImage);
+    console.log("Image Url get:", imageUrlPath); formattedTimestamp
+    console.log("Formatted timestamp:", formattedTimestamp);
+    setFormattedTimestamp(formatTimestamp(timestampDetail));
+    // Hide the file view if messageFile is null
+    if (!messagefile) {
+      setShowFile(false);
+    }
+  }, [messageID, messagefile, noteText, teacherName, studentName, timestampDetail, teacherImage, imageUrlPath]);
+
+  const openFileUrl = async () => {
+    try {
+      if (messagefile) {
+        const fileUrl = `https://www.balichildrenshouse.com/myCH/ev-assets/uploads/communications/${messagefile}`;
+        await Linking.openURL(fileUrl);
+      } else {
+        console.error('File is not available.');
+      }
+    } catch (error) {
+      console.error('Error opening file URL:', error);
+    }
+  };
+
   return (
     <NativeBaseProvider>
       <View style={styles.messageToTeacherViewHis}>
         <View style={styles.content}>
-          <HeroContent />
           <View style={[styles.bodycontent, styles.bodycontentPosition]}>
-            <Text style={[styles.maret20231340, styles.childTypo]}>
-              14 Maret 2023, 13:40 AM
-            </Text>
+            <View style={styles.timestampContainer}>
+              <Text style={styles.timestampText}>
+                Sent at: {formattedTimestamp}
+              </Text>
+            </View>
             <View style={styles.frameParent}>
               <Text style={[styles.child, styles.childTypo]}>Child</Text>
               <Input
                 variant="rounded"
-                placeholder="Rufus Stewart"
+                placeholder={studentName}
                 _light={{
                   placeholderTextColor: "#181818",
                 }}
@@ -28,38 +86,48 @@ const MessageToTeacherViewHis = () => {
                 }}
                 editable={false}
               />
-              <View style={styles.fileOptionalParent}>
-                <Text style={[styles.child, styles.childTypo]}>File</Text>
-                <View
-                  style={[
-                    styles.labelAndContaierWrapper,
-                    styles.inputFieldLayout,
-                  ]}
-                >
-                  <View style={styles.labelAndContaier}>
-                    <View style={[styles.inputField, styles.inputBorder]}>
-                      <View style={styles.icons}>
-                        <View style={styles.text}>
-                          <Image
-                            style={styles.playIcon}
-                            contentFit="cover"
-                            source={require("../assets/play2.png")}
-                          />
-                          <Text style={[styles.placeholder, styles.childTypo]}>
-                            Download File
-                          </Text>
-                          <View style={styles.cursor} />
+              
+              {showFile && (
+                <View style={styles.fileOptionalParent}>
+                  <Text style={[styles.child, styles.childTypo]}>File</Text>
+                  <View style={[styles.labelAndContaierWrapper, styles.inputFieldLayout]}>
+                    <View style={styles.labelAndContaier}>
+                      <View style={[styles.inputField, styles.inputBorder]}>
+                        <View style={styles.icons}>
+                          <View style={styles.text}>
+                            <Image
+                              style={styles.playIcon}
+                              contentFit="cover"
+                              source={require("../assets/play2.png")}
+                            />
+                            {/* Use Button component here */}
+                            <TouchableOpacity onPress={openFileUrl}>
+                              <Text
+                                style={{
+                                  fontFamily: FontFamily.poppinsLight,
+                                  fontWeight: "300",
+                                  color: "#a6a6a6",
+                                  fontSize: FontSize.textRegularXs12_size,
+                                  marginLeft: 75
+                                }}
+                              >
+                                Download File
+                              </Text>
+                            </TouchableOpacity>
+                            <View style={styles.cursor} />
+                          </View>
                         </View>
                       </View>
                     </View>
                   </View>
                 </View>
-              </View>
+              )}
+
               <View style={styles.messageParent}>
                 <Text style={[styles.child, styles.childTypo]}>Message</Text>
                 <View style={[styles.textArea, styles.textAreaLayout]}>
                   <FormControl>
-                    <TextArea h={40} placeholder="Leave a note" isReadOnly />
+                    <TextArea h={40} placeholder={noteText} isReadOnly />
                   </FormControl>
                 </View>
               </View>
@@ -72,6 +140,21 @@ const MessageToTeacherViewHis = () => {
 };
 
 const styles = StyleSheet.create({
+  timestampContainer: {
+    width: 285,
+    height: 20, // Adjust height as needed
+    justifyContent: 'center', // Center the text vertically
+    alignItems: 'center', // Center the text horizontally
+    marginTop: 24, // Adjust as needed
+  },
+  timestampText: {
+    fontFamily: FontFamily.poppinsLight,
+    fontWeight: "300",
+    color: "#a6a6a6",
+    fontSize: FontSize.textRegularXs12_size,
+    textAlign: 'center', // Center the text
+    // Add additional styling as needed
+  },
   inputRoundedText: {
     fontFamily: "Poppins-Regular",
     color: "#171717",

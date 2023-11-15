@@ -11,6 +11,8 @@ import {
 } from "../../GlobalStyles";
 import { useNavigation } from "@react-navigation/native";
 const MessageHistory = ({
+  message_id,
+  message_file,
   note,
   teacher = "Bu Sekar",
   student = "Rufus Stewart",
@@ -20,6 +22,29 @@ const MessageHistory = ({
 }) => {
   const navigation = useNavigation();
   const concatenatedImageUrl = `${imageUrl}${image}`;
+  
+  const handleViewMessHisto = () => {
+    console.log("Message ID", message_id);
+    console.log("Message File", message_file);
+    console.log("Note:", note);
+    console.log("Teacher Names:", teacher);
+    console.log("Student Names:", student);
+    console.log("Timestamp:",timestamp);
+    console.log("Image:",image);
+    console.log("Image Url:",imageUrl);
+
+    navigation.navigate("MessageToTeacherViewHis", {
+      message_id: message_id,
+      message_file: message_file,
+      note: note,
+      teacher: teacher,
+      student: student,
+      timestamp: timestamp,
+      image: image,
+      imageUrl: imageUrl,
+    });
+  };
+
   return (
     <View style={styles.messagehistory}>
       <View style={styles.helperTextFlexBox}>
@@ -56,7 +81,7 @@ const MessageHistory = ({
           />
         </FormControl>
         <TouchableOpacity
-          onPress={() => navigation.navigate("MessageToTeacherViewHis")}
+          onPress={handleViewMessHisto}
         >
           <View style={[styles.viewWrapper, styles.helperTextFlexBox]}>
             <Text style={[styles.view, styles.viewTypo]}>View</Text>
