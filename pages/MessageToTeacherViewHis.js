@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { TouchableOpacity, Alert, StyleSheet, View, Text, Linking } from "react-native";
+import {
+  TouchableOpacity,
+  Alert,
+  StyleSheet,
+  View,
+  Text,
+  Linking,
+} from "react-native";
 import { Image } from "expo-image";
 import { Color, FontFamily, FontSize, Padding, Border } from "../GlobalStyles";
 import { NativeBaseProvider, Input, FormControl, TextArea } from "native-base";
@@ -7,7 +14,16 @@ import Button from "../components/Button";
 import HeroContent from "../components/MessageToTeacherViewHis/HeroContentMessageToTeacherViewHis";
 
 const MessageToTeacherViewHis = ({ route, navigation }) => {
-  const { message_id, message_file, note, teacher, student, timestamp, image, imageUrl } = route.params;
+  const {
+    message_id,
+    message_file,
+    note,
+    teacher,
+    student,
+    timestamp,
+    image,
+    imageUrl,
+  } = route.params;
 
   const [messageID, setMessageID] = useState(message_id);
   const [messagefile, setMessageFile] = useState(message_file);
@@ -18,7 +34,7 @@ const MessageToTeacherViewHis = ({ route, navigation }) => {
   const [teacherImage, setTeacherImage] = useState(image);
   const [imageUrlPath, setImageUrlPath] = useState(imageUrl);
   const [showFile, setShowFile] = useState(true);
-  const [formattedTimestamp, setFormattedTimestamp] = useState('');
+  const [formattedTimestamp, setFormattedTimestamp] = useState("");
 
   const formatTimestamp = (timestamp) => {
     const date = new Date(timestamp);
@@ -30,9 +46,9 @@ const MessageToTeacherViewHis = ({ route, navigation }) => {
       minute: "numeric",
       second: "numeric",
     };
-    return date.toLocaleDateString('en-GB', options); // Adjust locale according to your preference
+    return date.toLocaleDateString("en-GB", options); // Adjust locale according to your preference
   };
-  
+
   useEffect(() => {
     console.log("Message ID get", messageID);
     console.log("File get", messagefile);
@@ -41,14 +57,24 @@ const MessageToTeacherViewHis = ({ route, navigation }) => {
     console.log("Student Name get:", studentName);
     console.log("Timestamp get:", timestampDetail);
     console.log("Teacher Image get:", teacherImage);
-    console.log("Image Url get:", imageUrlPath); formattedTimestamp
+    console.log("Image Url get:", imageUrlPath);
+    formattedTimestamp;
     console.log("Formatted timestamp:", formattedTimestamp);
     setFormattedTimestamp(formatTimestamp(timestampDetail));
     // Hide the file view if messageFile is null
     if (!messagefile) {
       setShowFile(false);
     }
-  }, [messageID, messagefile, noteText, teacherName, studentName, timestampDetail, teacherImage, imageUrlPath]);
+  }, [
+    messageID,
+    messagefile,
+    noteText,
+    teacherName,
+    studentName,
+    timestampDetail,
+    teacherImage,
+    imageUrlPath,
+  ]);
 
   const openFileUrl = async () => {
     try {
@@ -56,17 +82,33 @@ const MessageToTeacherViewHis = ({ route, navigation }) => {
         const fileUrl = `https://www.balichildrenshouse.com/myCH/ev-assets/uploads/communications/${messagefile}`;
         await Linking.openURL(fileUrl);
       } else {
-        console.error('File is not available.');
+        console.error("File is not available.");
       }
     } catch (error) {
-      console.error('Error opening file URL:', error);
+      console.error("Error opening file URL:", error);
     }
+  };
+
+  const handleBackButton = () => {
+    navigation.navigate("Main App Stack", {
+      screen: "MessageToTeacherHistory", // change this with your screen name
+    });
   };
 
   return (
     <NativeBaseProvider>
       <View style={styles.messageToTeacherViewHis}>
         <View style={styles.content}>
+          <View style={styles.HeroContainer}>
+            <TouchableOpacity onPress={handleBackButton}>
+              <Image
+                style={styles.buttonbackIcon}
+                contentFit="cover"
+                source={require("../assets/images/buttonback.png")}
+              />
+            </TouchableOpacity>
+            <Text style={styles.titleStyles}>History Message</Text>
+          </View>
           <View style={[styles.bodycontent, styles.bodycontentPosition]}>
             <View style={styles.timestampContainer}>
               <Text style={styles.timestampText}>
@@ -86,11 +128,16 @@ const MessageToTeacherViewHis = ({ route, navigation }) => {
                 }}
                 editable={false}
               />
-              
+
               {showFile && (
                 <View style={styles.fileOptionalParent}>
                   <Text style={[styles.child, styles.childTypo]}>File</Text>
-                  <View style={[styles.labelAndContaierWrapper, styles.inputFieldLayout]}>
+                  <View
+                    style={[
+                      styles.labelAndContaierWrapper,
+                      styles.inputFieldLayout,
+                    ]}
+                  >
                     <View style={styles.labelAndContaier}>
                       <View style={[styles.inputField, styles.inputBorder]}>
                         <View style={styles.icons}>
@@ -108,7 +155,7 @@ const MessageToTeacherViewHis = ({ route, navigation }) => {
                                   fontWeight: "300",
                                   color: "#a6a6a6",
                                   fontSize: FontSize.textRegularXs12_size,
-                                  marginLeft: 75
+                                  marginLeft: 75,
                                 }}
                               >
                                 Download File
@@ -143,8 +190,8 @@ const styles = StyleSheet.create({
   timestampContainer: {
     width: 285,
     height: 20, // Adjust height as needed
-    justifyContent: 'center', // Center the text vertically
-    alignItems: 'center', // Center the text horizontally
+    justifyContent: "center", // Center the text vertically
+    alignItems: "center", // Center the text horizontally
     marginTop: 24, // Adjust as needed
   },
   timestampText: {
@@ -152,7 +199,7 @@ const styles = StyleSheet.create({
     fontWeight: "300",
     color: "#a6a6a6",
     fontSize: FontSize.textRegularXs12_size,
-    textAlign: 'center', // Center the text
+    textAlign: "center", // Center the text
     // Add additional styling as needed
   },
   inputRoundedText: {
@@ -419,17 +466,34 @@ const styles = StyleSheet.create({
     backgroundColor: Color.singleToneWhite,
   },
   content: {
-    width: 390,
-    height: 789,
+    flex: 1,
   },
   messageToTeacherViewHis: {
     backgroundColor: Color.colorGray_100,
-    width: "100%",
-    height: 844,
+    // width: "100%",
+    // height: 844,
     flexDirection: "row",
     overflow: "hidden",
     flex: 1,
     borderRadius: Border.br_xl,
+  },
+  HeroContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    top: 40,
+    width: "100%",
+    height: 50,
+  },
+  buttonbackIcon: {
+    width: 20,
+    height: 20,
+    right: 70,
+  },
+  titleStyles: {
+    color: "#241856",
+    fontFamily: FontFamily.poppinsBold,
+    fontSize: 20,
   },
 });
 
