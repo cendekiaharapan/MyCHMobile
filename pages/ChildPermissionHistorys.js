@@ -257,7 +257,8 @@ const styles = StyleSheet.create({
   },
   backiconPosition: {
     height: 24,
-    left: 0,
+    width: 20,
+    left: 10,
     top: 0,
     position: "absolute",
   },
@@ -292,8 +293,7 @@ const styles = StyleSheet.create({
   },
   permissionHistory: {
     top: 1,
-
-    fontSize: FontSize.headingMd20_size,
+    fontSize: 20,
     lineHeight: 22,
     fontWeight: "700",
     fontFamily: FontFamily.headingMd20,
@@ -435,6 +435,7 @@ const styles = StyleSheet.create({
   },
 
   contact: {
+    top: 10,
     backgroundColor: Color.colorGray_100,
     paddingHorizontal: Padding.p_lgi,
     paddingVertical: Padding.p_11xl,

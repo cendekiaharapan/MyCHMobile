@@ -382,12 +382,12 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.textRegularSm14,
   },
   backicon: {
-    width: 15,
-    height: 24,
+    width: 20,
+    height: 20,
     overflow: "hidden",
   },
   permission1: {
-    fontSize: FontSize.headingMd20_size,
+    fontSize: 20,
     lineHeight: 22,
     color: Color.colorMidnightblue,
     textAlign: "left",
