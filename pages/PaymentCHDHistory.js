@@ -6,20 +6,24 @@ import CHDHistoryCard from "../components/CHDHistoryCard";
 
 import { Color } from "../GlobalStyles";
 
-const PaymentCHDHistory = () => {
+const PaymentCHDHistory = ({ route }) => {
+  const { student_id, student_name, chd_balance } = route.params;
   const navigation = useNavigation();
   const [transactions, setTransactions] = useState([]);
 
   useEffect(() => {
-    fetch("http://penjemputan.balichildrenshouse.com/api/get_transactions_list", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        student_id: "258",
-      }),
-    })
+    fetch(
+      "http://penjemputan.balichildrenshouse.com/api/get_transactions_list",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          student_id: student_id,
+        }),
+      }
+    )
       .then((response) => response.json())
       .then((data) => {
         if (data.transactions) {
@@ -31,28 +35,34 @@ const PaymentCHDHistory = () => {
 
   return (
     <View style={styles.paymentChdHistory}>
-    <Header
-      invoiceTitle="CHD History"
-      backButtonPosition="unset"
-      backButtonTop="unset"
-      backButtonLeft="unset"
-      invoicesAlignItems="flex-start"
-      invoicesWidth="unset"
-      onBackButtonPress={() => navigation.navigate("PaymentTopup")}
-    />
-    
-    <ScrollView contentContainerStyle={{ alignItems: "center" }}>
-      {transactions.map((transaction, index) => (
-        <CHDHistoryCard
-          key={index}
-          type={transaction.action === "2" ? 1 : 0}
-          date={transaction.waktu}
-          description={transaction.deskripsi}
-          amount={transaction.jumlah}
-        />
-      ))}
-    </ScrollView>
-  </View>
+      <Header
+        invoiceTitle="CHD History"
+        backButtonPosition="unset"
+        backButtonTop="unset"
+        backButtonLeft="unset"
+        invoicesAlignItems="flex-start"
+        invoicesWidth="unset"
+        onBackButtonPress={() =>
+          navigation.navigate("PaymentTopup", {
+            student_id,
+            student_name,
+            chd_balance,
+          })
+        }
+      />
+
+      <ScrollView contentContainerStyle={{ alignItems: "center" }}>
+        {transactions.map((transaction, index) => (
+          <CHDHistoryCard
+            key={index}
+            type={transaction.action === "2" ? 1 : 0}
+            date={transaction.waktu}
+            description={transaction.deskripsi}
+            amount={transaction.jumlah}
+          />
+        ))}
+      </ScrollView>
+    </View>
   );
 };
 
