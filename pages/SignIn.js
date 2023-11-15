@@ -82,7 +82,7 @@ const SignIn = () => {
           }
         }
         // You can navigate to another screen after successful login
-        navigation.navigate("Main App Stack", { screen: "Profile" });
+        navigation.navigate("Main App Stack", { screen: "BottomNavbar" });
         Toast.show({
           type: "success",
           position: "top",
