@@ -1,5 +1,5 @@
-import * as React from "react";
-import { StyleSheet, View } from "react-native";
+import React, { useState, useEffect } from "react";
+import { StyleSheet, View, ScrollView } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Header from "../components/Header";
 import CHDHistoryCard from "../components/CHDHistoryCard";
@@ -8,25 +8,51 @@ import { Color } from "../GlobalStyles";
 
 const PaymentCHDHistory = () => {
   const navigation = useNavigation();
+  const [transactions, setTransactions] = useState([]);
+
+  useEffect(() => {
+    fetch("http://penjemputan.balichildrenshouse.com/api/get_transactions_list", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        student_id: "258",
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.transactions) {
+          setTransactions(data.transactions);
+        }
+      })
+      .catch((error) => console.error("Error fetching data:", error));
+  }, []);
 
   return (
     <View style={styles.paymentChdHistory}>
-      <Header
-        invoiceTitle="CHD History"
-        backButtonPosition="unset"
-        backButtonTop="unset"
-        backButtonLeft="unset"
-        invoicesAlignItems="flex-start"
-        invoicesWidth="unset"
-        onBackButtonPress={() => navigation.navigate("PaymentTopup")}
-      />
-      
-      
-      {/* First Component with type set to 1 */}
-      <CHDHistoryCard type={1} />
-      <CHDHistoryCard type={0} />
-      <CHDHistoryCard type={1} />
-    </View>
+    <Header
+      invoiceTitle="CHD History"
+      backButtonPosition="unset"
+      backButtonTop="unset"
+      backButtonLeft="unset"
+      invoicesAlignItems="flex-start"
+      invoicesWidth="unset"
+      onBackButtonPress={() => navigation.navigate("PaymentTopup")}
+    />
+    
+    <ScrollView contentContainerStyle={{ alignItems: "center" }}>
+      {transactions.map((transaction, index) => (
+        <CHDHistoryCard
+          key={index}
+          type={transaction.action === "2" ? 1 : 0}
+          date={transaction.waktu}
+          description={transaction.deskripsi}
+          amount={transaction.jumlah}
+        />
+      ))}
+    </ScrollView>
+  </View>
   );
 };
 
@@ -37,8 +63,6 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 844,
     overflow: "hidden",
-    alignItems: "center",
-    
   },
 });
 
