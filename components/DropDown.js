@@ -1,10 +1,19 @@
+// DropDown.js
+
 import * as React from "react";
 import { FormControl, Select, CheckIcon } from "native-base";
 import { Text, StyleSheet, View, Pressable, Modal } from "react-native";
 import { Color, FontFamily, FontSize, Border, Padding } from "../GlobalStyles";
 
-const DropDown = ({ label, studentNames }) => {
+const DropDown = ({ label, studentNames, studentIds, onSelect }) => {
   const [selectedStudent, setSelectedStudent] = React.useState("");
+
+  const handleSelect = (itemValue) => {
+    setSelectedStudent(itemValue);
+    const selectedIndex = studentNames.indexOf(itemValue);
+    const selectedStudentId = studentIds[selectedIndex];
+    onSelect(selectedStudentId); // Call the onSelect callback with studentId
+  };
 
   return (
     <FormControl mt="3" mb="3">
@@ -20,7 +29,7 @@ const DropDown = ({ label, studentNames }) => {
           endIcon: <CheckIcon size="3" />,
         }}
         mt={1}
-        onValueChange={(itemValue) => setSelectedStudent(itemValue)}
+        onValueChange={handleSelect}
         borderRadius="full"
         isReadOnly={true}
         style={[styles.start, styles.endTypo]}
@@ -56,4 +65,5 @@ const styles = StyleSheet.create({
     fontSize: FontSize.bodyBodyXS_size,
   },
 });
+
 export default DropDown;

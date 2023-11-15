@@ -1,14 +1,38 @@
-import * as React from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { Text, StyleSheet, View, Pressable } from "react-native";
 import { Image } from "expo-image";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { Color, FontSize, FontFamily, Border, Padding } from "../GlobalStyles";
 import { ScrollView, NativeBaseProvider } from "native-base";
 import DropDown from "../components/DropDown";
+import ReportEntry from "../components/ReportEntry";
 
 const ListOfReport = () => {
   const navigation = useNavigation();
+  const route = useRoute();
+  const {
+    postData,
+    selectedStudentId,
+    selectedStartDate,
+    selectedEndDate,
+    selectedStudentName,
+    apiResponse,
+  } = route.params;
 
+  const [startDate, setStartDate] = useState(selectedStartDate);
+  const [endDate, setEndDate] = useState(selectedEndDate);
+
+  // You can now use postData and other parameters in your component
+  console.log("ini teh", selectedStudentName);
+
+  const reportData = apiResponse.map((data) => ({
+    id: data?.id || "",
+    date: data?.date ? new Date(data.date) : null,
+    subject: data?.subject?.title || "",
+    topic: data?.topic || "",
+    comment: data?.comment || "",
+    score: data?.score || "",
+  }));
   return (
     <NativeBaseProvider>
       <View style={[styles.listOfReport, styles.iconLayout]}>
@@ -44,12 +68,12 @@ const ListOfReport = () => {
             <View style={styles.groupParent}>
               <View style={styles.selectSubjectParent}>
                 <Text style={[styles.selectSubject, styles.selectTypo]}>
-                  Select Subject
+                  Student
                 </Text>
                 <View style={[styles.inputWrapper, styles.inputLayout]}>
                   <View style={[styles.input, styles.inputLayout]}>
                     <View style={[styles.inputChild, styles.inputPosition]} />
-                    <Text style={[styles.all, styles.allTypo]}>All</Text>
+                    <Text style={[styles.all, styles.allTypo]}></Text>
                   </View>
                 </View>
               </View>
@@ -59,120 +83,21 @@ const ListOfReport = () => {
                     style={[styles.inputContainer, styles.inputGroupLayout]}
                   >
                     <View style={[styles.inputItem, styles.inputGroupLayout]} />
-                    <Text style={[styles.all1, styles.allTypo]}>All</Text>
+                    <Text style={[styles.all1, styles.allTypo]}>hei</Text>
                   </View>
                 </View>
               </View>
               <Text style={[styles.selectRangeDate, styles.selectTypo]}>
                 Select Range Date
               </Text>
-              <ScrollView contentContainerStyle={styles.scrollContainer}>
-                <View style={[styles.frame, styles.frameShadowBox]}>
-                  <Pressable
-                    style={styles.cardShadowBox}
-                    onPress={() => navigation.navigate("DetailReport")}
-                  />
-                  <Text style={[styles.studentCanExplain, styles.oct2023Typo]}>
-                    Student can explain the different of them
-                  </Text>
-                  <Text style={[styles.oct2023, styles.oct2023Typo]}>
-                    03 Oct 2023
-                  </Text>
-                  <Text style={styles.mathematic}>Mathematic</Text>
-                  <Text style={[styles.linearAndNonLinear, styles.selectTypo]}>
-                    Linear and Non-Linear Function
-                  </Text>
-                  <View style={styles.parent}>
-                    <Text style={[styles.text, styles.textTypo]}>90</Text>
-                    <Text
-                      style={[styles.score, styles.selectTypo]}
-                    >{`Score `}</Text>
-                  </View>
-                  <Text style={[styles.text1, styles.textTypo]}>{`>`}</Text>
-                </View>
-                <View style={[styles.frame1, styles.frameShadowBox]}>
-                  <View style={styles.cardShadowBox} />
-                  <Text style={[styles.studentCanExplain, styles.oct2023Typo]}>
-                    Student can explain the different of them
-                  </Text>
-                  <Text style={[styles.oct2023, styles.oct2023Typo]}>
-                    03 Oct 2023
-                  </Text>
-                  <Text style={styles.mathematic}>Mathematic</Text>
-                  <Text style={[styles.linearAndNonLinear, styles.selectTypo]}>
-                    Linear and Non-Linear Function
-                  </Text>
-                  <View style={styles.parent}>
-                    <Text style={[styles.text, styles.textTypo]}>90</Text>
-                    <Text
-                      style={[styles.score, styles.selectTypo]}
-                    >{`Score `}</Text>
-                  </View>
-                  <Text style={[styles.text1, styles.textTypo]}>{`>`}</Text>
-                </View>
-                <View style={[styles.frame2, styles.frameShadowBox]}>
-                  <View style={styles.cardShadowBox} />
-                  <Text style={[styles.studentCanExplain, styles.oct2023Typo]}>
-                    Student can explain the different of them
-                  </Text>
-                  <Text style={[styles.oct2023, styles.oct2023Typo]}>
-                    03 Oct 2023
-                  </Text>
-                  <Text style={styles.mathematic}>Mathematic</Text>
-                  <Text style={[styles.linearAndNonLinear, styles.selectTypo]}>
-                    Linear and Non-Linear Function
-                  </Text>
-                  <View style={styles.parent}>
-                    <Text style={[styles.text, styles.textTypo]}>90</Text>
-                    <Text
-                      style={[styles.score, styles.selectTypo]}
-                    >{`Score `}</Text>
-                  </View>
-                  <Text style={[styles.text1, styles.textTypo]}>{`>`}</Text>
-                </View>
-                <View style={[styles.frame3, styles.frameShadowBox]}>
-                  <View style={styles.cardShadowBox} />
-                  <Text style={[styles.studentCanExplain, styles.oct2023Typo]}>
-                    Student can explain the different of them
-                  </Text>
-                  <Text style={[styles.oct2023, styles.oct2023Typo]}>
-                    03 Oct 2023
-                  </Text>
-                  <Text style={styles.mathematic}>Mathematic</Text>
-                  <Text style={[styles.linearAndNonLinear, styles.selectTypo]}>
-                    Linear and Non-Linear Function
-                  </Text>
-                  <View style={styles.parent}>
-                    <Text style={[styles.text, styles.textTypo]}>90</Text>
-                    <Text
-                      style={[styles.score, styles.selectTypo]}
-                    >{`Score `}</Text>
-                  </View>
-                  <Text style={[styles.text1, styles.textTypo]}>{`>`}</Text>
-                </View>
-                <View style={[styles.frame4, styles.frameShadowBox]}>
-                  <View style={styles.cardShadowBox} />
-                  <Text style={[styles.studentCanExplain, styles.oct2023Typo]}>
-                    Student can explain the different of them
-                  </Text>
-                  <Text style={[styles.oct2023, styles.oct2023Typo]}>
-                    03 Oct 2023
-                  </Text>
-                  <Text style={styles.mathematic}>Mathematic</Text>
-                  <Text style={[styles.linearAndNonLinear, styles.selectTypo]}>
-                    Linear and Non-Linear Function
-                  </Text>
-                  <View style={styles.parent}>
-                    <Text style={[styles.text, styles.textTypo]}>90</Text>
-                    <Text
-                      style={[styles.score, styles.selectTypo]}
-                    >{`Score `}</Text>
-                  </View>
-                  <Text style={[styles.text1, styles.textTypo]}>{`>`}</Text>
-                </View>
-              </ScrollView>
               <View style={[styles.groupContainer, styles.inputGroupLayout]}>
-                <View style={[styles.groupParent1, styles.inputParentLayout]}>
+                <View
+                  style={[
+                    styles.groupParent1,
+                    styles.inputParentLayout,
+                    { top: "5%" },
+                  ]}
+                >
                   <View style={[styles.groupParent1, styles.inputParentLayout]}>
                     <View
                       style={[styles.groupParent1, styles.inputParentLayout]}
@@ -184,22 +109,54 @@ const ListOfReport = () => {
                   </View>
                   <Text style={[styles.start, styles.endTypo]}>Start</Text>
                   <Text style={[styles.oct20235, styles.octTypo]}>
-                    03 Oct 2023
+                    {startDate
+                      ? `${startDate.getDate()} ${startDate.toLocaleString(
+                          "default",
+                          { month: "short" }
+                        )} ${startDate.getFullYear()}`
+                      : ""}
                   </Text>
                 </View>
-                <View style={[styles.inputParent, styles.inputParentLayout]}>
+                <View
+                  style={[
+                    styles.inputParent,
+                    styles.inputParentLayout,
+                    { top: "5%" },
+                  ]}
+                >
                   <View style={[styles.groupParent1, styles.inputParentLayout]}>
                     <View
                       style={[styles.inputInner, styles.inputParentLayout]}
                     />
                   </View>
                   <Text style={[styles.oct20236, styles.octTypo]}>
-                    04 Oct 2023
+                    {endDate
+                      ? `${endDate.getDate()} ${endDate.toLocaleString(
+                          "default",
+                          { month: "short" }
+                        )} ${endDate.getFullYear()}`
+                      : ""}
                   </Text>
                   <Text style={[styles.end, styles.endTypo]}>End</Text>
                 </View>
               </View>
             </View>
+            <ScrollView
+              contentContainerStyle={styles.scrollContainer}
+              style={{ marginTop: "70%" }}
+            >
+              {reportData.map((report) => (
+                <ReportEntry
+                  key={report.id}
+                  date={report.date}
+                  subject={report.subject}
+                  topic={report.topic}
+                  comment={report.comment}
+                  score={report.score}
+                  onPress={() => navigation.navigate("DetailReport")}
+                />
+              ))}
+            </ScrollView>
           </View>
         </View>
       </View>

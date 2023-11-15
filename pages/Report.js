@@ -1,75 +1,62 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { NativeBaseProvider } from "native-base";
-import {
-  Text,
-  StyleSheet,
-  View,
-  Pressable,
-  TouchableOpacity,
-  Modal,
-  FormControl,
-} from "react-native";
+import { Text, StyleSheet, View, Pressable } from "react-native";
 import { Image } from "expo-image";
 import { useNavigation } from "@react-navigation/native";
-// import Calender from "./Calender";
-import {
-  Color,
-  FontFamily,
-  FontSize,
-  Border,
-  Padding,
-  Label,
-} from "../GlobalStyles";
-import {
-  storeItem,
-  retrieveItem,
-  deleteItem,
-  getAllKeys,
-} from "../database/database.js";
+import { Color, FontFamily, FontSize, Border, Padding } from "../GlobalStyles";
+import { retrieveItem } from "../database/database.js";
 import DropDown from "../components/DropDown";
-import DatePickerComponent from "../components/Calender";
+import DatePickerComponent from "../components/DatePicker";
+import axios from "axios";
 
 const Report = () => {
   const navigation = useNavigation();
-  const [groupContainer5Visible, setGroupContainer5Visible] = useState(false);
-  const [groupContainer6Visible, setGroupContainer6Visible] = useState(false);
-  const [studentName, setStudentName] = React.useState("");
-  const [studentId, setStudentId] = React.useState("");
-  const [selectedChild, setSelectedChild] = React.useState("");
+  const [studentName, setStudentName] = useState("");
+  const [selectedStartDate, setSelectedStartDate] = useState(null);
+  const [selectedEndDate, setSelectedEndDate] = useState(null);
+  const [selectedStudentId, setSelectedStudentId] = useState(null);
+  const [studentId, setStudentId] = useState("");
+  const [apiResponse, setApiResponse] = useState(null);
+  const [selectedStudentName, setSelectedStudentName] = useState("");
 
-  console.log(studentName);
+  const handleSelectStudent = (studentId) => {
+    setSelectedStudentId(studentId);
+  };
 
-  const openGroupContainer5 = useCallback(() => {
-    setGroupContainer5Visible(true);
-  }, []);
+  const handleStartDateChange = (selected) => {
+    setSelectedStartDate(selected);
+  };
 
-  const closeGroupContainer5 = useCallback(() => {
-    setGroupContainer5Visible(false);
-  }, []);
+  const handleNavigateSubmit = () => {
+    // Assuming you're using React Navigation
+    const postData = {
+      student_id: selectedStudentId,
+      start_date: selectedStartDate.toISOString(),
+      end_date: selectedEndDate.toISOString(),
+    };
+    navigation.navigate("ListOfReport", {
+      postData,
+      selectedStudentId,
+      selectedStartDate,
+      selectedEndDate,
+      selectedStudentName,
+      apiResponse,
+    });
+  };
 
-  const openGroupContainer6 = useCallback(() => {
-    setGroupContainer6Visible(true);
-  }, []);
-
-  const closeGroupContainer6 = useCallback(() => {
-    setGroupContainer6Visible(false);
-  }, []);
+  const handleEndDateChange = (selected) => {
+    setSelectedEndDate(selected);
+  };
 
   useEffect(() => {
-    // This code will run after the component renders
     retrieveItem("childData")
       .then((data) => {
-        if (data) {
-          // Use the retrieved data
+        if (data && Array.isArray(data)) {
+          const student_names = data.map((item) => item.name);
           const student_ids = data.map((item) => item.id);
-          const student_name = data.map((item) => item.name);
-
+          setStudentName(student_names);
           setStudentId(student_ids);
-          setStudentName(student_name);
-          // Update your component state or data source with the new data
-          // For example, if you're using state in a functional component:
         } else {
-          // Handle the case when no data is found
           console.log("No data found in AsyncStorage.");
         }
       })
@@ -78,74 +65,100 @@ const Report = () => {
       });
   }, []);
 
+  const handlePressSubmit = () => {
+    // Check if all required data is available
+    if (selectedStudentId && selectedStartDate && selectedEndDate) {
+      // Create the JSON object
+      const postData = {
+        student_id: selectedStudentId,
+        start_date: selectedStartDate.toISOString(),
+        end_date: selectedEndDate.toISOString(),
+      };
+
+      // Send the POST request using Axios
+      axios
+        .post(
+          "https://www.balichildrenshouse.com/myCH/api/student/scores",
+          postData,
+          {}
+        )
+        .then((response) => {
+          console.log("Success:", response.data);
+          setApiResponse(response.data);
+          handleNavigateSubmit();
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    } else {
+      console.log("Please select all required data.");
+    }
+  };
+
+  console.log("API Response:", apiResponse);
+
   return (
     <NativeBaseProvider>
       <View style={styles.report}>
         <View style={styles.frameParent}>
-          <View style={[styles.frameWrapper, styles.frameWrapperPosition]}>
-            <View style={styles.weeklyReportWrapper}>
-              <Text style={styles.weeklyReport}>Score Board</Text>
-            </View>
+          <View style={styles.weeklyReportWrapper}>
+            <Text style={styles.weeklyReport}>Score Board</Text>
           </View>
           <Image
-            style={[styles.ictwotoneArrowBackIcon, styles.frameWrapperPosition]}
+            style={styles.ictwotoneArrowBackIcon}
             contentFit="cover"
             source={require("../assets/ictwotonearrowback.png")}
           />
           <View style={styles.btnprimaryParent}>
-            <View style={[styles.btnprimary, styles.btnprimaryLayout]}>
+            <View style={styles.btnprimary}>
               <Pressable
-                style={[styles.btnprimaryChild, styles.btnprimaryLayout]}
+                style={styles.btnprimaryChild}
                 onPress={() => navigation.navigate("ListOfReport")}
               />
-              <Text style={styles.submit}>Submit</Text>
+              <Text style={styles.submit} onPress={handlePressSubmit}>
+                Submit
+              </Text>
             </View>
-            <Text style={[styles.selectSubject, styles.selectTypo]}>
-              Select Child
-            </Text>
-            <DropDown label="Select Child" studentNames={studentName} />
-            <Text style={[styles.selectRangeDate, styles.selectTypo]}>
-              Select Range Date
-            </Text>
-            <View style={[styles.groupParent, styles.inputGroupLayout]}>
+            <Text style={styles.selectSubject}>Select Child</Text>
+            <DropDown
+              label="Select Child"
+              studentNames={studentName?.length ? studentName : []}
+              studentIds={studentId?.length ? studentId : []}
+              onSelect={handleSelectStudent} // Pass the callback function
+            />
+            <Text style={styles.selectRangeDate}>Select Range Date</Text>
+            <View style={styles.container}>
+              <DatePickerComponent
+                selectedDate={selectedStartDate}
+                onDateChange={handleStartDateChange}
+                label="Start Date"
+              />
+
+              <DatePickerComponent
+                selectedDate={selectedEndDate}
+                onDateChange={handleEndDateChange}
+                label="End Date"
+              />
+            </View>
+            <View style={[styles.btnprimary, styles.btnprimaryLayout]}>
               <Pressable
-                style={[styles.groupContainer, styles.inputLayout]}
-                onPress={openGroupContainer5}
+                style={({ pressed }) => [
+                  {
+                    backgroundColor: pressed
+                      ? Color.colorTomato_300
+                      : Color.colorTomato_200,
+                  },
+                  styles.btnprimaryChild,
+                  styles.btnprimaryLayout,
+                ]}
+                onPress={handlePressSubmit}
               >
-                <DatePickerComponent />
-                <Text style={[styles.start, styles.endTypo]}>Start</Text>
-              </Pressable>
-              <Pressable
-                style={[styles.inputParent, styles.inputLayout]}
-                onPress={openGroupContainer6}
-              >
-                <DatePickerComponent />
-                <Text style={[styles.end, styles.endTypo]}>End</Text>
+                <Text style={styles.submit}>Submit</Text>
               </Pressable>
             </View>
           </View>
         </View>
       </View>
-
-      {/* <Modal animationType="fade" transparent visible={groupContainer5Visible}>
-        <View style={styles.groupContainer5Overlay}>
-          <Pressable
-            style={styles.groupContainer5Bg}
-            onPress={closeGroupContainer5}
-          />
-          <Calender onClose={closeGroupContainer5} />
-        </View>
-      </Modal>
-
-      <Modal animationType="fade" transparent visible={groupContainer6Visible}>
-        <View style={styles.groupContainer6Overlay}>
-          <Pressable
-            style={styles.groupContainer6Bg}
-            onPress={closeGroupContainer6}
-          />
-          <Calender onClose={closeGroupContainer6} />
-        </View>
-      </Modal> */}
     </NativeBaseProvider>
   );
 };
@@ -264,7 +277,7 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
   btnprimary: {
-    top: 208,
+    top: 300,
   },
   selectSubject: {
     fontSize: FontSize.bodyBodyXS_size,

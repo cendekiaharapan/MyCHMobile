@@ -1,45 +1,33 @@
+// DatePickerComponent.js
 import React, { useState } from "react";
 import { TouchableOpacity, Text, StyleSheet, Platform } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { FontFamily, FontSize } from "../GlobalStyles";
+import { FontFamily, FontSize, Color } from "../GlobalStyles";
 
-const DatePickerComponent = () => {
-  const [selectedDate, setSelectedDate] = useState(null); // Initialize to null
+const DatePickerComponent = ({ onDateChange, selectedDate, label }) => {
   const [showDatePicker, setShowDatePicker] = useState(false);
 
-  // Function to handle date change
   const handleDateChange = (event, selected) => {
     if (selected !== undefined) {
-      setSelectedDate(selected);
-      setShowDatePicker(Platform.OS === "ios"); // Close the picker on iOS
+      setShowDatePicker(Platform.OS === "ios");
+
+      if (typeof onDateChange === "function") {
+        onDateChange(selected);
+      }
     }
   };
 
-  // Function to show/hide the date picker
   const toggleDatePicker = () => {
     setShowDatePicker((prev) => !prev);
   };
 
-  const months = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
-
   const formattedDate = selectedDate
-    ? `${selectedDate.getDate()} ${
-        months[selectedDate.getMonth()]
-      } ${selectedDate.getFullYear()}`
-    : ""; // Use "Select Date" if selectedDate is null
+    ? new Intl.DateTimeFormat("en-US", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+      }).format(selectedDate)
+    : `Select ${label}`;
 
   return (
     <>
@@ -49,7 +37,7 @@ const DatePickerComponent = () => {
 
       {showDatePicker && (
         <DateTimePicker
-          value={selectedDate || new Date()} // Use selectedDate or current date
+          value={selectedDate || new Date()}
           mode="date"
           display="default"
           onChange={handleDateChange}
@@ -70,9 +58,9 @@ const styles = StyleSheet.create({
   },
   dateText: {
     fontFamily: FontFamily.poppinsLight,
-    fontWeight: "100",
+    fontWeight: "300",
     color: "#292a2a",
-    fontSize: FontSize.textRegularXs5_size,
+    fontSize: FontSize.textRegularXs12_size,
   },
 });
 
