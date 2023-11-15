@@ -3,20 +3,28 @@ import { Text, StyleSheet, View } from "react-native";
 import { Image } from "expo-image";
 import { Color, FontFamily, FontSize, Padding, Border } from "../GlobalStyles";
 
-const CHDHistoryCard = ({ ChdCardHistoryType }) => {
-  const isChdIn = ChdCardHistoryType === 1;
+const CHDHistoryCard = ({ type, date, description, amount }) => {
+  const isChdIn = type === 1;
+
+  const formattedDate = new Date(date).toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+
+  const parsedAmount = parseFloat(amount);
 
   return (
     <View style={isChdIn ? styles.cardChdIn : styles.cardChdOut}>
       <View style={styles.dateHistory}>
-        <Text style={styles.textDateHistory}>Text_date_history</Text>
+        <Text style={styles.textDateHistory}>{formattedDate}</Text>
       </View>
       <View style={styles.history}>
-        <Text style={[styles.historyDescription, styles.historyTypo]}>
-          {isChdIn ? "Work as Policeman" : "Bought item(s) at the canteen"}
+        <Text style={[styles.historyDescription, styles.historyTypo]} numberOfLines={2}>
+          {description}
         </Text>
         <Text style={[styles.historyValue, styles.historyTypo]}>
-          {isChdIn ? "+20 CHD" : "-20 CHD"}
+        {parsedAmount}
         </Text>
         <Image
           style={isChdIn ? styles.chInIcon : styles.foodIcon}
@@ -31,8 +39,6 @@ const CHDHistoryCard = ({ ChdCardHistoryType }) => {
     </View>
   );
 };
-
-// The rest of the styling and export remain the same
 
 
 const styles = StyleSheet.create({
@@ -81,9 +87,11 @@ const styles = StyleSheet.create({
   },
   historyDescription: {
     top: 16,
+    width: 250, 
+    marginBottom: 5, 
   },
   historyValue: {
-    top: 39,
+    top: 45,
   },
   chInIcon: {
     top: 15,
