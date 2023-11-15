@@ -44,6 +44,7 @@ const ChildPermissionViewHisto = ({ route, navigation }) => {
   const studentGet = route?.params?.studentGet;
 
   const [student, setStudent] = useState("");
+  const [studentName, setStudentName] = useState("");
   const [type, setType] = useState("");
   const [fromDateTime, setFromDateTime] = useState(null);
   const [toDateTime, setToDateTime] = useState(null);
@@ -81,6 +82,7 @@ const ChildPermissionViewHisto = ({ route, navigation }) => {
   useEffect(() => {
     console.log("inside use effect : ", leave.id);
     if (leave) {
+      setStudentName(name);
       setStudent(leave.student_id);
       setType(leave.apply_type);
       setFromDateTime(
@@ -127,6 +129,10 @@ const ChildPermissionViewHisto = ({ route, navigation }) => {
     setStudent(selectedService);
   };
 
+  const handleStudentNameChange = (name) => {
+    setStudentName(name);
+  };
+
   const handleNoteChange = (note) => {
     setNote(note);
   };
@@ -134,9 +140,13 @@ const ChildPermissionViewHisto = ({ route, navigation }) => {
   const handleUpdateData = () => {
     setIsLoading(true);
 
+    const selectedChildData = studentGet.find(
+      (child) => child.name === studentName
+    );
+
     const data = {
       id: leave.id,
-      student_id: student,
+      student_id: selectedChildData.id,
       apply_type: type,
       from_timestamp: fromDateTime,
       to_timestamp: toDateTime,
@@ -235,13 +245,19 @@ const ChildPermissionViewHisto = ({ route, navigation }) => {
                 <Text style={styles.permissionDetail}>Permission Detail</Text>
               </View>
               <View style={[styles.bodycontent, styles.bodycontentSpaceBlock]}>
+                {console.log(
+                  "inside dropdown student get ",
+                  studentGet,
+                  leave,
+                  studentName
+                )}
                 <DropDown
                   label="Child"
                   leave={leave}
-                  studentGet={studentGet}
-                  childId={childId}
-                  name={name}
-                  onServiceChange={handleServiceChange}
+                  data={studentGet}
+                  selected={studentName}
+                  name={studentName}
+                  setSelected={handleStudentNameChange}
                 />
                 <FormControl mb="3">
                   <FormControl.Label>Type Of Permission</FormControl.Label>

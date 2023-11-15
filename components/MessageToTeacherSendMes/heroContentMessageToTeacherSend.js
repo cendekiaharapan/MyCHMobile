@@ -15,11 +15,6 @@ const HeroContent = () => {
     <View style={styles.herocontent}>
       <View style={styles.rectangleuiParent}>
         <View style={styles.profileteacher}>
-          <Image
-            style={styles.profilepictIcon}
-            contentFit="cover"
-            source={require("../../assets/profilepict.png")}
-          />
           <View style={styles.buSekarParent}>
             <Text style={[styles.buSekar, styles.buSekarLayout]}>Bu Sekar</Text>
             <Text style={[styles.mathTeacher, styles.buSekarLayout]}>
