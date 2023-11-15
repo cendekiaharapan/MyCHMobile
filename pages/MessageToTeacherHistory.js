@@ -194,6 +194,8 @@ const MessageToTeacherHistory = () => {
                       return (
                         <MessageHistory
                           key={index}
+                          message_id={message.id}
+                          message_file={message.file}
                           note={message.message}
                           teacher={
                             teacherNames[message.teacher_id]
