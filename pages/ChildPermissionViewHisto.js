@@ -1,44 +1,193 @@
-import * as React from "react";
+import React, { useState, useEffect } from "react";
 import { Image } from "expo-image";
 import {
   StyleSheet,
   Text,
   View,
-  ScrollView,
   TouchableOpacity,
+  TextInput,
+  SafeAreaView,
+  ScrollView,
 } from "react-native";
+import { Border, Color, FontFamily, FontSize, Padding } from "../GlobalStyles";
 import {
+  Center,
+  NativeBaseProvider,
+  FormControlLabel,
+  FormControlLabelText,
+  TextArea,
+  TextareaInput,
+  FormControlHelper,
+  FormControlHelperText,
+  Button,
+  Select,
   FormControl,
   Input,
-  FormControlLabel,
-  NativeBaseProvider,
-  Select,
   CheckIcon,
-  TextArea,
+  useToast,
 } from "native-base";
-import { Padding, Color, Border, FontSize, FontFamily } from "../GlobalStyles";
+import { useNavigation } from "@react-navigation/native";
+import DateTimePicker from "@react-native-community/datetimepicker";
 import DatePickerComponent from "../components/DatePicker";
 import DocumentPick from "../components/DocumentPick";
-import { useNavigation } from "@react-navigation/native";
 import DropDown from "../components/DropDown";
-const ChildPermissionViewHisto = () => {
-  const [service, setService] = React.useState("");
-  const navigation = useNavigation();
+import axios from "axios";
+import { LoadingModal } from "react-native-loading-modal";
+import Toast from 'react-native-toast-message';
+
+const ChildPermissionViewHisto = ({ route, navigation }) => {
+  const leave = route?.params?.leave;
+  const imageUri = route?.params?.imageUri;
+  const imageUrl = route?.params?.imageUrl;
+  const name = route?.params?.name;
+  const childId = route?.params?.childId;
+  const studentGet = route?.params?.studentGet;
+
+  const [student, setStudent] = useState("");
+  const [type, setType] = useState("");
+  const [fromDateTime, setFromDateTime] = useState(null);
+  const [toDateTime, setToDateTime] = useState(null);
+  const [note, setNote] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const fullImageUrl = `${imageUrl}${imageUri}`;
+  const toast = useToast();
+
+  const showToastEditSuccess = () => {
+    Toast.show({
+      type: 'success',
+      text1: 'Update Successful',
+    });
+  }
+  const showToastEditError = () => {
+    Toast.show({
+      type: 'error',
+      text1: 'Update Failed',
+    });
+  }
+  const showToastDeleteSuccess = () => {
+    Toast.show({
+      type: 'success',
+      text1: 'Delete Successful',
+    });
+  }
+  const showToastDeleteError = () => {
+    Toast.show({
+      type: 'error',
+      text1: 'Delete Failed',
+    });
+  }
+
+  useEffect(() => {
+    console.log("inside use effect : ", leave.id);
+    if (leave) {
+      setStudent(leave.student_id);
+      setType(leave.apply_type);
+      setFromDateTime(formatDateTime(leave.year, leave.month, leave.day, leave.from_time));
+      setToDateTime(formatDateTime(leave.to_year, leave.to_month, leave.to_day, leave.to_time));
+      setNote(leave.note);
+    }
+  }, [leave]);
+
+  const formatDateTime = (year, month, day, time) => {
+    if (!year || !month || !day || !time) {
+      return null;
+    }
+
+    const [hour, minute] = time.split(":");
+    const date = new Date(year, month - 1, day, hour, minute);
+
+    const yyyy = date.getFullYear();
+    const mm = String(date.getMonth() + 1).padStart(2, "0");
+    const dd = String(date.getDate()).padStart(2, "0");
+    const hh = String(date.getHours()).padStart(2, "0");
+    const min = String(date.getMinutes()).padStart(2, "0");
+
+    return `${yyyy}-${mm}-${dd} ${hh}:${min}`;
+  };
+
+  const handleDateTimeChange = (dateTime, field) => {
+    if (field === "from") {
+      setFromDateTime(dateTime);
+    } else if (field === "to") {
+      setToDateTime(dateTime);
+    }
+  };
+
+  const handleServiceChange = (selectedService) => {
+    setStudent(selectedService);
+  };
+
+  const handleNoteChange = (note) => {
+    setNote(note);
+  };
+
+  const handleUpdateData = () => {
+    setIsLoading(true);
+
+    const data = {
+      id: leave.id,
+      student_id: student,
+      apply_type: type,
+      from_timestamp: fromDateTime,
+      to_timestamp: toDateTime,
+      note: note,
+    };
+
+    axios
+      .patch("https://www.balichildrenshouse.com/myCHStaging/api/edit-leave", data)
+      .then((response) => {
+        console.log("API response:", response.data);
+        navigation.goBack();
+
+        showToastEditSuccess();
+      })
+      .catch((error) => {
+        console.error("API request error:", error);
+
+        showToastEditError();
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
+
+  const handleDeleteData = () => {
+    setIsLoading(true);
+    console.log("Inside Handle Delete : ", leave.id);
+    const idToDelete = leave.id;
+
+    axios
+      .delete(`https://www.balichildrenshouse.com/myCHStaging/api/delete_excused/${idToDelete}`)
+      .then((response) => {
+        console.log("API response:", response.data);
+        navigation.goBack();
+
+        showToastDeleteSuccess();
+      })
+      .catch((error) => {
+        console.error("API request error:", error);
+
+        showToastDeleteError();
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
+
   return (
     <NativeBaseProvider>
       <View style={[styles.childPermissionViewHisto, styles.lineIconLayout]}>
         <View style={[styles.content, styles.contentFlexBox]}>
           <View style={styles.backbuttonParent}>
-            <TouchableOpacity
-              onPress={() => navigation.navigate("ChildPermissionHistorys")}
-            >
+            <TouchableOpacity onPress={() => navigation.navigate("ChildPermissionHistorys")}>
               <Image
                 style={styles.iconLayout}
                 contentFit="cover"
                 source={require("../assets/vector5.png")}
               />
             </TouchableOpacity>
-            <Text style={styles.rufusStewart}>Rufus Stewart</Text>
+            <Text style={styles.rufusStewart}>{name}</Text>
           </View>
 
           <View style={styles.maincontent}>
@@ -47,96 +196,87 @@ const ChildPermissionViewHisto = () => {
                 <Image
                   style={styles.profilepictureIcon}
                   contentFit="cover"
-                  source={require("../assets/profilepicture.png")}
+                  source={
+                    imageUri
+                      ? { uri: fullImageUrl }
+                      : require("../assets/profilepic.png")
+                  }
                 />
-                <Text
-                  style={[styles.januari20231120, styles.lineIconSpaceBlock]}
-                >
-                  25 Januari 2023, 11:20 AM
-                </Text>
+                <Text style={[styles.januari20231120, styles.lineIconSpaceBlock]}>{leave.created_at}</Text>
                 <Image
                   style={[styles.lineIcon, styles.lineIconSpaceBlock]}
                   contentFit="cover"
                   source={require("../assets/line.png")}
                 />
               </View>
-              <View
-                style={[
-                  styles.permissionDetailWrapper,
-                  styles.bodycontentSpaceBlock,
-                ]}
-              >
+              <View style={[styles.permissionDetailWrapper, styles.bodycontentSpaceBlock]}>
                 <Text style={styles.permissionDetail}>Permission Detail</Text>
               </View>
               <View style={[styles.bodycontent, styles.bodycontentSpaceBlock]}>
-                {/* Form 1 ( Child ) */}
-                <DropDown label="Child" />
-                {/* End Form 1 ( Child ) */}
-                {/* Form 2 ( Type Of Permission ) */}
+                <DropDown
+                  label="Child"
+                  leave={leave}
+                  studentGet={studentGet}
+                  childId={childId}
+                  name={name}
+                  onServiceChange={handleServiceChange}
+                />
                 <FormControl mb="3">
                   <FormControl.Label>Type Of Permission</FormControl.Label>
                   <Select
-                    selectedValue={service}
+                    selectedValue={type}
                     height="10"
                     minWidth="200"
-                    accessibilityLabel="Choose Service"
+                    accessibilityLabel="Choose Permission"
                     placeholder="Choose Permission"
                     _selectedItem={{
                       bg: "teal.600",
                       endIcon: <CheckIcon size="3" />,
                     }}
                     mt={1}
-                    onValueChange={(itemValue) => setService(itemValue)}
+                    onValueChange={(itemValue) => setType(itemValue)}
                     borderRadius="full"
                     isReadOnly={true}
                   >
                     <Select.Item label="Excused" value="excused" />
-                    <Select.Item label="Sick Leave" value="sick" />
+                    <Select.Item label="Sick Leave" value="sick_leave" />
                   </Select>
                 </FormControl>
-                {/* End Form 2 ( Type Of Permission ) */}
-
-                {/* Form 3 ( Date Picker ) */}
                 <FormControl mb="3">
                   <FormControl.Label>From</FormControl.Label>
-                  <DatePickerComponent />
+                  <DatePickerComponent
+                    onDateChange={(dateTime) => handleDateTimeChange(dateTime, "from")}
+                    dateTime={formatDateTime(leave.year, leave.month, leave.day, leave.from_time)}
+                  />
                 </FormControl>
-                {/* End Form 3 ( Date Picker ) */}
-                {/* Form 4 ( Date Picker ) */}
                 <FormControl mb="3">
                   <FormControl.Label>To</FormControl.Label>
-                  <DatePickerComponent />
+                  <DatePickerComponent
+                    onDateChange={(dateTime) => handleDateTimeChange(dateTime, "to")}
+                    dateTime={formatDateTime(leave.to_year, leave.to_month, leave.to_day, leave.to_time)}
+                  />
                 </FormControl>
-                {/* End Form 4 ( Date Picker ) */}
-                {/* Form 5 ( Document Picker ) */}
-                <FormControl mb="3">
-                  <FormControl.Label>Letter (Optional)</FormControl.Label>
-                  <DocumentPick />
-                </FormControl>
-                {/* End Form 5 ( Document Picker ) */}
-                {/* Form 6 ( Commment Box ) */}
                 <FormControl mb="3">
                   <FormControl.Label>Note</FormControl.Label>
-                  <TextArea h={40} placeholder="Leave a note" />
+                  <TextArea h={40} placeholder="Leave a note" value={note} onChangeText={handleNoteChange} />
                 </FormControl>
-                {/* End Form 6 ( Comment Box ) */}
               </View>
             </ScrollView>
           </View>
           <View style={styles.btnsaveParent}>
-            <TouchableOpacity style={[styles.btnsave, styles.btnsaveFlexBox]}>
+            <Button onPress={handleUpdateData} borderRadius="full" style={[styles.btnsave, styles.btnsaveFlexBox]}>
               <View>
-                <Text style={[styles.saveChanges, styles.deleteTypo]}>
-                  Save Changes
-                </Text>
+                <Text style={{ color: Color.colorWhite }}>Save</Text>
               </View>
-            </TouchableOpacity>
-            <TouchableOpacity style={[styles.btndelete, styles.btnsaveFlexBox]}>
-              <View>
-                <Text style={[styles.delete, styles.deleteTypo]}>Delete</Text>
-              </View>
-            </TouchableOpacity>
+            </Button>
+            <TouchableOpacity onPress={handleDeleteData} style={[styles.btndelete, styles.btnsaveFlexBox]}>
+            <View>
+              <Text style={[styles.delete, styles.deleteTypo]}>Delete</Text>
+            </View>
+          </TouchableOpacity>
           </View>
+
+          <LoadingModal modalVisible={isLoading} color="red" />
         </View>
       </View>
     </NativeBaseProvider>
@@ -246,6 +386,10 @@ const styles = StyleSheet.create({
   profilepictureIcon: {
     width: 85,
     height: 87,
+    borderRadius: 60,
+    borderColor: "black",
+    borderWidth: 2,
+    borderStyle: "solid",
   },
   januari20231120: {
     color: Color.colorDarkgray_100,
@@ -453,6 +597,20 @@ const styles = StyleSheet.create({
     flex: 1,
     borderRadius: Border.br_xl,
     width: "100%",
+  },
+  datePicker: {
+    borderWidth: 1,
+    borderColor: "#a6a6a6",
+    borderRadius: 5,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    borderRadius: 99999,
+  },
+  dateText: {
+    fontFamily: FontFamily.poppinsLight,
+    fontWeight: "300",
+    color: "#292a2a",
+    fontSize: FontSize.textRegularXs12_size,
   },
 });
 

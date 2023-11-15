@@ -15,7 +15,7 @@ const MyDatePicker = () => {
       <DatePicker
         style={styles.datePicker}
         date={selectedDate}
-        mode="date"
+        mode="datetime"
         placeholder="Select date"
         format="YYYY-MM-DD"
         minDate="2023-01-01"

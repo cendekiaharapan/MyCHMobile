@@ -4,9 +4,23 @@ import { StyleSheet, Text, View } from "react-native";
 import { Button } from "native-base";
 import { Color, Padding, FontFamily, FontSize, Border } from "../GlobalStyles";
 import { useNavigation } from "@react-navigation/native";
-const PermissionHistory = ({ name, type, time, imageUri, imageUrl }) => {
+
+const PermissionHistory = ({ name, type, time, imageUri, imageUrl, leave, childId, studentGet}) => {
   const navigation = useNavigation();
+
+  const handleViewHisto = () => {
+    navigation.navigate("ChildPermissionViewHisto", {
+      studentGet: studentGet,
+      leave: leave,
+      imageUri: imageUri,
+      imageUrl: imageUrl,
+      name: name,
+      childId: childId
+    });
+  };
+
   const fullImageUrl = `${imageUrl}${imageUri}`;
+
   return (
     <View style={styles.history1}>
       <View style={styles.profilepicParent}>
@@ -28,10 +42,7 @@ const PermissionHistory = ({ name, type, time, imageUri, imageUrl }) => {
             <View style={[styles.line1, styles.lineBorder]} />
             <View style={styles.maret20231040AmParent}>
               <Text style={styles.maret20231040}>{time}</Text>
-              <Button
-                onPress={() => navigation.navigate("ChildPermissionViewHisto")}
-                style={[styles.btnprimary]}
-              >
+              <Button onPress={handleViewHisto} style={[styles.btnprimary]}>
                 <Text style={[styles.view, styles.viewTypo]}>View</Text>
               </Button>
             </View>

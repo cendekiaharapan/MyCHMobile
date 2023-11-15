@@ -13,7 +13,7 @@ import {
 import { Button, NativeBaseProvider } from "native-base";
 import { Color, Padding, FontFamily, FontSize, Border } from "../GlobalStyles";
 import PermissionHistory from "../components/PermissionHistory";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useFocusEffect } from "@react-navigation/native"; // Updated import
 import AddButton from "../components/AddButton";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -34,37 +34,37 @@ const ChildPermissionHistorys = () => {
   const [studentName, setStudentName] = useState(null);
   const [studentData, setStudentData] = useState(null);
   const [studentImg, setStudentImg] = useState(null);
+  const [studentGet, setStudentGet] = useState(null);
 
-  useEffect(() => {
-    console.log("use Effect actived!");
-    retrieveItem("childData")
-      .then((data) => {
-        if (data) {
-          // Use the retrieved data
-          console.log("inside fetchChildData (data) : ", data);
-          const student_ids = data.map((item) => item.id);
-          const student_name = data.map((item) => item.name);
-          const student_image = data.map((item) => item.image);
-          console.log("Student id in fetch child : ", student_ids);
-          console.log("Student Name in fetch child : ", student_name);
-          console.log("Student Image in fetch child : ", student_image);
+  const fetchChildData = async () => {
+    try {
+      const data = await retrieveItem("childData");
 
-          // Update your component state or data source with the new data
-          // For example, if you're using state in a functional component:
-          setChildId(student_ids);
-          setStudentName(student_name);
-          setStudentImg(student_image);
-          fetchMultipleStudentsData(student_ids);
-        } else {
-          // Handle the case when no data is found
-          console.log("No data found in SQLite.");
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching response data from SQLite:", error);
-      });
-  }, []);
+      if (data) {
+        const student_ids = data.map((item) => item.id);
+        const student_name = data.map((item) => item.name);
+        const student_image = data.map((item) => item.image);
 
+        setStudentGet(data);
+        setChildId(student_ids);
+        setStudentName(student_name);
+        setStudentImg(student_image);
+        fetchMultipleStudentsData(student_ids);
+      } else {
+        console.log("No data found in SQLite.");
+      }
+    } catch (error) {
+      console.error("Error fetching response data from SQLite:", error);
+    }
+  };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      console.log("use Focus Effect activated!");
+      fetchChildData();
+    }, [navigation])
+  );
+  
   const fetchChildDataFromSQLite = () => {
     return new Promise((resolve, reject) => {
       db.transaction((tx) => {
@@ -135,7 +135,7 @@ const ChildPermissionHistorys = () => {
     }
   };
 
-  const imageUrl = `https://www.balichildrenshouse.com/myCH/ev-assets/uploads/avatars/`;
+  const imageUrl = `https://www.balichildrenshouse.com/myCHStaging/ev-assets/uploads/avatars/`;
 
   return (
     <NativeBaseProvider>
@@ -184,6 +184,8 @@ const ChildPermissionHistorys = () => {
                           <PermissionHistory
                             imageUri={studentImg[studentId_index]}
                             imageUrl={imageUrl}
+                            studentGet={studentGet}
+                            childId={childId[studentId_index]}
                             name={studentName[studentId_index]}
                             type={
                               leave.apply_type === "sick_leave"
@@ -191,6 +193,7 @@ const ChildPermissionHistorys = () => {
                                 : "Excused"
                             }
                             time={leave.created_at}
+                            leave={leave}
                           />
                         );
                       })

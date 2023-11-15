@@ -1,59 +1,94 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { TouchableOpacity, Text, StyleSheet, Platform } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { FontFamily, FontSize } from "../GlobalStyles";
 
-const DatePickerComponent = ({ onDateChange }) => {
-  const [selectedDate, setSelectedDate] = useState(null); // Initialize to null
+const DatePickerComponent = ({ onDateChange, dateTime, leave }) => {
+  const [selectedDate, setSelectedDate] = useState(null);
   const [showDatePicker, setShowDatePicker] = useState(false);
 
-  // Function to handle date change
+  const [selectedTime, setSelectedTime] = useState(null);
+  const [showTimePicker, setShowTimePicker] = useState(false);
+
+  useEffect(() => {
+    if (dateTime) {
+      const [date, time] = dateTime.split(" ");
+      setSelectedDate(new Date(date));
+      setSelectedTime(time || null);
+    } else {
+      setSelectedDate(new Date());
+    }
+  }, [dateTime]);
+
   const handleDateChange = (event, selected) => {
     if (selected !== undefined) {
       setSelectedDate(selected);
-      setShowDatePicker(Platform.OS === "ios"); // Close the picker on iOS
-      onDateChange(selected);
+      setShowDatePicker(Platform.OS === "ios");
+
+      const formattedDate = `${selected.getFullYear()}-${String(selected.getMonth() + 1).padStart(2, '0')}-${String(selected.getDate()).padStart(2, '0')}`;
+      const formattedTime = selectedTime || "00:00";
+
+      if (typeof onDateChange === 'function') {
+        onDateChange(`${formattedDate} ${formattedTime}`);
+      }
     }
   };
 
-  // Function to show/hide the date picker
+  const handleTimeChange = (event, selected) => {
+    if (selected !== undefined && selected !== null) {
+      setSelectedTime(`${String(selected.getHours()).padStart(2, '0')}:${String(selected.getMinutes()).padStart(2, '0')}`);
+      setShowTimePicker(Platform.OS === "ios");
+
+      const formattedDate = selectedDate
+        ? `${selectedDate.getFullYear()}-${String(selectedDate.getMonth() + 1).padStart(2, '0')}-${String(selectedDate.getDate()).padStart(2, '0')}`
+        : "Select Date";
+
+      const formattedTime = `${String(selected.getHours()).padStart(2, '0')}:${String(selected.getMinutes()).padStart(2, '0')}`;
+
+      if (typeof onDateChange === 'function') {
+        onDateChange(`${formattedDate} ${formattedTime}`);
+      }
+    }
+  };
+
   const toggleDatePicker = () => {
     setShowDatePicker((prev) => !prev);
   };
 
-  const months = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
+  const toggleTimePicker = () => {
+    setShowTimePicker((prev) => !prev);
+  };
 
   const formattedDate = selectedDate
-    ? `${selectedDate.getDate()} ${
-        months[selectedDate.getMonth()]
-      } ${selectedDate.getFullYear()}`
-    : "Select Date"; // Use "Select Date" if selectedDate is null
+    ? `${selectedDate.getFullYear()}-${String(selectedDate.getMonth() + 1).padStart(2, '0')}-${String(selectedDate.getDate()).padStart(2, '0')}`
+    : "Select Date";
+
+  const formattedTime = selectedTime || "Select Time";
 
   return (
     <>
       <TouchableOpacity style={styles.datePicker} onPress={toggleDatePicker}>
         <Text style={styles.dateText}>{formattedDate}</Text>
       </TouchableOpacity>
+      <TouchableOpacity style={styles.datePicker} onPress={toggleTimePicker}>
+        <Text style={styles.dateText}>{formattedTime}</Text>
+      </TouchableOpacity>
 
       {showDatePicker && (
         <DateTimePicker
-          value={selectedDate || new Date()} // Use selectedDate or current date
+          value={selectedDate || new Date()}
           mode="date"
           display="default"
           onChange={handleDateChange}
+        />
+      )}
+
+      {showTimePicker && (
+        <DateTimePicker
+          value={selectedTime ? new Date(`2000-01-01T${selectedTime}`) : new Date()}
+          mode="time"
+          display="default"
+          onChange={handleTimeChange}
         />
       )}
     </>
