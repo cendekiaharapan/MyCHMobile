@@ -9,13 +9,24 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { Color, FontFamily, FontSize, Border, Padding } from "../GlobalStyles";
 
-const CHDCard = ({ student_name, chd_balance }) => {
+const CHDCard = ({ student_id, student_name, chd_balance }) => {
   const navigation = useNavigation();
+
+  const handleCHDBalance = () => {
+    console.log("Student ID:",student_id);
+    console.log("Student Names:",student_name);
+    console.log("Chd Balances:",chd_balance);
+    navigation.navigate("PaymentTopup", {
+      student_id: student_id,
+      student_name: student_name,
+      chd_balance: chd_balance
+    });
+  };
 
   return (
     <Pressable
       style={styles.chdCard}
-      onPress={() => navigation.navigate("PaymentTopup")}
+      onPress={handleCHDBalance}
     >
       <ImageBackground
         style={styles.icon}

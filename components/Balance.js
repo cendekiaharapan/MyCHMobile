@@ -1,21 +1,16 @@
 import * as React from "react";
 import { Text, StyleSheet, View } from "react-native";
-import TopUpForm from "./TopUpForm";
 import { FontSize, FontFamily, Color } from "../GlobalStyles";
 
-const Balance = () => {
+const Balance = ({ chdBalance }) => {
   return (
     <View style={[styles.balance, styles.framePosition]}>
       <View style={[styles.frame, styles.framePosition]}>
         <Text style={styles.balances}>Balances:</Text>
+        <View style={styles.balanceForm}>
+          <Text style={styles.balanceText}>{chdBalance}</Text>
+        </View>
       </View>
-      <TopUpForm
-        inputFieldPosition="absolute"
-        inputFieldTop={25}
-        inputFieldLeft={0}
-        inputFieldWidth={350}
-        inputFieldBackgroundColor="#fff"
-      />
     </View>
   );
 };
@@ -42,6 +37,18 @@ const styles = StyleSheet.create({
   balance: {
     top: 20,
     height: 59,
+  },
+  balanceForm: {
+    borderWidth: 1,
+    borderColor: Color.colorGray,
+    borderRadius: 8,
+    padding: 10,
+  },
+  balanceText: {
+    fontSize: FontSize.size_lg,
+    fontWeight: "bold",
+    fontFamily: FontFamily.poppinsMedium,
+    color: Color.colorBlack,
   },
 });
 
