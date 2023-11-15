@@ -19,7 +19,13 @@ const AssessmentList = ({ route }) => {
 // Use useRoute to get route information
   const { selectedStudent, selectedSession, selectedSessionName, selectedStudentName, selectedSemesterName, selectedSemester} = route.params || {};
   const [assessmentData, setAssessmentData] = useState([]);
-
+  const navigateToAssessmentDetail = (subject) => {
+    subject.session = selectedSessionName;
+    subject.semester = selectedSemesterName;
+    console.log("AssessmentData being passed to AssessmentDetail.js:", assessmentData);
+    console.log("Subject being passed to AssessmentDetail.js:", subject);
+    navigation.navigate("AssessmentDetail", { subject, data: assessmentData});
+  };
 
 
   useEffect(() => {
@@ -75,13 +81,17 @@ const AssessmentList = ({ route }) => {
           </View>
           <View style={styles.scrollContainer}>
             <ScrollView style={styles.scrollView}>
-              {assessmentData.map((item, index) => (
+            {assessmentData.map((item, index) => (
+              <Pressable
+                key={index}
+                onPress={() => navigateToAssessmentDetail(item)}
+              >
                 <ListComponent
-                  key={index}
                   subject={item.title}
-                  score={item.avg_score}
+                  score={item.final_score}
                 />
-              ))}
+              </Pressable>
+            ))}
             </ScrollView>
           </View>
         </View>

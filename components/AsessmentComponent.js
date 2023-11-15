@@ -5,20 +5,23 @@ import { Color, Border, FontSize, FontFamily } from "../GlobalStyles";
 const AsessmentComponent = ({ Text_Criteria, score }) => {
   return (
     <View style={styles.asessmentComponent}>
-      <View style={styles.card} />
-      <Text style={[styles.textCriteria, styles.scoreFlexBox]}>
-      {Text_Criteria}
-      </Text>
-      <Text style={[styles.score, styles.scoreFlexBox]}> {score !== null && score !== "" ? score : "N/A"}</Text>
+      <View style={styles.card}>
+        <Text style={[styles.textCriteria, styles.centeredText]}>
+          {Text_Criteria}
+        </Text>
+        <Text style={[styles.score, styles.centeredText]}>
+          {score !== null && score !== "" ? score : "N/A"}
+        </Text>
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  scoreFlexBox: {
+  centeredText: {
     textAlign: "center",
     color: Color.colorBlack,
-    position: "absolute",
+    
   },
   card: {
     height: "105%",
@@ -32,30 +35,26 @@ const styles = StyleSheet.create({
     shadowColor: "rgba(0, 0, 0, 0.06)",
     shadowRadius: 29.56,
     elevation: 29.56,
-    position: "absolute",
+    
     shadowOpacity: 1,
-
+    justifyContent: "center",
     shadowOffset: {
       width: 0,
       height: 0,
     },
   },
   textCriteria: {
-    top: "11.48%",
-    left: "20.39%",
+    top: "11.5%",
     fontSize: FontSize.size_2xs_6,
     fontFamily: FontFamily.poppinsRegular,
-    marginLeft: -23,
   },
   score: {
-    top: "36.07%",
-    left: "26.32%",
+    
+    
     fontSize: 25,
     fontWeight: "600",
     fontFamily: FontFamily.poppinsSemiBold,
-    marginLeft: 20,
-    alignContent: "center",
-    alignItems: "center",
+    
   },
   asessmentComponent: {
     shadowColor: "rgba(0, 0, 0, 0.5)",

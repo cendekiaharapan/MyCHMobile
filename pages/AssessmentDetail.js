@@ -17,33 +17,8 @@ import AsessmentComponent from "../components/AsessmentComponent";
 import Header from "../components/Header";
 import Criteria from "../components/Criteria";
 
-const AssessmentDetail = () => {
-    const assessmentData = {
-        "id": 996,
-        "teacher_id": 2018,
-        "class_id": 1,
-        "title": "English",
-        "code": "CH010101",
-        "type": 0,
-        "active": 1,
-        "moodle_id": 964,
-        "remedial_moodle_id": 1127,
-        "created_at": "2019-07-05 01:46:16",
-        "updated_at": "2023-06-28 03:14:52",
-        "avg_score": 83.2,
-        "final_score": "90",
-        "score_semester": null,
-        "booklet": "60",
-        "presentation": "",
-        "subject_integration": "90",
-        "progress_test": "95",
-        "mid_block_assessment": 60,
-        "final_block_assessment": 90,
-        "remarks": "",
-        "mock_test": "30",
-        "semester": "Semester 2",
-        "session": "Academic Year 2023/2024"
-    };
+const AssessmentDetail = ({route}) => {
+    const assessmentData = route.params.subject;
 
   return (
     <NativeBaseProvider>
