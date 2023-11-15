@@ -34,6 +34,7 @@ import ChildPermissionViewHisto from "./pages/ChildPermissionViewHisto";
 
 // Communication
 import MessageToTeacherSendMes from "./pages/MessageToTeacherSendMes";
+import MessageToTeacherHistory from "./pages/MessageToTeacherHistory";
 
 const Stack = createNativeStackNavigator();
 
@@ -63,6 +64,11 @@ const MainStack = () => {
       <Stack.Screen
         name="ChildPermissionAddPermis"
         component={ChildPermissionAddPermis}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="MessageToTeacherHistory"
+        component={MessageToTeacherHistory}
         options={{ headerShown: false }}
       />
       <Stack.Screen

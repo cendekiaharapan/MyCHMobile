@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
     width: 250,
     height: 18,
     textAlign: "left",
-    color: Color.colorGray_300,
+    color: "black",
     fontSize: FontSize.textRegularXs12_size,
   },
   frameChild: {
@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
     textAlign: "right",
     fontSize: FontSize.size_3xs,
     fontWeight: "500",
-    color: Color.colorGray_300,
+    color: "grey",
   },
   maret20231240AmParent: {
     marginTop: 6,

@@ -117,7 +117,7 @@ const MessageToTeacherSendMes = () => {
 
   const handleHistoryButton = () => {
     navigation.navigate("Main App Stack", {
-      screen: "BottomNavbar", // change this with your screen name
+      screen: "MessageToTeacherHistory", // change this with your screen name
     });
   };
 

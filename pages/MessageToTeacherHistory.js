@@ -1,6 +1,12 @@
 import * as React from "react";
 import { Image } from "expo-image";
-import { StyleSheet, View, Text, SafeAreaView } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Text,
+  SafeAreaView,
+  TouchableOpacity,
+} from "react-native";
 import { NativeBaseProvider, StatusBar, ScrollView } from "native-base";
 import { Padding, Color, FontSize, FontFamily, Border } from "../GlobalStyles";
 import HeroContent from "../components/MessageToTeacherHistory/HeroContentMessageToTeacherHis";
@@ -9,6 +15,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import * as SQLite from "expo-sqlite";
 import * as SecureStore from "expo-secure-store";
+import { useNavigation } from "@react-navigation/native";
 import {
   storeItem,
   retrieveItem,
@@ -18,6 +25,7 @@ import {
 import { LoadingModal } from "react-native-loading-modal";
 
 const MessageToTeacherHistory = () => {
+  const navigation = useNavigation();
   const [responseData, setResponseData] = useState(null);
   const [studentId, setStudentId] = useState(null);
   const [studentName, setStudentName] = useState(null);
@@ -88,6 +96,12 @@ const MessageToTeacherHistory = () => {
     fetchData();
   }, []);
 
+  const handleBackButton = () => {
+    navigation.navigate("Main App Stack", {
+      screen: "BottomNavbar", // change this with your screen name
+    });
+  };
+
   useEffect(() => {
     // Fetch teacher names for each message
     if (responseData) {
@@ -142,8 +156,18 @@ const MessageToTeacherHistory = () => {
       <SafeAreaView style={styles.AndroidSafeArea}>
         <View style={styles.messageToTeacherHistory}>
           <View style={[styles.content, styles.contentFlexBox]}>
-            <HeroContent />
+            {/* <HeroContent /> */}
             {/* Main Content */}
+            <View style={styles.HeroContainer}>
+              <TouchableOpacity onPress={handleBackButton}>
+                <Image
+                  style={styles.buttonbackIcon}
+                  contentFit="cover"
+                  source={require("../assets/images/buttonback.png")}
+                />
+              </TouchableOpacity>
+              <Text style={styles.titleStyles}>History Communication</Text>
+            </View>
             <View style={styles.maincontent}>
               <View style={styles.allHistoryWrapper}>
                 <Text style={[styles.allHistory, styles.messageClr]}>
@@ -203,11 +227,11 @@ const MessageToTeacherHistory = () => {
             {/* End Main Content */}
             <View style={styles.frame}>
               <View style={styles.addicon}>
-                <Image
+                {/* <Image
                   style={styles.addicon1}
                   contentFit="cover"
                   source={require("../assets/addicon.png")}
-                />
+                /> */}
               </View>
             </View>
           </View>
@@ -227,6 +251,15 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     alignSelf: "stretch",
+  },
+  buttonbackIcon: {
+    width: 20,
+    height: 20,
+  },
+  titleStyles: {
+    color: "#241856",
+    fontFamily: FontFamily.poppinsBold,
+    fontSize: 20,
   },
   wrapperFlexBox: {
     padding: Padding.p_3xs,
@@ -270,6 +303,14 @@ const styles = StyleSheet.create({
     padding: Padding.p_3xs,
     alignItems: "center",
     flexDirection: "row",
+  },
+  HeroContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    top: 50,
+    height: 50,
+    width: 300,
   },
   vectorIcon: {
     width: 16,
