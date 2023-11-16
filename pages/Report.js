@@ -113,7 +113,6 @@ const Report = () => {
   }, []);
 
   // console.log("API Response:", apiResponse);
-
   return (
     <NativeBaseProvider>
       <View style={styles.report}>
@@ -121,24 +120,27 @@ const Report = () => {
           <View style={styles.weeklyReportWrapper}>
             <Text style={styles.weeklyReport}>Score Board</Text>
           </View>
-          <Image
-            style={styles.ictwotoneArrowBackIcon}
-            contentFit="cover"
-            source={require("../assets/ictwotonearrowback.png")}
-          />
+          <View style={styles.ictwotoneArrowBackParent}>
+            <Pressable
+              style={styles.ictwotoneArrowBack}
+              onPress={() => navigation.navigate("Profile")}
+            >
+              <Image
+                style={[styles.icon, styles.iconLayout]}
+                contentFit="cover"
+                source={require("../assets/ictwotonearrowback.png")}
+              />
+            </Pressable>
+          </View>
           <View style={styles.btnprimaryParent}>
             <View style={styles.btnprimary}>
               <Pressable
                 style={styles.btnprimaryChild}
                 onPress={() => navigation.navigate("ListOfReport")}
               />
-              <Text style={styles.submit} onPress={handlePressSubmit}>
-                Submit
-              </Text>
             </View>
             <Text style={styles.selectSubject}>Select Child</Text>
             <DropDown
-              label="Select Child"
               studentNames={studentName?.length ? studentName : []}
               studentIds={studentId?.length ? studentId : []}
               onSelect={(studentId, studentName) =>
@@ -146,17 +148,19 @@ const Report = () => {
               } // Pass the callback function
             />
             <Text style={styles.selectRangeDate}>Select Range Date</Text>
-            <View style={styles.container}>
+            <View style={styles.container1}>
               <DatePickerComponent
                 selectedDate={selectedStartDate}
                 onDateChange={handleStartDateChange}
                 label="Start Date"
               />
-
+            </View>
+            <View style={styles.container2}>
               <DatePickerComponent
                 selectedDate={selectedEndDate}
                 onDateChange={handleEndDateChange}
                 label="End Date"
+                style={styles.datestyle}
               />
             </View>
             <View style={[styles.btnprimary, styles.btnprimaryLayout]}>
@@ -169,6 +173,7 @@ const Report = () => {
                   },
                   styles.btnprimaryChild,
                   styles.btnprimaryLayout,
+                  styles.datepickst,
                 ]}
                 onPress={handlePressSubmit}
               >
@@ -183,6 +188,17 @@ const Report = () => {
 };
 
 const styles = StyleSheet.create({
+  ictwotoneArrowBackParent: {
+    width: 20,
+    height: 20,
+  },
+  iconLayout: {
+    overflow: "hidden",
+    width: "100%",
+  },
+  icon: {
+    height: "100%",
+  },
   frameWrapperPosition: {
     height: 24,
     top: 0,
@@ -193,6 +209,13 @@ const styles = StyleSheet.create({
     width: 320,
     left: 0,
     position: "absolute",
+  },
+  datepickst: {
+    borderColor: "black",
+  },
+  datestyle: {
+    borderColor: "black",
+    FontSize: 20,
   },
   selectTypo: {
     color: Color.colorBlack,
@@ -261,13 +284,13 @@ const styles = StyleSheet.create({
     color: Color.colorMidnightblue,
     textAlign: "left",
     fontFamily: FontFamily.poppinsBold,
-    fontWeight: "700",
   },
   weeklyReportWrapper: {
     marginLeft: -61.5,
     width: 124,
+    alignSelf: "stretch",
     left: "50%",
-    top: 0,
+    textAlign: "center",
     position: "absolute",
   },
   frameWrapper: {
@@ -276,14 +299,14 @@ const styles = StyleSheet.create({
     left: "50%",
   },
   ictwotoneArrowBackIcon: {
-    width: 24,
-    left: 0,
+    width: 200,
+    left: -20,
     overflow: "hidden",
   },
   btnprimaryChild: {
     borderRadius: Border.br_31xl,
     backgroundColor: Color.colorTomato_200,
-    top: 0,
+    top: -35,
   },
   submit: {
     top: 14,
@@ -303,7 +326,7 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.poppinsLight,
     fontWeight: "300",
     left: 10,
-    top: 0,
+    bottom: -17,
   },
   inputChild: {
     backgroundColor: Color.colorWhitesmoke_100,
@@ -351,13 +374,20 @@ const styles = StyleSheet.create({
     left: 0,
     top: 0,
   },
+  container1: {
+    flex: 1,
+    top: 13,
+  },
+  container2: {
+    top: -30,
+  },
   groupWrapper: {
     left: 12,
     top: 26,
   },
   selectRangeDate: {
     marginLeft: -150,
-    top: 92,
+    top: 6,
     fontSize: FontSize.bodyBodyXS_size,
     fontFamily: FontFamily.poppinsLight,
     fontWeight: "300",
@@ -387,10 +417,6 @@ const styles = StyleSheet.create({
   groupContainer: {
     left: 0,
   },
-  start: {
-    marginLeft: -14.54,
-    width: 29,
-  },
   oct2023: {
     marginLeft: -31.16,
     top: 21,
@@ -416,11 +442,6 @@ const styles = StyleSheet.create({
     marginLeft: -11.42,
     width: 30,
   },
-  start: {
-    marginLeft: -16.42,
-    width: 30,
-    marginTop: 3,
-  },
   inputParent: {
     left: 161,
   },
@@ -437,11 +458,10 @@ const styles = StyleSheet.create({
   },
   frameParent: {
     width: 322,
-    height: 349,
+    height: 700,
   },
   report: {
     borderRadius: Border.br_xl,
-    backgroundColor: Color.colorGray_100,
     flex: 1,
     width: "100%",
     height: 800,

@@ -1,4 +1,3 @@
-// DatePickerComponent.js
 import React, { useState } from "react";
 import { TouchableOpacity, Text, StyleSheet, Platform } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -21,12 +20,15 @@ const DatePickerComponent = ({ onDateChange, selectedDate, label }) => {
     setShowDatePicker((prev) => !prev);
   };
 
+  const formatDate = (date) => {
+    const day = date.getDate();
+    const month = date.toLocaleString("default", { month: "long" });
+    const year = date.getFullYear();
+    return `${day} ${month} ${year}`;
+  };
+
   const formattedDate = selectedDate
-    ? new Intl.DateTimeFormat("en-US", {
-        year: "numeric",
-        month: "2-digit",
-        day: "2-digit",
-      }).format(selectedDate)
+    ? formatDate(selectedDate)
     : `Select ${label}`;
 
   return (
@@ -41,6 +43,7 @@ const DatePickerComponent = ({ onDateChange, selectedDate, label }) => {
           mode="date"
           display="default"
           onChange={handleDateChange}
+          style={styles.datePicker1}
         />
       )}
     </>
@@ -50,17 +53,23 @@ const DatePickerComponent = ({ onDateChange, selectedDate, label }) => {
 const styles = StyleSheet.create({
   datePicker: {
     borderWidth: 1,
-    borderColor: "#a6a6a6",
     borderRadius: 5,
     paddingVertical: 10,
     paddingHorizontal: 12,
     borderRadius: 99999,
+    borderColor: "black",
   },
   dateText: {
     fontFamily: FontFamily.poppinsLight,
-    fontWeight: "300",
+    fontWeight: "100",
     color: "#292a2a",
-    fontSize: FontSize.textRegularXs12_size,
+    fontSize: FontSize.size_xs,
+  },
+  datePicker1: {
+    fontFamily: FontFamily.poppinsLight,
+    fontWeight: "100",
+    color: Color.colorBlack,
+    fontSize: FontSize.size_xs,
   },
 });
 

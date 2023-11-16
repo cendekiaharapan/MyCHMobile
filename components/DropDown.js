@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
     width: 29,
   },
   endTypo: {
-    color: "black",
+    color: Color.colorBlack,
     top: 0,
     fontFamily: FontFamily.poppinsLight,
     fontWeight: "300",
