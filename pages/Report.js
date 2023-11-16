@@ -8,6 +8,7 @@ import { retrieveItem } from "../database/database.js";
 import DropDown from "../components/DropDown";
 import DatePickerComponent from "../components/DatePicker";
 import axios from "axios";
+import Toast from "react-native-toast-message";
 
 const Report = () => {
   const navigation = useNavigation();
@@ -39,11 +40,11 @@ const Report = () => {
         )
         .then((response) => {
           console.log("Success:", response.data);
-          // setApiResponse(response.data);
           handleNavigateSubmit(response.data);
+          showToastSuccess();
         })
         .catch((error) => {
-          console.error("Error:", error);
+          showToastError();
         });
     } else {
       console.log("Please select all required data.");
@@ -93,6 +94,19 @@ const Report = () => {
 
   const handleEndDateChange = (selected) => {
     setSelectedEndDate(selected);
+  };
+
+  const showToastSuccess = () => {
+    Toast.show({
+      type: "success",
+      text1: "Report submitted successfully",
+    });
+  };
+  const showToastError = () => {
+    Toast.show({
+      type: "error",
+      text1: "Report not found in this range date",
+    });
   };
 
   useEffect(() => {
@@ -379,7 +393,7 @@ const styles = StyleSheet.create({
     top: 13,
   },
   container2: {
-    top: -30,
+    top: -17,
   },
   groupWrapper: {
     left: 12,
