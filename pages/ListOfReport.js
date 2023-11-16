@@ -86,7 +86,7 @@ const ListOfReport = () => {
                 </View>
               </View>
               <Text style={[styles.selectRangeDate, styles.selectTypo]}>
-                Select Range Date
+                Range Date
               </Text>
               <View style={[styles.groupContainer, styles.inputGroupLayout]}>
                 <View
@@ -141,7 +141,7 @@ const ListOfReport = () => {
             </View>
             <ScrollView
               contentContainerStyle={styles.scrollContainer}
-              style={{ marginTop: "70%" }}
+              style={{ marginTop: "65%" }}
             >
               {reportData.map((report) => (
                 <ReportEntry
@@ -380,12 +380,12 @@ const styles = StyleSheet.create({
   },
   selectRangeDate: {
     marginLeft: -148.5,
-    top: 95,
+    top: "13%",
     fontFamily: FontFamily.poppinsLight,
     fontWeight: "300",
     color: Color.colorBlack,
     fontSize: FontSize.bodyBodyXS_size,
-    left: "50%",
+    left: "46%",
   },
   cardShadowBox: {
     elevation: 29.56,
@@ -513,19 +513,19 @@ const styles = StyleSheet.create({
     left: 161,
   },
   groupContainer: {
-    top: 126,
+    top: "17%",
     left: 10,
   },
   groupParent: {
     top: 60,
-    left: 5,
+    left: "3%",
     width: "100%",
     height: 628,
     position: "absolute",
   },
   frameParent: {
-    width: 322,
-    height: 719,
+    width: "100%",
+    height: "100%",
   },
   listOfReport: {
     borderRadius: Border.br_xl,

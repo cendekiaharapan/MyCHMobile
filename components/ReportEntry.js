@@ -9,9 +9,11 @@ const ReportEntry = ({ date, subject, topic, comment, score }) => {
       <View style={[styles.frame, styles.frameShadowBox]}>
         <View style={styles.cardShadowBox} />
         <Text style={styles.date}>{date}</Text>
-        <Text style={styles.subject}>{subject}</Text>
-        <Text style={styles.topic}>{topic}</Text>
-        <Text style={styles.comment}>{comment}</Text>
+        <View style={styles.contentContainer}>
+          <Text style={styles.subject}>{subject}</Text>
+          <Text style={styles.topic}>{topic}</Text>
+          <Text style={styles.comment}>{comment}</Text>
+        </View>
         <View style={styles.scoreContainer}>
           <Text style={styles.scoreLabel}>{`Score `}</Text>
           <Text style={styles.scoreText}>{score}</Text>
@@ -25,18 +27,19 @@ const ReportEntry = ({ date, subject, topic, comment, score }) => {
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 10,
-    paddingVertical: 10,
+    paddingVertical: 4,
   },
   frame: {
-    shadowOpacity: 1,
-    elevation: 0.99,
-    shadowRadius: 0.99,
+    elevation: 5,
+    shadowRadius: 5,
+    borderColor: "white", // Border color
+    borderWidth: 1, // Border width
     shadowOffset: {
       width: 0,
-      height: 0,
+      height: 2,
     },
-    shadowColor: "rgba(0, 0, 0, 0.5)",
-    height: 150,
+    shadowColor: "rgba(0, 0, 0, 0.8)",
+    height: "auto",
     position: "relative",
     width: "100%",
     backgroundColor: Color.colorGray_100,
@@ -46,9 +49,10 @@ const styles = StyleSheet.create({
   cardShadowBox: {
     elevation: 29.56,
     shadowRadius: 29.56,
-    shadowColor: "rgba(0, 0, 0, 0.06)",
+    shadowColor: "rgba(0, 0, 0, 0)", // Darker shadow color
     backgroundColor: Color.colorWhite,
     borderRadius: 10,
+    borderWidth: 1, // Border width
     bottom: 5,
     height: "90%",
     top: 5,
@@ -73,51 +77,49 @@ const styles = StyleSheet.create({
     top: "12%",
     width: "90%",
   },
+  contentContainer: {
+    flex: 1,
+    padding: "5%",
+    marginTop: "7%",
+  },
   subject: {
-    top: "20%",
-    left: "5%",
-    textAlign: "left",
     color: Color.colorBlack,
-    fontSize: FontSize.size_2xs, // Mengurangi ukuran font untuk subject
+    fontSize: FontSize.size_2xs,
     fontFamily: FontFamily.poppinsBold,
     fontWeight: "700",
-    position: "absolute",
+    marginBottom: "2%",
+    width: "50%",
   },
   topic: {
-    top: "35%",
-    left: "5%",
     fontFamily: FontFamily.poppinsRegular,
     color: Color.colorBlack,
-    fontSize: FontSize.size_3xs, // Mengurangi ukuran font untuk topic
-    textAlign: "left",
-    position: "absolute",
-    width: "90%",
+    fontSize: FontSize.size_3xs,
+    marginBottom: "3%",
+    width: "65%",
   },
   comment: {
-    top: "50%",
-    left: "5%",
-    fontFamily: FontFamily.poppinsLight, // Mengganti tebal tulisan comment
+    fontFamily: FontFamily.poppinsLight,
     color: Color.colorBlack,
-    fontSize: FontSize.size_3xs, // Mengurangi ukuran font untuk comment
-    textAlign: "left",
-    position: "absolute",
-    width: "60%",
+    fontSize: FontSize.size_3xs,
+    width: "65%",
+    color: "green",
+    marginBottom: "3%",
   },
   scoreContainer: {
-    flexDirection: "column", // Menyesuaikan dengan permintaan
+    flexDirection: "column",
     position: "absolute",
     top: "20%",
     left: "70%",
     alignItems: "center",
   },
   scoreText: {
-    fontSize: 50, // Menyesuaikan dengan permintaan
+    fontSize: 50,
     color: Color.colorBlack,
     fontFamily: FontFamily.poppinsBold,
     fontWeight: "700",
   },
   scoreLabel: {
-    marginBottom: 5, // Menambahkan jarak antara label dan angka score
+    marginBottom: 5,
     color: Color.colorBlack,
     fontSize: FontSize.bodyBodyXS_size,
     fontFamily: FontFamily.poppinsBold,
