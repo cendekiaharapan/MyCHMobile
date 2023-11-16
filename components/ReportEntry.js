@@ -1,26 +1,45 @@
 // ReportEntry.js
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Pressable } from "react-native";
 import { Color, FontSize, FontFamily } from "../GlobalStyles";
+import { useNavigation } from "@react-navigation/native";
 
-const ReportEntry = ({ date, subject, topic, comment, score }) => {
+const ReportEntry = ({ date, subject, topic, comment, score, student_id, start_date, end_date }) => {
+  const navigation = useNavigation();
+
+  const handleReportDetail = () => {
+    console.log("Student ID:", student_id);
+
+    navigation.navigate("DetailReport", {
+      date: date, 
+      subject: subject, 
+      topic: topic, 
+      comment: comment, 
+      score: score,
+      student_id: student_id,
+      start_date: start_date,
+      end_date: end_date
+    });
+  };
   return (
-    <View style={styles.container}>
-      <View style={[styles.frame, styles.frameShadowBox]}>
-        <View style={styles.cardShadowBox} />
-        <Text style={styles.date}>{date}</Text>
-        <View style={styles.contentContainer}>
-          <Text style={styles.subject}>{subject}</Text>
-          <Text style={styles.topic}>{topic}</Text>
-          <Text style={styles.comment}>{comment}</Text>
+    <Pressable onPress={handleReportDetail}>
+      <View style={styles.container}>
+        <View style={[styles.frame, styles.frameShadowBox]}>
+          <View style={styles.cardShadowBox} />
+          <Text style={styles.date}>{date}</Text>
+          <View style={styles.contentContainer}>
+            <Text style={styles.subject}>{subject}</Text>
+            <Text style={styles.topic}>{topic}</Text>
+            <Text style={styles.comment}>{comment}</Text>
+          </View>
+          <View style={styles.scoreContainer}>
+            <Text style={styles.scoreLabel}>{`Score `}</Text>
+            <Text style={styles.scoreText}>{score}</Text>
+          </View>
+          <Text style={styles.arrow}>{`>`}</Text>
         </View>
-        <View style={styles.scoreContainer}>
-          <Text style={styles.scoreLabel}>{`Score `}</Text>
-          <Text style={styles.scoreText}>{score}</Text>
-        </View>
-        <Text style={styles.arrow}>{`>`}</Text>
       </View>
-    </View>
+    </Pressable>
   );
 };
 

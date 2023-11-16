@@ -20,6 +20,7 @@ const ListOfReport = () => {
     selectedStudentName,
   } = route.params;
 
+  const [studentID, setStudentID] = useState(selectedStudentId);
   const [startDate, setStartDate] = useState(selectedStartDate);
   const [endDate, setEndDate] = useState(selectedEndDate);
 
@@ -159,7 +160,9 @@ const ListOfReport = () => {
                   topic={report.topic}
                   comment={report.comment}
                   score={report.score}
-                  onPress={() => navigation.navigate("DetailReport")}
+                  student_id={studentID}
+                  start_date={startDate}
+                  end_date={endDate}
                 />
               ))}
             </ScrollView>
