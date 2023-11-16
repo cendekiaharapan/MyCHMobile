@@ -39,6 +39,11 @@ import MessageToTeacherSendMes from "./pages/MessageToTeacherSendMes";
 import MessageToTeacherHistory from "./pages/MessageToTeacherHistory";
 import MessageToTeacherViewHis from "./pages/MessageToTeacherViewHis";
 
+// Term Assessment
+import NewAssessment from "./pages/NewAssessment";
+import AssessmentDetail from "./pages/AssessmentDetail";
+import AssessmentList from "./pages/AssessmentList";
+
 const Stack = createNativeStackNavigator();
 
 const MainStack = () => {
@@ -152,6 +157,21 @@ const MainStack = () => {
       <Stack.Screen
         name="AllPost"
         component={AllPost}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="NewAssessment"
+        component={NewAssessment}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="AssessmentList"
+        component={AssessmentList}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="AssessmentDetail"
+        component={AssessmentDetail}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>

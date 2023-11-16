@@ -17,21 +17,43 @@ import AsessmentComponent from "../components/AsessmentComponent";
 import Header from "../components/HeaderTerm";
 import Criteria from "../components/Criteria";
 
-const AssessmentDetail = ({ route }) => {
+const AssessmentDetail = ({ route, navigation }) => {
+  const {
+    selectedStudent,
+    selectedSession,
+    selectedSessionName,
+    selectedStudentName,
+    selectedSemesterName,
+    selectedSemester,
+  } = route.params || {};
+
   const assessmentData = route.params.subject;
+
+  const handleBackButton = () => {
+    navigation.navigate("AssessmentList", {
+      selectedStudent,
+      selectedSession,
+      selectedStudentName,
+      selectedSessionName,
+      selectedSemesterName,
+      selectedSemester,
+    });
+  };
 
   return (
     <NativeBaseProvider>
       <View style={styles.mainContainer}>
         <View style={styles.bodyContainer}>
           <View style={styles.headerContainer}>
-            <View style={styles.imageContainer}>
-              <Image
-                style={styles.ictwotoneArrowBackIcon}
-                contentFit="cover"
-                source={require("../assets/ictwotonearrowback.png")}
-              />
-            </View>
+            <TouchableOpacity onPress={handleBackButton}>
+              <View style={styles.imageContainer}>
+                <Image
+                  style={styles.ictwotoneArrowBackIcon}
+                  contentFit="cover"
+                  source={require("../assets/ictwotonearrowback.png")}
+                />
+              </View>
+            </TouchableOpacity>
             <View style={styles.titleContainer}>
               {assessmentData && (
                 <Text style={styles.titleStyle}>{assessmentData.title}</Text>
@@ -49,9 +71,7 @@ const AssessmentDetail = ({ route }) => {
 
           <View style={styles.mainContainer}>
             <View style={styles.container}>
-              <View
-                style={[styles.column, styles.marginRight, styles.marginBottom]}
-              >
+              <View style={[styles.column]}>
                 <AsessmentComponent
                   Text_Criteria="Booklet"
                   score={assessmentData?.booklet}
@@ -100,34 +120,18 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   container: {
+    paddingLeft: 20,
     flexDirection: "row",
-    justifyContent: "space-between",
-    marginLeft: 10,
-    marginRight: -5,
-    alignContent: "center",
-    justifyContent: "center",
   },
   column: {
     flex: 1,
-    paddingVertical: 10,
   },
-  marginRight: {
-    marginRight: 20,
-    alignContent: "center",
-    justifyContent: "center",
-  },
-  marginBottom: {
-    paddingBottom: 50,
-    paddingRight: 70,
-    alignContent: "center",
-  },
-
   bodyContainer: {
-    flex: 0.53,
+    flex: 1,
     marginTop: 50,
     marginLeft: 15,
     marginRight: 15,
-    alignContent: "center",
+
     justifyContent: "center",
   },
   headerContainer: {

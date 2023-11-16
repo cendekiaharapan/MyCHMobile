@@ -30,6 +30,12 @@ const NewAssessment = () => {
   const [selectedSemesterName, setSelectedSemesterName] = useState("");
   const [selectedSessionName, setSelectedSessionName] = useState("");
 
+  const handleBackButton = () => {
+    navigation.navigate("Main App Stack", {
+      screen: "BottomNavbar", // change this with your screen name
+    });
+  };
+
   const handleSubmit = () => {
     if (selectedStudent && selectedSession) {
       // Prepare data for the post request
@@ -160,13 +166,15 @@ const NewAssessment = () => {
       <View style={styles.mainContainer}>
         <View style={styles.bodyContainer}>
           <View style={styles.headerContainer}>
-            <View style={styles.imageContainer}>
-              <Image
-                style={styles.ictwotoneArrowBackIcon}
-                contentFit="cover"
-                source={require("../assets/ictwotonearrowback.png")}
-              />
-            </View>
+            <TouchableOpacity onPress={handleBackButton}>
+              <View style={styles.imageContainer}>
+                <Image
+                  style={styles.ictwotoneArrowBackIcon}
+                  contentFit="cover"
+                  source={require("../assets/ictwotonearrowback.png")}
+                />
+              </View>
+            </TouchableOpacity>
             <View style={styles.titleContainer}>
               <Text style={styles.titleStyle}>Term Assessment</Text>
             </View>

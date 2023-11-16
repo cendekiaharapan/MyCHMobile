@@ -14,32 +14,53 @@ import ListComponent from "../components/ListComponent";
 import { FontFamily, Color, FontSize } from "../GlobalStyles";
 import { useNavigation, useRoute } from "@react-navigation/native";
 
-const AssessmentList = ({ route }) => {
-  const navigation = useNavigation();
-// Use useRoute to get route information
-  const { selectedStudent, selectedSession, selectedSessionName, selectedStudentName, selectedSemesterName, selectedSemester} = route.params || {};
+const AssessmentList = ({ route, navigation }) => {
+  // Use useRoute to get route information
+  const {
+    selectedStudent,
+    selectedSession,
+    selectedSessionName,
+    selectedStudentName,
+    selectedSemesterName,
+    selectedSemester,
+  } = route.params || {};
   const [assessmentData, setAssessmentData] = useState([]);
   const navigateToAssessmentDetail = (subject) => {
     subject.session = selectedSessionName;
     subject.semester = selectedSemesterName;
-    console.log("AssessmentData being passed to AssessmentDetail.js:", assessmentData);
+    console.log(
+      "AssessmentData being passed to AssessmentDetail.js:",
+      assessmentData
+    );
     console.log("Subject being passed to AssessmentDetail.js:", subject);
-    navigation.navigate("AssessmentDetail", { subject, data: assessmentData});
+    navigation.navigate("AssessmentDetail", {
+      subject,
+      data: assessmentData,
+      selectedStudent,
+      selectedSession,
+      selectedSessionName,
+      selectedStudentName,
+      selectedSemesterName,
+      selectedSemester,
+    });
   };
 
-
   useEffect(() => {
-    axios.post("https://www.balichildrenshouse.com/myCH/api/get-semester-assessment-report", {
-      session: selectedSession,
-      semester: selectedSemester,
-      id: selectedStudent,
-    })
-    .then(response => {
-      setAssessmentData(response.data[0]);
-    })
-    .catch(error => {
-      console.error("Error fetching assessment data:", error);
-    });
+    axios
+      .post(
+        "https://www.balichildrenshouse.com/myCH/api/get-semester-assessment-report",
+        {
+          session: selectedSession,
+          semester: selectedSemester,
+          id: selectedStudent,
+        }
+      )
+      .then((response) => {
+        setAssessmentData(response.data[0]);
+      })
+      .catch((error) => {
+        console.error("Error fetching assessment data:", error);
+      });
   }, [selectedStudent, selectedSemester, selectedSession]);
 
   return (
@@ -48,23 +69,22 @@ const AssessmentList = ({ route }) => {
         <View style={styles.bodyContainer}>
           <View style={styles.headerContainer}>
             <View style={styles.imageContainer}>
-            <Pressable
-              style={styles.imageContainer}
-              onPress={() => navigation.navigate("NewAssessment")} // Navigate to "NewAssessment" screen
-            >
-              <Image
-                style={styles.ictwotoneArrowBackIcon}
-                contentFit="cover"
-                source={require("../assets/ictwotonearrowback.png")}
-              />
-            </Pressable>
+              <Pressable
+                style={styles.imageContainer}
+                onPress={() => navigation.navigate("NewAssessment")} // Navigate to "NewAssessment" screen
+              >
+                <Image
+                  style={styles.ictwotoneArrowBackIcon}
+                  contentFit="cover"
+                  source={require("../assets/ictwotonearrowback.png")}
+                />
+              </Pressable>
             </View>
             <View style={styles.titleContainer}>
               <Text style={styles.titleStyle}>Term Assessment</Text>
             </View>
           </View>
           <View style={styles.contentContainer}>
-          
             <FormControl mb="3">
               <FormControl.Label>Student</FormControl.Label>
               <Text>{selectedStudentName}</Text>
@@ -77,21 +97,20 @@ const AssessmentList = ({ route }) => {
               <FormControl.Label>Semester</FormControl.Label>
               <Text>{selectedSemesterName}</Text>
             </FormControl>
-            
           </View>
           <View style={styles.scrollContainer}>
             <ScrollView style={styles.scrollView}>
-            {assessmentData.map((item, index) => (
-              <Pressable
-                key={index}
-                onPress={() => navigateToAssessmentDetail(item)}
-              >
-                <ListComponent
-                  subject={item.title}
-                  score={item.final_score}
-                />
-              </Pressable>
-            ))}
+              {assessmentData.map((item, index) => (
+                <Pressable
+                  key={index}
+                  onPress={() => navigateToAssessmentDetail(item)}
+                >
+                  <ListComponent
+                    subject={item.title}
+                    score={item.final_score}
+                  />
+                </Pressable>
+              ))}
             </ScrollView>
           </View>
         </View>
@@ -108,14 +127,14 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     color: "#000", // You can change the text color
   },
-   
-scrollContainer: {
+
+  scrollContainer: {
     flex: 1,
   },
-  
+
   scrollView: {
     flex: 1,
-  },    
+  },
   mainContainer: {
     flex: 1,
   },

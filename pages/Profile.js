@@ -136,7 +136,7 @@ const AllPost = () => {
             </View>
           </View>
         ) : (
-          <Text>Loading....</Text>
+          <LoadingModal modalVisible={true} color="red" />
         )}
       </View>
       <View style={styles.BodyContainer}>
@@ -166,7 +166,7 @@ const AllPost = () => {
                 />
               </View>
             ) : (
-              <Text>Loading....</Text>
+              <LoadingModal modalVisible={true} color="red" />
             )}
           </View>
           <View style={styles.ButtonContainer}>

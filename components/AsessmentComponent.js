@@ -21,7 +21,6 @@ const styles = StyleSheet.create({
   centeredText: {
     textAlign: "center",
     color: Color.colorBlack,
-    
   },
   card: {
     height: "105%",
@@ -35,7 +34,7 @@ const styles = StyleSheet.create({
     shadowColor: "rgba(0, 0, 0, 0.06)",
     shadowRadius: 29.56,
     elevation: 29.56,
-    
+
     shadowOpacity: 1,
     justifyContent: "center",
     shadowOffset: {
@@ -49,12 +48,9 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.poppinsRegular,
   },
   score: {
-    
-    
     fontSize: 25,
     fontWeight: "600",
     fontFamily: FontFamily.poppinsSemiBold,
-    
   },
   asessmentComponent: {
     shadowColor: "rgba(0, 0, 0, 0.5)",

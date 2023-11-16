@@ -36,6 +36,11 @@ const AppsList = () => {
       screen: "MessageToTeacherSendMes", // change this with your screen name
     });
   };
+  const handleTermAssessmentButton = () => {
+    navigation.navigate("Main App Stack", {
+      screen: "NewAssessment", // change this with your screen name
+    });
+  };
   return (
     <View style={styles.mainContainer}>
       <View style={styles.bodyContainer}>
@@ -64,14 +69,16 @@ const AppsList = () => {
           </View>
         </View>
         <View style={styles.RowContainer}>
-          <View style={styles.BoxContainer}>
-            <Image
-              style={styles.StyleImage}
-              source={require("../assets/images/TermAssessmentReport.png")}
-              contentFit="cover"
-            />
-            <Text style={styles.StyleText}>TERM ASSESSMENT REPORT</Text>
-          </View>
+          <TouchableOpacity onPress={handleTermAssessmentButton}>
+            <View style={styles.BoxContainer}>
+              <Image
+                style={styles.StyleImage}
+                source={require("../assets/images/TermAssessmentReport.png")}
+                contentFit="cover"
+              />
+              <Text style={styles.StyleText}>TERM ASSESSMENT REPORT</Text>
+            </View>
+          </TouchableOpacity>
           <TouchableOpacity onPress={handleReportCardButton}>
             <View style={styles.BoxContainer}>
               <Image
