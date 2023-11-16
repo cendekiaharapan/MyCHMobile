@@ -17,6 +17,7 @@ const ListOfReport = () => {
     selectedEndDate,
     studentName,
     apiResponse,
+    selectedStudentName,
   } = route.params;
 
   const [startDate, setStartDate] = useState(selectedStartDate);
@@ -24,11 +25,9 @@ const ListOfReport = () => {
 
   // You can now use postData and other parameters in your component
 
-  console.log("reportData:", apiResponse);
-  
-  const reportData = apiResponse;
+  console.log("reportData:", selectedStudentName);
 
-  console.log("reportData:", reportData);
+  const reportData = apiResponse;
 
   return (
     <NativeBaseProvider>
@@ -80,7 +79,9 @@ const ListOfReport = () => {
                     style={[styles.inputContainer, styles.inputGroupLayout]}
                   >
                     <View style={[styles.inputItem, styles.inputGroupLayout]} />
-                    <Text style={[styles.all1, styles.allTypo]}>{studentName}</Text>
+                    <Text style={[styles.all1, styles.allTypo]}>
+                      {selectedStudentName}
+                    </Text>
                   </View>
                 </View>
               </View>
@@ -145,7 +146,15 @@ const ListOfReport = () => {
               {reportData.map((report) => (
                 <ReportEntry
                   key={report.id}
-                  date={report.date}
+                  date={
+                    report.date
+                      ? `${new Date(report.date).toLocaleDateString("id-ID", {
+                          day: "2-digit",
+                          month: "long",
+                          year: "numeric",
+                        })}`
+                      : ""
+                  }
                   subject={report.subject.title}
                   topic={report.topic}
                   comment={report.comment}

@@ -136,31 +136,28 @@ const Report = () => {
                 Submit
               </Text>
             </View>
-            <View style={styles.inputContainer}>
-              <Text style={styles.selectSubject}>Select Child</Text>
-              <DropDown
-                label=""
-                studentNames={studentName?.length ? studentName : []}
-                studentIds={studentId?.length ? studentId : []}
-                onSelect={(studentId, studentName) =>
-                  handleSelectStudentOne(studentId, studentName)
-                }
+            <Text style={styles.selectSubject}>Select Child</Text>
+            <DropDown
+              label="Select Child"
+              studentNames={studentName?.length ? studentName : []}
+              studentIds={studentId?.length ? studentId : []}
+              onSelect={(studentId, studentName) =>
+                handleSelectStudentOne(studentId, studentName)
+              } // Pass the callback function
+            />
+            <Text style={styles.selectRangeDate}>Select Range Date</Text>
+            <View style={styles.container}>
+              <DatePickerComponent
+                selectedDate={selectedStartDate}
+                onDateChange={handleStartDateChange}
+                label="Start Date"
               />
-            </View>
-            <View style={styles.selectDateContainer}>
-              <Text style={styles.selectRangeDate}>Select Range Date</Text>
-              <View style={styles.datePickerContainer}>
-                <DatePickerComponent
-                  selectedDate={selectedStartDate}
-                  onDateChange={handleStartDateChange}
-                  label="Start Date"
-                />
-                <DatePickerComponent
-                  selectedDate={selectedEndDate}
-                  onDateChange={handleEndDateChange}
-                  label="End Date"
-                />
-              </View>
+
+              <DatePickerComponent
+                selectedDate={selectedEndDate}
+                onDateChange={handleEndDateChange}
+                label="End Date"
+              />
             </View>
             <View style={[styles.btnprimary, styles.btnprimaryLayout]}>
               <Pressable
@@ -191,19 +188,6 @@ const styles = StyleSheet.create({
     top: 0,
     position: "absolute",
   },
-  inputContainer: {
-    marginBottom: 20,
-  },
-
-  selectDateContainer: {
-    marginBottom: 20,
-  },
-
-  datePickerContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-
   btnprimaryLayout: {
     height: 50,
     width: 320,

@@ -1,32 +1,34 @@
-// DropDown.js
-
 import * as React from "react";
 import { FormControl, Select, CheckIcon } from "native-base";
 import { Text, StyleSheet, View, Pressable, Modal } from "react-native";
 import { Color, FontFamily, FontSize, Border, Padding } from "../GlobalStyles";
 
 const DropDown = ({ label, studentNames, studentIds, onSelect }) => {
-  const [selectedStudent, setSelectedStudent] = React.useState("");
+  const [selectedStudentId, setSelectedStudentId] = React.useState("");
+  const [selectedStudentName, setSelectedStudentName] = React.useState("");
 
   const handleSelect = (itemValue) => {
-    setSelectedStudent(itemValue);
+    setSelectedStudentName(itemValue);
     const selectedIndex = studentNames.indexOf(itemValue);
-    const selectedStudentId = studentIds[selectedIndex];
-    onSelect(selectedStudentId); // Call the onSelect callback with studentId
+    const selectedId = studentIds[selectedIndex];
+    setSelectedStudentId(selectedId);
+    onSelect(selectedId, itemValue); // Call the onSelect callback with studentId and studentName
   };
 
   return (
     <FormControl mt="3" mb="3">
       <FormControl.Label>{label}</FormControl.Label>
       <Select
-        selectedValue={selectedStudent}
+        selectedValue={selectedStudentName}
         height="10"
         minWidth="200"
         accessibilityLabel="Choose Child"
         placeholder="Choose Child"
+        borderColor="black"
         _selectedItem={{
           bg: "teal.600",
           endIcon: <CheckIcon size="3" />,
+          color: "black",
         }}
         mt={1}
         onValueChange={handleSelect}
@@ -37,7 +39,14 @@ const DropDown = ({ label, studentNames, studentIds, onSelect }) => {
         {studentNames.map((name, index) => (
           <Select.Item
             key={index}
-            style={[styles.option]}
+            style={[
+              styles.option,
+              {
+                color: selectedStudentName === name ? "black" : undefined,
+                backgroundColor:
+                  selectedStudentName === name ? "teal.600" : undefined,
+              },
+            ]}
             label={name}
             value={name}
           />
@@ -53,7 +62,7 @@ const styles = StyleSheet.create({
     width: 29,
   },
   endTypo: {
-    color: Color.colorDarkgray,
+    color: "black",
     top: 0,
     fontFamily: FontFamily.poppinsLight,
     fontWeight: "300",
