@@ -89,6 +89,12 @@ const ReportCard = () => {
       });
   }, []);
 
+  function clearSelectedSemester() {
+    // Implement the logic to clear the selected semester state
+    setSelectedSemester(null);
+    setFilteredTermSessions([]);
+  }
+
   function fetchAndSetTermSessions(selectedSession) {
     console.log("inside ftech and set term session id : ", selectedSession);
     if (selectedSession) {
@@ -111,6 +117,7 @@ const ReportCard = () => {
         .catch((error) => {
           setLoading(false);
           showToast();
+          clearSelectedSemester();
         });
     }
   }
@@ -166,69 +173,59 @@ const ReportCard = () => {
           </View>
         </View>
         <View style={styles.frame2}>
-          <LinearGradient
-            style={styles.menu}
-            locations={[0, 1]}
-            colors={["#fff", "rgba(255, 255, 255, 0)"]}
-          >
-            <View style={styles.frame3}>
-              <View style={styles.selectSessionParent}>
-                <Text style={styles.selectSession}>Select Student</Text>
-                {/* New Select component for students */}
+          <View style={styles.frame3}>
+            <View style={styles.selectSessionParent}>
+              <Text style={styles.selectSession}>Select Student</Text>
+              {/* New Select component for students */}
+              <Select
+                minWidth="100%"
+                accessibilityLabel="Choose Student"
+                placeholder="Choose Student"
+                onValueChange={(studentId) => {
+                  setSelectedStudent(studentId);
+                }}
+              >
+                {studentNames.map((student, index) => (
+                  <Select.Item
+                    key={studentIds[index]}
+                    label={student}
+                    value={studentIds[index]}
+                  />
+                ))}
+              </Select>
+            </View>
+            <View style={styles.selectSessionParent}>
+              <Text style={styles.selectSession}>Select Session</Text>
+              <Center>
                 <Select
-                  minWidth="275"
-                  accessibilityLabel="Choose Student"
-                  placeholder="Choose Student"
-                  onValueChange={(studentId) => {
-                    setSelectedStudent(studentId);
+                  minWidth="100%"
+                  accessibilityLabel="Choose Session"
+                  placeholder="Choose Session"
+                  onValueChange={(itemId) => {
+                    // console.log("set selected session id : ",itemId);
+                    // console.log("value of selected session id : ",selectedSession);
+                    fetchAndSetTermSessions(itemId);
+                    setSelectedSession(itemId);
                   }}
                 >
-                  {studentNames.map((student, index) => (
+                  {academicSessions.map((session) => (
                     <Select.Item
-                      key={studentIds[index]}
-                      label={student}
-                      value={studentIds[index]}
+                      key={session.id}
+                      label={session.name}
+                      value={session.id}
                     />
                   ))}
                 </Select>
-              </View>
-              <View style={styles.selectSessionParent}>
-                <Text style={styles.selectSession}>Select Session</Text>
-                <Center>
-                  <Select
-                    minWidth="275"
-                    accessibilityLabel="Choose Session"
-                    placeholder="Choose Session"
-                    onValueChange={(itemId) => {
-                      // console.log("set selected session id : ",itemId);
-                      // console.log("value of selected session id : ",selectedSession);
-                      fetchAndSetTermSessions(itemId);
-                      setSelectedSession(itemId);
-                    }}
-                  >
-                    {academicSessions.map((session) => (
-                      <Select.Item
-                        key={session.id}
-                        label={session.name}
-                        value={session.id}
-                      />
-                    ))}
-                  </Select>
-                </Center>
-              </View>
-              <Image
-                style={styles.frameChild}
-                contentFit="cover"
-                source={require("../assets/vector-8.png")}
-              />
+              </Center>
             </View>
-            <View style={styles.selectSemesterParent}>
+
+            <View style={styles.selectSessionParent}>
               <Text style={styles.selectSession}>Select Semester</Text>
               <Center>
                 {academicSessions.length > 0 && (
                   <Select
                     selectedValue={selectedSemester}
-                    minWidth="275"
+                    minWidth="100%"
                     accessibilityLabel="Choose Semester"
                     placeholder="Choose Semester"
                     onValueChange={(itemValue) => {
@@ -247,24 +244,15 @@ const ReportCard = () => {
                 )}
               </Center>
             </View>
-            <View style={styles.buttonCariTiket}>
-              <View style={{ alignItems: "center", justifyContent: "center" }}>
-                <Button
-                  style={{
-                    ...styles.viewReportCard,
-                    backgroundColor: Color.colorTomato,
-                    width: 200,
-                    height: 40,
-                  }}
-                  onPress={handleViewReportCard}
-                >
-                  <Text style={{ color: Color.colorWhite }}>
-                    VIEW REPORT CARD
-                  </Text>
-                </Button>
-              </View>
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                style={styles.roundedButton}
+                onPress={handleViewReportCard}
+              >
+                <Text style={styles.buttonText}>Submit</Text>
+              </TouchableOpacity>
             </View>
-          </LinearGradient>
+          </View>
         </View>
       </View>
     </NativeBaseProvider>
@@ -272,11 +260,28 @@ const ReportCard = () => {
 };
 
 const styles = StyleSheet.create({
+  buttonContainer: {
+    marginTop: 30,
+    height: 50,
+    width: 330,
+  },
+  buttonText: {
+    fontSize: 14,
+    fontFamily: "Your-Font-Family", // Replace with your actual font family
+    color: "white", // Change text color if needed
+  },
+  roundedButton: {
+    flex: 1,
+    borderRadius: 25, // Use half of the height to create a perfect circle
+    backgroundColor: "#FC4B41",
+    justifyContent: "center",
+    alignItems: "center",
+  },
   frameIcon: {
-    position: "relative",
     width: 24,
-    height: 31,
+    height: 24,
     overflow: "hidden",
+    right: 80,
   },
   reportCard1: {
     position: "relative",
@@ -285,41 +290,31 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.poppinsSemiBold,
     color: Color.colorMidnightblue,
     textAlign: "center",
-    width: 136,
+    width: 150,
   },
   reportCardWrapper: {
     height: 25,
     flexDirection: "row",
     alignItems: "flex-start",
     justifyContent: "flex-start",
-    marginLeft: 70,
   },
   frame1: {
-    width: 231,
+    width: "100%",
     height: 31,
     overflow: "hidden",
     flexDirection: "row",
-    alignItems: "flex-start",
-    justifyContent: "flex-start",
-    marginRight: 93,
+    alignItems: "center",
+    justifyContent: "center",
+    // marginRight: 93,
   },
   frame: {
+    marginTop: 25,
     width: 360,
     height: 50,
     overflow: "hidden",
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "flex-end",
-  },
-  selectSession: {
-    position: "relative",
-    fontSize: 9,
-    letterSpacing: -0.2,
-    lineHeight: 9,
-    fontWeight: "700",
-    fontFamily: FontFamily.poppinsBold,
-    color: Color.blue2,
-    textAlign: "left",
   },
   academicYear20232024: {
     position: "relative",
@@ -358,25 +353,31 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     marginTop: 13,
   },
-  selectSessionParent: {
-    width: 285,
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 13,
-  },
   frameChild: {
     position: "relative",
     width: 287,
     height: 0,
   },
-  frame3: {
-    width: 287,
-    overflow: "hidden",
+  selectSession: {
+    position: "relative",
+    fontSize: 15,
+    letterSpacing: -0.2,
+    lineHeight: 30,
+    fontWeight: "700",
+    fontFamily: FontFamily.poppinsBold,
+    color: Color.blue2,
+    textAlign: "left",
+  },
+  selectSessionParent: {
+    width: 330,
     flexDirection: "column",
-    alignItems: "flex-start",
-    justifyContent: "flex-end",
-    paddingBottom: 0,
+    marginTop: 13,
+  },
+  frame3: {
+    width: "100%",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
   },
   inputParent: {
     width: 285,
@@ -395,13 +396,11 @@ const styles = StyleSheet.create({
     marginTop: 13,
   },
   viewReportCard: {
-    position: "relative",
-    fontSize: 11,
-    lineHeight: 9,
-    fontWeight: "700",
-    fontFamily: FontFamily.poppinsBold,
-    color: Color.colorWhite,
-    textAlign: "left",
+    flex: 1,
+    borderRadius: 25, // Use half of the height to create a perfect circle
+    backgroundColor: "#FC4B41",
+    justifyContent: "center",
+    alignItems: "center",
   },
   buttonCariTiket: {
     borderRadius: 50,
@@ -415,15 +414,7 @@ const styles = StyleSheet.create({
   },
   menu: {
     borderRadius: 7,
-    shadowColor: "rgba(0, 0, 0, 0.25)",
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowRadius: 4,
-    elevation: 4,
-    shadowOpacity: 1,
-    width: 317,
+    width: "100%",
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
@@ -431,11 +422,9 @@ const styles = StyleSheet.create({
     paddingTop: Padding.p_xl,
     paddingRight: 15,
     paddingBottom: Padding.p_xl,
-    backgroundColor: "transparent",
   },
   frame2: {
-    width: 324,
-    overflow: "hidden",
+    width: "100%",
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
@@ -446,9 +435,9 @@ const styles = StyleSheet.create({
     borderRadius: Border.br_xl,
     backgroundColor: Color.colorGray_100,
     flex: 1,
-    width: "100%",
-    height: 800,
-    overflow: "hidden",
+    // width: 350,
+    // height: 800,
+
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "flex-start",

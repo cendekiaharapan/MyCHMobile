@@ -13,8 +13,10 @@ import { useNavigation } from "@react-navigation/native";
 import DropDown from "../components/DropDownTerm";
 import { Color, FontFamily, FontSize, Border, Padding } from "../GlobalStyles";
 import { retrieveItem } from "../database/database";
-
+import Toast from "react-native-toast-message";
+import { LoadingModal } from "react-native-loading-modal";
 import axios from "axios";
+import { useFocusEffect } from "@react-navigation/native";
 
 const NewAssessment = () => {
   const [academicSessions, setAcademicSessions] = useState([]);
@@ -24,20 +26,62 @@ const NewAssessment = () => {
   const [filteredTermSessions, setFilteredTermSessions] = useState([]);
   const [studentIds, setStudentIds] = React.useState([]); // State to store student IDs
   const [studentNames, setStudentNames] = React.useState([]);
-  const [selectedStudent, setSelectedStudent] = useState("");
+  const [selectedStudent, setSelectedStudent] = useState(null);
   const navigation = useNavigation();
   const [selectedStudentName, setSelectedStudentName] = useState("");
   const [selectedSemesterName, setSelectedSemesterName] = useState("");
   const [selectedSessionName, setSelectedSessionName] = useState("");
+  const [loading, setLoading] = React.useState(false);
 
   const handleBackButton = () => {
     navigation.navigate("Main App Stack", {
       screen: "BottomNavbar", // change this with your screen name
     });
   };
+  const showToast = () => {
+    Toast.show({
+      type: "error",
+      text1: "Term Assessment",
+      text2: "There are no terms for this academic session",
+      position: "top",
+    });
+  };
+  const showToastError = () => {
+    Toast.show({
+      type: "error",
+      text1: "Term Assessment",
+      text2: "No academic report, please select another option!",
+      position: "top",
+    });
+  };
+  const showToastSuccess = () => {
+    Toast.show({
+      type: "success",
+      text1: "Term Assessment",
+      text2: "Term Assessment has been retrieved!",
+      position: "top",
+    });
+  };
+  const showToastErrorRequired = () => {
+    Toast.show({
+      text1: "Please select all required fields!",
+      text1Style: { fontSize: 15 },
+      text2Style: { fontSize: 13 },
+      type: "error",
+    });
+  };
 
   const handleSubmit = () => {
-    if (selectedStudent && selectedSession) {
+    console.log("handle submit");
+
+    try {
+      if (selectedStudent === null || !selectedSession || !selectedSemester) {
+        showToastErrorRequired();
+        return; // Exit early to avoid further processing
+      }
+
+      setLoading(true);
+
       // Prepare data for the post request
       console.log("Selected AAAA: " + selectedSemester);
       const postData = {
@@ -53,6 +97,8 @@ const NewAssessment = () => {
         )
         .then((response) => {
           console.log("XXXXXXXXXXXXXX", selectedSemesterName);
+          setLoading(false);
+          showToastSuccess();
           // Navigate to AssessmentList and pass parameters
           navigation.navigate("AssessmentList", {
             selectedStudent,
@@ -64,10 +110,13 @@ const NewAssessment = () => {
           });
         })
         .catch((error) => {
-          console.error("Error fetching semester assessment report:", error);
+          setLoading(false);
+          showToastError();
         });
-    } else {
-      console.warn("Please select both student and session before submitting.");
+    } catch (error) {
+      console.error("An unexpected error occurred:", error);
+      setLoading(false);
+      showToastError();
     }
   };
   useEffect(() => {
@@ -78,7 +127,6 @@ const NewAssessment = () => {
     if (selectedSemesterData) {
       setSelectedSemesterName(selectedSemesterData.name);
     } else {
-      console.error("Selected semester data not found.");
     }
   }, [selectedSemester, termSessions]);
 
@@ -99,7 +147,6 @@ const NewAssessment = () => {
           if (selectedStudentData) {
             setSelectedStudentName(selectedStudentData.name);
           } else {
-            console.error("Selected student data not found.");
           }
         } else {
           console.log("No data found in SQLite.");
@@ -110,25 +157,41 @@ const NewAssessment = () => {
       });
   }, [selectedStudent]);
 
-  useEffect(() => {
-    axios
-      .get("https://www.balichildrenshouse.com/myCH/api/get-academic-sessions")
-      .then((response) => {
-        setAcademicSessions(response.data);
+  useFocusEffect(
+    React.useCallback(() => {
+      const fetchData = async () => {
+        try {
+          const response = await axios.get(
+            "https://www.balichildrenshouse.com/myCH/api/get-academic-sessions"
+          );
+          setAcademicSessions(response.data);
 
-        // Assuming that the response structure is { name: "SemesterName" }
-        const sessions = response.data;
-        const selectedSessionIndex = sessions.findIndex(
-          (session) => session.id === selectedSession
-        );
-        if (selectedSessionIndex !== -1) {
-          setSelectedSessionName(sessions[selectedSessionIndex].name);
+          // Assuming that the response structure is { name: "SemesterName" }
+          const sessions = response.data;
+          const selectedSessionIndex = sessions.findIndex(
+            (session) => session.id === selectedSession
+          );
+          if (selectedSessionIndex !== -1) {
+            setSelectedSessionName(sessions[selectedSessionIndex].name);
+          }
+        } catch (error) {
+          console.error("Error fetching academic sessions: ", error);
         }
-      })
-      .catch((error) => {
-        console.error("Error fetching academic sessions: ", error);
-      });
-  }, [selectedSession]);
+      };
+
+      fetchData(); // Call fetchData when the screen is focused
+
+      return () => {
+        // Cleanup function, if needed
+      };
+    }, [selectedSession]) // Include selectedSession as a dependency
+  );
+
+  function clearSelectedSemester() {
+    // Implement the logic to clear the selected semester state
+    setSelectedSemester(null);
+    setFilteredTermSessions([]);
+  }
 
   function fetchAndSetTermSessions(selectedSession) {
     console.log("inside ftech and set term session id : ", selectedSession);
@@ -151,6 +214,8 @@ const NewAssessment = () => {
         })
         .catch((error) => {
           showToast();
+          console.log("error no fetching term session");
+          clearSelectedSemester();
         });
     }
   }
@@ -163,6 +228,7 @@ const NewAssessment = () => {
 
   return (
     <NativeBaseProvider>
+      <LoadingModal modalVisible={loading} color="red" />
       <View style={styles.mainContainer}>
         <View style={styles.bodyContainer}>
           <View style={styles.headerContainer}>
@@ -273,9 +339,9 @@ const NewAssessment = () => {
 const styles = StyleSheet.create({
   selectSession: {
     position: "relative",
-    fontSize: 9,
+    fontSize: 15,
     letterSpacing: -0.2,
-    lineHeight: 9,
+    lineHeight: 30,
     fontWeight: "700",
     fontFamily: FontFamily.poppinsBold,
     color: Color.blue2,
@@ -284,8 +350,7 @@ const styles = StyleSheet.create({
   selectSessionParent: {
     width: 330,
     flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
+
     marginTop: 13,
   },
   frame3: {

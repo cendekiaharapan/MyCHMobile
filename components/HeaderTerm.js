@@ -27,19 +27,6 @@ const Header = (assessmentData) => {
               <Text style={styles.FinalScores}>Final Score</Text>
             </View>
           </View>
-
-          {/* <Text style={styles.mathematic}>
-            {assessmentData.assessmentData.title}
-          </Text>
-          <Text style={[styles.text, styles.textTypo]}>
-            {assessmentData.assessmentData.final_score}
-          </Text>
-          <Text style={[styles.semester1, styles.semester1Typo]}>
-            {assessmentData.assessmentData.semester}
-          </Text>
-          <Text style={[styles.academicYear20232024, styles.semester1Typo]}>
-            {assessmentData.assessmentData.session}
-          </Text> */}
         </>
       )}
     </View>
@@ -122,6 +109,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     flex: 0.3,
+    bottom: 20,
   },
   AcademicStyles: {
     fontSize: 12,
@@ -140,6 +128,7 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.poppinsBold,
   },
   FinalScores: {
+    bottom: 2,
     fontSize: 13,
     fontFamily: FontFamily.poppinsBold,
   },
