@@ -1,5 +1,11 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { Text, StyleSheet, View, Pressable } from "react-native";
+import {
+  Text,
+  StyleSheet,
+  View,
+  Pressable,
+  TouchableOpacity,
+} from "react-native";
 import { Image } from "expo-image";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { Color, FontSize, FontFamily, Border, Padding } from "../GlobalStyles";
@@ -28,6 +34,15 @@ const ListOfReport = () => {
   console.log("reportData:", selectedStudentName);
 
   const reportData = apiResponse;
+
+  const handleReportDetail = () => {
+    console.log("handle report detail clicked!");
+    // navigation.navigate("DetailReport", {
+    //   id: id,
+    //   start_date: postData.start_date,
+    //   end_date: postData.end_date,
+    // });
+  };
 
   return (
     <NativeBaseProvider>
@@ -144,23 +159,25 @@ const ListOfReport = () => {
               style={{ marginTop: "65%" }}
             >
               {reportData.map((report) => (
-                <ReportEntry
-                  key={report.id}
-                  date={
-                    report.date
-                      ? `${new Date(report.date).toLocaleDateString("id-ID", {
-                          day: "2-digit",
-                          month: "long",
-                          year: "numeric",
-                        })}`
-                      : ""
-                  }
-                  subject={report.subject.title}
-                  topic={report.topic}
-                  comment={report.comment}
-                  score={report.score}
-                  onPress={() => navigation.navigate("DetailReport")}
-                />
+                <TouchableOpacity onPress={handleReportDetail}>
+                  <ReportEntry
+                    key={report.id}
+                    date={
+                      report.date
+                        ? `${new Date(report.date).toLocaleDateString("id-ID", {
+                            day: "2-digit",
+                            month: "long",
+                            year: "numeric",
+                          })}`
+                        : ""
+                    }
+                    subject={report.subject.title}
+                    topic={report.topic}
+                    comment={report.comment}
+                    score={report.score}
+                    onPress={handleReportDetail}
+                  />
+                </TouchableOpacity>
               ))}
             </ScrollView>
           </View>
