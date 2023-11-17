@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Image } from "expo-image";
-import { StyleSheet, Text, View, TextInput, Pressable } from "react-native";
+import { TouchableOpacity, StyleSheet, Text, View, TextInput, Pressable, Linking } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { Color, FontFamily, FontSize, Border, Padding } from "../GlobalStyles";
 
@@ -15,6 +15,7 @@ const DetailReports = () => {
     comment, 
     score, 
     remark, 
+    file_comment,
     student_id, 
     start_date, 
     end_date, 
@@ -34,6 +35,7 @@ const DetailReports = () => {
   const [commentData, setCommentData] = useState(comment);
   const [scoreData, setScoreData] = useState(score);
   const [remarkData, setRemarkData] = useState(remark);
+  const [messagefile, setMessageFile] = useState(file_comment);
 
   const [studentId, setStudentID] = useState(student_id);
   const [startDate, setStartDate] = useState(start_date);
@@ -48,8 +50,12 @@ const DetailReports = () => {
   const [selectedStudentName, setSelectedStudentName] = useState(selected_student_name);
 
   const [inputText, setInputText] = useState("");
+  const [showFile, setShowFile] = useState(true);
 
   useEffect(() => {
+    if (!messagefile) {
+      setShowFile(false);
+    }
     fetchData();
   }, []);
 
@@ -89,6 +95,19 @@ const DetailReports = () => {
     });
   };
 
+  const openFileUrl = async () => {
+    try {
+      if (messagefile) {
+        const fileUrl = `https://www.balichildrenshouse.com/myCH/ev-assets/uploads/student-score/${messagefile}`;
+        await Linking.openURL(fileUrl);
+      } else {
+        console.error('File is not available.');
+      }
+    } catch (error) {
+      console.error('Error opening file URL:', error);
+    }
+  };
+
   return (
     // Header
     <View style={[styles.detailNew, styles.iconLayout]}>
@@ -113,7 +132,7 @@ const DetailReports = () => {
       <View style={styles.mathematicParent}>
         <Text style={[styles.mathematic, styles.score90Typo]}>{subjectData}</Text>
         <Text style={[styles.oct2023, styles.oct2023Typo]}>{dateData}</Text>
-        <Text style={[styles.score90, styles.score90Typo]}>Score : {scoreData.score}</Text>
+        <Text style={[styles.score90, styles.score90Typo]}>Score : {scoreData}</Text>
       </View>
     )}
         
@@ -149,6 +168,25 @@ const DetailReports = () => {
           value={inputText}
           onChangeText={(text) => setInputText(text)}
         />
+      </View>
+    )}
+    {showFile && (
+      <View style={styles.inputContainer}>
+        <Text style={styles.FormTitle}>File</Text>
+          {/* Use Button component here */}
+          <TouchableOpacity onPress={openFileUrl}>
+            <Text
+              style={{
+                fontFamily: FontFamily.poppinsLight,
+                fontWeight: "300",
+                color: "#a6a6a6",
+                fontSize: FontSize.textRegularXs12_size,
+                marginLeft: 75
+              }}
+            >
+              Download File
+            </Text>
+          </TouchableOpacity>
       </View>
     )}
     </View>

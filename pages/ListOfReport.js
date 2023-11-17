@@ -159,6 +159,7 @@ const ListOfReport = () => {
                   comment={report.comment}
                   score={report.score}
                   remark={report.problem}
+                  file_comment={report.file_comment}
                   student_id={studentID}
                   start_date={startDate}
                   end_date={endDate}
