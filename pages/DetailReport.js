@@ -140,55 +140,55 @@ const DetailReports = () => {
     {scoreData && (
       <View style={styles.inputContainer1}>
         <Text style={styles.FormTitle}>Topic</Text>
-        <TextInput
-          style={styles.InputField}
-          placeholder={topicData}
-          value={inputText}
-          onChangeText={(text) => setInputText(text)}
-        />
+        <Text style={styles.dataText}>{topicData}</Text>
+
       </View>
     )}
     {scoreData && (
       <View style={styles.inputContainer}>
-        <Text style={styles.FormTitle}>Remark</Text>
-        <TextInput
-          style={styles.InputField}
-          placeholder={remarkData}
-          value={inputText}
-          onChangeText={(text) => setInputText(text)}
-        />
-      </View>
+      <Text style={styles.FormTitle}>Remark</Text>
+      {remarkData ? (
+        <Text style={styles.dataText}>{remarkData}</Text>
+      ) : (
+        <Text style={styles.placeholderText}>N/A</Text>
+      )}
+    </View>    
     )}
     {scoreData && (
       <View style={styles.inputContainer}>
-        <Text style={styles.FormTitle}>Comment</Text>
-        <TextInput
-          style={styles.InputField}
-          placeholder={commentData}
-          value={inputText}
-          onChangeText={(text) => setInputText(text)}
-        />
-      </View>
+      <Text style={styles.FormTitle}>Comment</Text>
+      {remarkData ? (
+        <Text style={styles.dataText}>{commentData}</Text>
+      ) : (
+        <Text style={styles.placeholderText}>N/A</Text>
+      )}
+    </View>    
     )}
-    {showFile && (
-      <View style={styles.inputContainer}>
-        <Text style={styles.FormTitle}>File</Text>
-          {/* Use Button component here */}
-          <TouchableOpacity onPress={openFileUrl}>
-            <Text
-              style={{
-                fontFamily: FontFamily.poppinsLight,
-                fontWeight: "300",
-                color: "#a6a6a6",
-                fontSize: FontSize.textRegularXs12_size,
-                marginLeft: 75
-              }}
-            >
-              Download File
-            </Text>
-          </TouchableOpacity>
-      </View>
-    )}
+    {messagefile !== null && messagefile !== '' ? (
+  <View style={styles.inputContainer}>
+    <Text style={styles.FormTitle}>File</Text>
+    {/* Use Button component here */}
+    <TouchableOpacity onPress={openFileUrl}>
+      <Text
+        style={{
+          fontFamily: FontFamily.poppinsLight,
+          fontWeight: "300",
+          color: "#a6a6a6",
+          fontSize: FontSize.textRegularXs12_size,
+          marginLeft: 75
+        }}
+      >
+        Download File
+      </Text>
+    </TouchableOpacity>
+  </View>
+) : (
+  <View style={styles.inputContainer}>
+    <Text style={styles.FormTitle}>File</Text>
+    <Text style={styles.dataText}>N/A</Text>
+  </View>
+)}
+
     </View>
     </View>
   );
@@ -196,7 +196,7 @@ const DetailReports = () => {
 
 const styles = StyleSheet.create({
     inputContainer1: {
-        marginTop:200,
+        marginTop:180,
       },
     inputContainer: {
         marginTop:10,
@@ -206,13 +206,26 @@ const styles = StyleSheet.create({
         fontSize: FontSize.size_sm,
         color: Color.colorBlack,
       },
-      InputField: {
+      placeholderText: {
+        fontFamily: FontFamily.poppinsRegular,
+        fontSize: FontSize.size_sm,
+        color: Color.colorBlack,
         borderWidth: 1,
         borderColor: Color.colorGrey,
-        borderRadius: Border.br1,
+        borderRadius: Border.br_xs,
         padding: Padding.p_sm,
-        marginTop: 5, 
-      },
+        marginTop: 5,
+      },      
+      dataText: {
+        fontFamily: FontFamily.poppinsRegular,
+        fontSize: FontSize.size_sm,
+        color: Color.colorBlack,
+        borderWidth: 1,
+        borderColor: Color.colorGrey,
+        borderRadius: Border.br_xs,
+        padding: Padding.p_sm,
+        marginTop: 5,
+      },      
   iconLayout: {
     width: "100%",
     overflow: "hidden",
@@ -226,7 +239,7 @@ const styles = StyleSheet.create({
   score90Typo: {
     color: Color.colorBlack,
     top: "3.66%",
-    textAlign: "center",
+    textAlign: "left",
     fontFamily: FontFamily.poppinsBold,
     fontWeight: "700",
     position: "absolute",
@@ -346,25 +359,26 @@ const styles = StyleSheet.create({
     width: 107,
   },
   mathematic: {
-    textAlign: "center",
-    left: "5%",
+    // textAlign: "left",
+    // left: "5%",
     fontSize: FontSize.size_xl,
     top: "3.66%",
+    width: "60%",
   },
   oct2023: {
     height: "3.23%",
-    width: "31.47%",
+    width: "50%",
     fontWeight: "300",
     fontFamily: FontFamily.poppinsLight,
     top: "0%",
     fontSize: FontSize.bodyBodyXS_size,
-    textAlign: "center",
+    textAlign: "left",
     color: Color.colorBlack,
     left: "0%",
   },
   score90: {
     left: "72.94%",
-    fontSize: 17,
+    fontSize: FontSize.size_xl,
     textAlign: "center",
   },
   topic: {
@@ -563,6 +577,7 @@ const styles = StyleSheet.create({
     height: 542,
   },
   detailNew: {
+    justifyContent: 'center',
     borderRadius: Border.br_xl,
     backgroundColor: Color.colorGray_100,
     height: 800,
