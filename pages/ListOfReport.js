@@ -28,8 +28,6 @@ const ListOfReport = () => {
 
   console.log("reportData:", selectedStudentName);
 
-  const reportData = apiResponse;
-
   return (
     <NativeBaseProvider>
       <View style={[styles.listOfReport, styles.iconLayout]}>
@@ -144,7 +142,7 @@ const ListOfReport = () => {
               contentContainerStyle={styles.scrollContainer}
               style={{ marginTop: "65%" }}
             >
-              {reportData.map((report) => (
+              {apiResponse.map((report) => (
                 <ReportEntry
                   key={report.id}
                   date={
@@ -160,9 +158,17 @@ const ListOfReport = () => {
                   topic={report.topic}
                   comment={report.comment}
                   score={report.score}
+                  remark={report.problem}
                   student_id={studentID}
                   start_date={startDate}
                   end_date={endDate}
+                  post_data={postData}
+                  selected_student_id={selectedStudentId}
+                  selected_start_date={selectedStartDate}
+                  selected_end_date={selectedEndDate}
+                  student_name={studentName}
+                  api_response={apiResponse}
+                  selected_student_name={selectedStudentName}
                 />
               ))}
             </ScrollView>

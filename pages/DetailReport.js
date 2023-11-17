@@ -8,40 +8,86 @@ const DetailReports = () => {
   const navigation = useNavigation();
   const route = useRoute();
 
-  const { student_id, start_date, end_date } = route.params;
+  const { 
+    date, 
+    subject, 
+    topic, 
+    comment, 
+    score, 
+    remark, 
+    student_id, 
+    start_date, 
+    end_date, 
+    post_data, 
+    selected_student_id, 
+    selected_start_date, 
+    selected_end_date, 
+    student_name, 
+    api_response, 
+    selected_student_name
+  } = route.params;
+  
+
+  const [dateData, setDateData] = useState(date);
+  const [subjectData, setSubjectData] = useState(subject);
+  const [topicData, setTopicData] = useState(topic);
+  const [commentData, setCommentData] = useState(comment);
+  const [scoreData, setScoreData] = useState(score);
+  const [remarkData, setRemarkData] = useState(remark);
 
   const [studentId, setStudentID] = useState(student_id);
   const [startDate, setStartDate] = useState(start_date);
   const [endDate, setEndDate] = useState(end_date);
 
+  const [postData, setPostData] = useState(post_data);
+  const [selectedStudentId, setSelectedStudentId] = useState(selected_student_id);
+  const [selectedStartDate, setSelectedStartDate] = useState(selected_start_date);
+  const [selectedEndDate, setSelectedEndDate] = useState(selected_end_date);
+  const [studentName, setStudentName] = useState(student_name);
+  const [apiResponse, setApiResponse] = useState(api_response);
+  const [selectedStudentName, setSelectedStudentName] = useState(selected_student_name);
+
   const [inputText, setInputText] = useState("");
-  const [scoreData, setScoreData] = useState(null);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch("https://www.balichildrenshouse.com/myCHStaging/api/student/scores", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            student_id: studentId,
-            start_date: startDate,
-            end_date: endDate,
-          }),
-        });
-
-        const data = await response.json();
-        if (data && data.length > 0) {
-          setScoreData(data[0]);
-        }
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
     fetchData();
-  }, [studentId, startDate, endDate]);
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch("https://www.balichildrenshouse.com/myCHStaging/api/student/scores", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          student_id: studentId,
+          start_date: startDate,
+          end_date: endDate,
+        }),
+      });
+
+      const data = await response.json();
+      if (data && data.length > 0) {
+        setScoreData(data[0]);
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  const handleListOfReport = () => {
+
+    navigation.navigate("ListOfReport", {
+      postData: postData,
+      selectedStudentId: selectedStudentId,
+      selectedStartDate: selectedStartDate,
+      selectedEndDate: selectedEndDate,
+      studentName: studentName,
+      apiResponse: apiResponse,
+      selectedStudentName: selectedStudentName
+    });
+  };
 
   return (
     // Header
@@ -49,7 +95,7 @@ const DetailReports = () => {
       <View style={styles.ictwotoneArrowBackParent}>
         <Pressable
           style={styles.ictwotoneArrowBack}
-          onPress={() => navigation.navigate("ListOfReport")}>
+          onPress={handleListOfReport}>
           <Image
             style={[styles.icon, styles.iconLayout]}
             contentFit="cover"
@@ -65,8 +111,8 @@ const DetailReports = () => {
     {/* Hero */}
     {scoreData && (
       <View style={styles.mathematicParent}>
-        <Text style={[styles.mathematic, styles.score90Typo]}>{scoreData.subject.title}</Text>
-        <Text style={[styles.oct2023, styles.oct2023Typo]}>{scoreData.date}</Text>
+        <Text style={[styles.mathematic, styles.score90Typo]}>{subjectData}</Text>
+        <Text style={[styles.oct2023, styles.oct2023Typo]}>{dateData}</Text>
         <Text style={[styles.score90, styles.score90Typo]}>Score : {scoreData.score}</Text>
       </View>
     )}
@@ -77,7 +123,7 @@ const DetailReports = () => {
         <Text style={styles.FormTitle}>Topic</Text>
         <TextInput
           style={styles.InputField}
-          placeholder={scoreData.topic}
+          placeholder={topicData}
           value={inputText}
           onChangeText={(text) => setInputText(text)}
         />
@@ -88,7 +134,7 @@ const DetailReports = () => {
         <Text style={styles.FormTitle}>Remark</Text>
         <TextInput
           style={styles.InputField}
-          placeholder={scoreData.problem}
+          placeholder={remarkData}
           value={inputText}
           onChangeText={(text) => setInputText(text)}
         />
@@ -99,7 +145,7 @@ const DetailReports = () => {
         <Text style={styles.FormTitle}>Comment</Text>
         <TextInput
           style={styles.InputField}
-          placeholder={scoreData.file_comment}
+          placeholder={commentData}
           value={inputText}
           onChangeText={(text) => setInputText(text)}
         />

@@ -4,21 +4,44 @@ import { View, Text, StyleSheet, Pressable } from "react-native";
 import { Color, FontSize, FontFamily } from "../GlobalStyles";
 import { useNavigation } from "@react-navigation/native";
 
-const ReportEntry = ({ date, subject, topic, comment, score, student_id, start_date, end_date }) => {
+const ReportEntry = ({ 
+  date, 
+  subject, 
+  topic, 
+  comment, 
+  score, 
+  remark, 
+  student_id, 
+  start_date, 
+  end_date, 
+  post_data, 
+  selected_student_id, 
+  selected_start_date, 
+  selected_end_date, 
+  student_name, 
+  api_response, 
+  selected_student_name 
+}) => {
   const navigation = useNavigation();
 
   const handleReportDetail = () => {
-    console.log("Student ID:", student_id);
-
     navigation.navigate("DetailReport", {
       date: date, 
       subject: subject, 
       topic: topic, 
       comment: comment, 
       score: score,
+      remark: remark,
       student_id: student_id,
       start_date: start_date,
-      end_date: end_date
+      end_date: end_date,
+      post_data: post_data,
+      selected_student_id: selected_student_id,
+      selected_start_date: selected_start_date,
+      selected_end_date: selected_end_date,
+      student_name: student_name,
+      api_response: api_response,
+      selected_student_name: selected_student_name
     });
   };
   return (
