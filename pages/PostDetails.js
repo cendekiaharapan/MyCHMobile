@@ -10,23 +10,28 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useRoute } from '@react-navigation/native';
 import { FontFamily, Color, Border, Padding } from "../GlobalStyles";
 
 const DetailPost = () => {
   const navigation = useNavigation();
   const [postData, setPostData] = useState(null);
+  const route = useRoute();
 
   useEffect(() => {
-    // Fetch data when the component mounts
-    axios
-      .get("https://www.balichildrenshouse.com/myCHStaging/api/post_details/")
-      .then((response) => {
-        setPostData(response.data); // Assuming your API response is in JSON format
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
-  }, []);
+    // Assuming your API endpoint requires a post ID to fetch data
+    if (route.params && route.params.post) {
+      const postId = route.params.post.id;
+      axios
+        .get(`https://www.balichildrenshouse.com/myCHStaging/api/post_details/${postId}`)
+        .then((response) => {
+          setPostData(response.data); // Assuming your API response is in JSON format
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+        });
+    }
+  }, [route.params]);
 
   if (!postData) {
     // You can display a loading indicator here while waiting for the API response
