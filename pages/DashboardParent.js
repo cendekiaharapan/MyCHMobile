@@ -262,6 +262,9 @@ const DashboardParent = () => {
                             <CircularProgress
                               radius={43}
                               value={child.attendanceData.attendancePercentage}
+                              initialValue={
+                                child.attendanceData.attendancePercentage
+                              }
                               progressValueColor={"black"}
                               valueSuffix={"%"}
                             />

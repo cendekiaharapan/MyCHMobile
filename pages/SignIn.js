@@ -87,7 +87,7 @@ const SignIn = () => {
         }
         // You can navigate to another screen after successful login
         // After a successful login
-        navigation.navigate("BottomNavbar", { screen: homeName });
+        navigation.navigate("Main App Stack", { BottomNavbar });
 
         setLoading(false);
         Toast.show({
