@@ -40,6 +40,8 @@ import CircularProgress from "react-native-circular-progress-indicator";
 import { HorizontalBarChart } from "chart-react-native";
 import { VerticalBarChart } from "chart-react-native";
 import { ProgressSteps, ProgressStep } from "react-native-progress-steps";
+import { useFocusEffect } from "@react-navigation/native";
+import { LoadingModal } from "react-native-loading-modal";
 
 const DashboardParent = () => {
   const [parentName, setParentName] = useState(null);
@@ -52,7 +54,7 @@ const DashboardParent = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [modalEventsVisible, setModalEventsVisible] = useState(false);
   const [currentBooklet, setCurrentBooklet] = useState(0);
-
+  const [loading, setLoading] = React.useState(false);
   const [modalDailyScoreVisible, setModalDailyScoreVisible] = useState(false);
   const [selectedChildData, setSelectedChildData] = useState(null);
   const [upcomingEvents, setUpcomingEvents] = useState(null);
@@ -82,19 +84,26 @@ const DashboardParent = () => {
           const postArray = response.data.data.posts;
           storeItem("postData", postArray);
           setChildrenData(childrensArray);
+          setLoading(false);
         })
         .catch((error) => {
           // Handle any errors that occurred during the request
           console.error("Error fetching data:", error);
+          setLoading(false);
         });
     } catch (error) {
       // Handle errors
       console.error("Error fetching data:", error.message);
+      setLoading(false);
     }
   };
-  useEffect(() => {
-    fetchRespData();
-  }, []);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      setLoading(true);
+      fetchRespData();
+    }, [])
+  );
 
   const handleAttendanceClick = (childData) => {
     setSelectedChildData(childData);
@@ -111,6 +120,7 @@ const DashboardParent = () => {
 
   return (
     <View style={styles.MainContainer}>
+      <LoadingModal modalVisible={loading} color="red" />
       <View style={styles.HeaderContainer}>
         <Image
           style={{ width: 75, height: 75 }}
@@ -125,83 +135,117 @@ const DashboardParent = () => {
           <CarouselCards />
         </View>
         <ScrollView style={styles.ScrollContainer}>
-          {childrenData != null
-            ? childrenData.map((child, index) => {
-                // child.events.map((event, index) => {
-                // });
+          {childrenData !== null ? (
+            childrenData.map((child, index) => {
+              // child.events.map((event, index) => {
+              // });
 
-                // if (!currentTestArray.includes(child.id)) {
-                //   // child.id is not in currentTestArray, add it
-                //   setCurrentTestArray((prevArray) => [...prevArray, child.id]);
-                // }
-                const now = new Date(); // current date and time
-                const buttonTextStyle = {
-                  color: "#393939",
-                };
-                const upcomingEvents = child.events.filter((event) => {
-                  const eventStart = new Date(event.start_timestamp);
-                  return eventStart > now;
-                });
+              // if (!currentTestArray.includes(child.id)) {
+              //   // child.id is not in currentTestArray, add it
+              //   setCurrentTestArray((prevArray) => [...prevArray, child.id]);
+              // }
+              const now = new Date(); // current date and time
+              const buttonTextStyle = {
+                color: "#393939",
+              };
+              const upcomingEvents = child.events.filter((event) => {
+                const eventStart = new Date(event.start_timestamp);
+                return eventStart > now;
+              });
 
-                if (upcomingEvents.length > 0) {
-                  // Get the first upcoming event
-                  const firstUpcomingEvent = upcomingEvents[0];
-                  if (upcomingEvents == null) {
-                    setUpcomingEvents(firstUpcomingEvent);
-                  }
-                  const rawDate = upcomingEvents[0].start_timestamp;
-                  const formattedDate = new Date(rawDate).toLocaleDateString(
-                    "en-US",
-                    {
-                      day: "numeric",
-                      month: "short",
-                      year: "numeric",
-                      timeZone: "UTC",
-                    }
-                  );
-                  if (upcomingEventsFirstDate == null) {
-                    setUpcomingEventsFirstDate(
-                      formattedDate
-                        .replace(/^[A-Za-z]+,\s/, "") // Remove day of the week (e.g., "Saturday, ")
-                        .replace(/\s\d{2}:\d{2}/, "") // Remove time (e.g., " 12:34")
-                        .replace(/:00 AM UTC$/, "")
-                        .replace(/,/, "") // Remove the comma
-                    );
-                  }
-                } else {
-                  console.log("No upcoming events.");
+              if (upcomingEvents.length > 0) {
+                // Get the first upcoming event
+                const firstUpcomingEvent = upcomingEvents[0];
+                if (upcomingEvents == null) {
+                  setUpcomingEvents(firstUpcomingEvent);
                 }
-
-                const stepsArray = Object.entries(
-                  child.booklet.parsed_steps
-                ).map(([label, date]) => ({ label, date }));
-
-                let targetLabel = null;
-                let indexArray = 0;
-
-                if (
-                  child.bookletStudent != null &&
-                  child.bookletStudent.booklet_step != null
-                ) {
-                  targetLabel = child.bookletStudent.booklet_step;
-                  indexArray = stepsArray.findIndex(
-                    (item) => item.label === targetLabel
+                const rawDate = upcomingEvents[0].start_timestamp;
+                const formattedDate = new Date(rawDate).toLocaleDateString(
+                  "en-US",
+                  {
+                    day: "numeric",
+                    month: "short",
+                    year: "numeric",
+                    timeZone: "UTC",
+                  }
+                );
+                if (upcomingEventsFirstDate == null) {
+                  setUpcomingEventsFirstDate(
+                    formattedDate
+                      .replace(/^[A-Za-z]+,\s/, "") // Remove day of the week (e.g., "Saturday, ")
+                      .replace(/\s\d{2}:\d{2}/, "") // Remove time (e.g., " 12:34")
+                      .replace(/:00 AM UTC$/, "")
+                      .replace(/,/, "") // Remove the comma
                   );
-                } else {
-                  indexArray = -1;
-                  targetLabel = "booklet student null";
                 }
+              } else {
+                console.log("No upcoming events.");
+              }
 
-                return (
-                  <View style={styles.ChildContainer} key={index}>
-                    <ScrollView horizontal style={{ flex: 1 }}>
-                      <View style={styles.ChildNameContainer}>
-                        <Text style={styles.ChildName}>{child.name}</Text>
-                        <Text style={styles.ChildName1}>'s Dashboard</Text>
+              const stepsArray = Object.entries(child.booklet.parsed_steps).map(
+                ([label, date]) => ({ label, date })
+              );
+
+              let targetLabel = null;
+              let indexArray = 0;
+
+              if (
+                child.bookletStudent != null &&
+                child.bookletStudent.booklet_step != null
+              ) {
+                targetLabel = child.bookletStudent.booklet_step;
+                indexArray = stepsArray.findIndex(
+                  (item) => item.label === targetLabel
+                );
+              } else {
+                indexArray = -1;
+                targetLabel = "booklet student null";
+              }
+
+              return (
+                <View style={styles.ChildContainer} key={index}>
+                  <ScrollView horizontal style={{ flex: 1 }}>
+                    <View style={styles.ChildNameContainer}>
+                      <Text style={styles.ChildName}>{child.name}</Text>
+                      <Text style={styles.ChildName1}>'s Dashboard</Text>
+                    </View>
+                  </ScrollView>
+                  <View style={styles.ChildDataContainer}>
+                    <View style={styles.ChildDataRow}>
+                      <View style={styles.CardData}>
+                        <View style={styles.CardTitle}>
+                          <Text
+                            style={{
+                              fontSize: 18,
+                              color: "#241856",
+                              fontFamily: FontFamily.poppinsRegular,
+                            }}
+                          >
+                            CH Dollar
+                          </Text>
+                        </View>
+                        <View style={styles.CardItem}>
+                          <View style={styles.BalanceStyle}>
+                            <Text
+                              style={{
+                                fontSize: 70,
+                                color: "#03a9f3",
+                                bottom: 12,
+                              }}
+                            >
+                              &cent;
+                            </Text>
+                            <Text style={styles.balanceStyle2}>
+                              {child.flashpayBalance.balance}
+                            </Text>
+                          </View>
+                        </View>
                       </View>
-                    </ScrollView>
-                    <View style={styles.ChildDataContainer}>
-                      <View style={styles.ChildDataRow}>
+                      <TouchableOpacity
+                        onPress={() =>
+                          handleAttendanceClick(child.attendanceData)
+                        }
+                      >
                         <View style={styles.CardData}>
                           <View style={styles.CardTitle}>
                             <Text
@@ -211,145 +255,111 @@ const DashboardParent = () => {
                                 fontFamily: FontFamily.poppinsRegular,
                               }}
                             >
-                              CH Dollar
+                              Attendance
                             </Text>
                           </View>
                           <View style={styles.CardItem}>
-                            <View style={styles.BalanceStyle}>
-                              <Text
-                                style={{
-                                  fontSize: 70,
-                                  color: "#03a9f3",
-                                  bottom: 12,
-                                }}
-                              >
-                                &cent;
-                              </Text>
-                              <Text style={styles.balanceStyle2}>
-                                {child.flashpayBalance.balance}
-                              </Text>
-                            </View>
+                            <CircularProgress
+                              radius={43}
+                              value={child.attendanceData.attendancePercentage}
+                              progressValueColor={"black"}
+                              valueSuffix={"%"}
+                            />
                           </View>
                         </View>
-                        <TouchableOpacity
-                          onPress={() =>
-                            handleAttendanceClick(child.attendanceData)
-                          }
-                        >
-                          <View style={styles.CardData}>
-                            <View style={styles.CardTitle}>
-                              <Text
-                                style={{
-                                  fontSize: 18,
-                                  color: "#241856",
-                                  fontFamily: FontFamily.poppinsRegular,
-                                }}
-                              >
-                                Attendance
-                              </Text>
-                            </View>
-                            <View style={styles.CardItem}>
-                              <CircularProgress
-                                radius={43}
-                                value={
-                                  child.attendanceData.attendancePercentage
-                                }
-                                progressValueColor={"black"}
-                                valueSuffix={"%"}
-                              />
-                            </View>
-                          </View>
-                        </TouchableOpacity>
-                      </View>
-                      <View style={styles.ChildDataRow}>
-                        <TouchableOpacity
-                          onPress={() => handleEventsClick(child.events)}
-                        >
-                          <View style={styles.CardData}>
-                            <View style={styles.CardTitle}>
-                              <Text
-                                style={{
-                                  fontSize: 18,
-                                  color: "#241856",
-                                  fontFamily: FontFamily.poppinsRegular,
-                                }}
-                              >
-                                Events
-                              </Text>
-                            </View>
-                            <View style={styles.CardItem}>
-                              <Text
-                                style={{
-                                  textAlign: "center",
-                                  fontSize: 18,
-                                  fontFamily: FontFamily.poppinsBold,
-                                }}
-                              >
-                                {upcomingEventsFirstDate}
-                              </Text>
-                              <Text
-                                style={{
-                                  textAlign: "center",
-                                  fontSize: 10,
-                                  fontFamily: FontFamily.poppinsRegular,
-                                }}
-                              >
-                                {upcomingEvents[0].title}
-                              </Text>
-                            </View>
-                          </View>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                          onPress={() =>
-                            handleDailyScoreClick(child.scoreData.subjects)
-                          }
-                        >
-                          <View style={styles.CardData}>
-                            <View style={styles.CardTitle}>
-                              <Text
-                                style={{
-                                  fontSize: 18,
-                                  color: "#241856",
-                                  fontFamily: FontFamily.poppinsRegular,
-                                }}
-                              >
-                                Daily Score
-                              </Text>
-                            </View>
-                            <View style={styles.CardItem}>
-                              <Image
-                                style={{ width: 103, height: 103 }}
-                                source={require("../assets/images/DailyScore.png")}
-                                contentFit="cover"
-                              />
-                            </View>
-                          </View>
-                        </TouchableOpacity>
-                      </View>
+                      </TouchableOpacity>
                     </View>
-                    <View style={styles.BookletContainer}>
-                      <Text>Booklet Progress</Text>
+                    <View style={styles.ChildDataRow}>
+                      <TouchableOpacity
+                        onPress={() => handleEventsClick(child.events)}
+                      >
+                        <View style={styles.CardData}>
+                          <View style={styles.CardTitle}>
+                            <Text
+                              style={{
+                                fontSize: 18,
+                                color: "#241856",
+                                fontFamily: FontFamily.poppinsRegular,
+                              }}
+                            >
+                              Events
+                            </Text>
+                          </View>
+                          <View style={styles.CardItem}>
+                            <Text
+                              style={{
+                                textAlign: "center",
+                                fontSize: 18,
+                                fontFamily: FontFamily.poppinsBold,
+                              }}
+                            >
+                              {upcomingEventsFirstDate}
+                            </Text>
+                            <Text
+                              style={{
+                                textAlign: "center",
+                                fontSize: 10,
+                                fontFamily: FontFamily.poppinsRegular,
+                              }}
+                            >
+                              {upcomingEvents[0].title}
+                            </Text>
+                          </View>
+                        </View>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        onPress={() =>
+                          handleDailyScoreClick(child.scoreData.subjects)
+                        }
+                      >
+                        <View style={styles.CardData}>
+                          <View style={styles.CardTitle}>
+                            <Text
+                              style={{
+                                fontSize: 18,
+                                color: "#241856",
+                                fontFamily: FontFamily.poppinsRegular,
+                              }}
+                            >
+                              Daily Score
+                            </Text>
+                          </View>
+                          <View style={styles.CardItem}>
+                            <Image
+                              style={{ width: 103, height: 103 }}
+                              source={require("../assets/images/DailyScore.png")}
+                              contentFit="cover"
+                            />
+                          </View>
+                        </View>
+                      </TouchableOpacity>
                     </View>
-                    <ScrollView horizontal style={{ flex: 1 }}>
-                      <ProgressSteps activeStep={indexArray + 1}>
-                        {stepsArray.map((parse, index) => {
-                          return (
-                            <ProgressStep
-                              key={index} // Add a unique key prop for each ProgressStep
-                              nextBtnDisabled
-                              previousBtnDisabled
-                              removeBtnRow
-                              scrollViewProps
-                              label={parse.label}
-                            ></ProgressStep>
-                          );
-                        })}
-                      </ProgressSteps>
-                    </ScrollView>
                   </View>
-                );
-              })
-            : null}
+                  <View style={styles.BookletContainer}>
+                    <Text>Booklet Progress</Text>
+                  </View>
+                  <ScrollView horizontal style={{ flex: 1 }}>
+                    <ProgressSteps activeStep={indexArray + 1}>
+                      {stepsArray.map((parse, index) => {
+                        return (
+                          <ProgressStep
+                            key={index} // Add a unique key prop for each ProgressStep
+                            nextBtnDisabled
+                            previousBtnDisabled
+                            removeBtnRow
+                            scrollViewProps
+                            label={parse.label}
+                          ></ProgressStep>
+                        );
+                      })}
+                    </ProgressSteps>
+                  </ScrollView>
+                </View>
+              );
+            })
+          ) : (
+            <Text>Loading...</Text>
+          )}
         </ScrollView>
       </View>
       {(() => {

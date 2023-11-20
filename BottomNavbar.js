@@ -9,7 +9,7 @@ import Profile from "./pages/Profile";
 import Apps from "./pages/AppsList";
 
 //screen names
-const homeName = "Home";
+export const homeName = "Home";
 const appsName = "Apps";
 const profileName = "Profile";
 

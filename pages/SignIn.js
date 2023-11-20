@@ -21,6 +21,7 @@ import {
 } from "../database/database";
 import Toast from "react-native-toast-message";
 import { LoadingModal } from "react-native-loading-modal";
+import BottomNavbar, { homeName } from "../BottomNavbar";
 
 const SignIn = () => {
   const [childData, setChildData] = useState(null);
@@ -85,7 +86,9 @@ const SignIn = () => {
           }
         }
         // You can navigate to another screen after successful login
-        navigation.navigate("Main App Stack", { screen: "BottomNavbar" });
+        // After a successful login
+        navigation.navigate("BottomNavbar", { screen: homeName });
+
         setLoading(false);
         Toast.show({
           type: "success",
