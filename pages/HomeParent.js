@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import {
   Text,
   StyleSheet,
@@ -13,10 +13,23 @@ import Carousel from "react-native-reanimated-carousel";
 import Attendance from "../components/Attendance";
 import AverageDailyScore from "../components/AverageDailyScore";
 import { Color, FontFamily, FontSize, Border, Padding } from "../GlobalStyles";
+import {
+  storeItem,
+  retrieveItem,
+  deleteItem,
+  getAllKeys,
+  saveTokenToSecureStore,
+  getTokenFromSecureStore,
+  saveRespDataSecureStore,
+  getRespDataFromSecureStore,
+} from "../database/database";
+import axios from "axios";
 
 const HomeParent = () => {
   const [mensahContainerVisible, setMensahContainerVisible] = useState(false);
   const [mensahContainer1Visible, setMensahContainer1Visible] = useState(false);
+  const [parentId, setParentId] = useState(null);
+  const [responseData, setResponseData] = useState(null);
 
   const openMensahContainer = useCallback(() => {
     setMensahContainerVisible(true);
@@ -34,6 +47,41 @@ const HomeParent = () => {
     setMensahContainer1Visible(false);
   }, []);
 
+  const fetchRespData = async () => {
+    try {
+      console.log("this is inside fetchRespData");
+
+      // Assuming getRespDataFromSecureStore is an asynchronous function
+      resp = await getRespDataFromSecureStore();
+
+      // Assuming parentId is retrieved from resp.user.parent_id
+      const parentId = resp.user.name;
+      setParentId(parentId);
+      const apiUrl =
+        "https://www.balichildrenshouse.com/myCH/api/dashboard/1773";
+
+      // Make a GET request to the API
+      axios
+        .get(apiUrl)
+        .then((response) => {
+          // Handle the successful response here
+          setResponseData(response.data);
+          console.log("response data saved!", response.data.data.childrens);
+        })
+        .catch((error) => {
+          // Handle any errors that occurred during the request
+          console.error("Error fetching data:", error);
+        });
+    } catch (error) {
+      // Handle errors
+      console.error("Error fetching data:", error.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchRespData();
+  }, []);
+
   return (
     <>
       <View style={[styles.homeParent, styles.homeParentLayout]}>
@@ -42,19 +90,9 @@ const HomeParent = () => {
             <View style={styles.frameParent}>
               <View style={styles.welcomeToMychWrapper}>
                 <Text style={[styles.welcomeToMych, styles.textTypo3]}>
-                  Welcome to MyCH!
+                  Welcome, {parentId} to MyCH!
                 </Text>
               </View>
-              <Image
-                style={styles.emailIcon}
-                contentFit="cover"
-                source={require("../assets/images/email1.png")}
-              />
-              <Image
-                style={styles.bellIcon}
-                contentFit="cover"
-                source={require("../assets/images/bell1.png")}
-              />
             </View>
           </View>
           <View style={[styles.caraousel, styles.frameFlexBox1]}>
@@ -198,52 +236,6 @@ const HomeParent = () => {
                   />
                   <Text style={[styles.text12, styles.textTypo]}>3</Text>
                 </View>
-              </View>
-            </View>
-            <View style={[styles.frameGroup, styles.contentFlexBox]}>
-              <View style={[styles.homeGroup, styles.homeGroupFlexBox]}>
-                <Image
-                  style={styles.iconLayout}
-                  contentFit="cover"
-                  source={require("../assets/images/home1.png")}
-                />
-                <Text style={styles.home}>Home</Text>
-              </View>
-              <View
-                style={[styles.mdiwomanChildWrapper, styles.homeGroupFlexBox]}
-              >
-                <Image
-                  style={styles.mdiwomanChildIcon}
-                  contentFit="cover"
-                  source={require("../assets/images/mdiwomanchild1.png")}
-                />
-              </View>
-              <View
-                style={[styles.mdiwomanChildWrapper, styles.homeGroupFlexBox]}
-              >
-                <Image
-                  style={styles.mdiwomanChildIcon}
-                  contentFit="cover"
-                  source={require("../assets/images/materialsymbolscontactpage1.png")}
-                />
-              </View>
-              <View
-                style={[styles.mdiwomanChildWrapper, styles.homeGroupFlexBox]}
-              >
-                <Image
-                  style={[styles.biuiChecksGridIcon, styles.iconLayout]}
-                  contentFit="cover"
-                  source={require("../assets/images/biuichecksgrid2.png")}
-                />
-              </View>
-              <View
-                style={[styles.mdiwomanChildWrapper, styles.homeGroupFlexBox]}
-              >
-                <Image
-                  style={styles.iconLayout}
-                  contentFit="cover"
-                  source={require("../assets/images/vuesaxlinearprofile3.png")}
-                />
               </View>
             </View>
           </View>

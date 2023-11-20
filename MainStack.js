@@ -10,6 +10,7 @@ import AverageDailyScore from "./components/AverageDailyScore";
 import BottomNavbar from "./BottomNavbar";
 import Apps from "./pages/AppsList";
 import HomeParent from "./pages/HomeParent";
+import DashboardParent from "./pages/DashboardParent";
 
 // Call My Child
 import CallMyChild from "./pages/CallMyChild";
