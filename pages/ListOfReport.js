@@ -4,7 +4,7 @@ import { Image } from "expo-image";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { Color, FontSize, FontFamily, Border, Padding } from "../GlobalStyles";
 import { ScrollView, NativeBaseProvider } from "native-base";
-import DropDown from "../components/DropDown";
+import DropDown from "../components/DropDownDailyScore";
 import ReportEntry from "../components/ReportEntry";
 
 const ListOfReport = () => {

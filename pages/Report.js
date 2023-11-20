@@ -5,8 +5,8 @@ import { Image } from "expo-image";
 import { useNavigation } from "@react-navigation/native";
 import { Color, FontFamily, FontSize, Border, Padding } from "../GlobalStyles";
 import { retrieveItem } from "../database/database.js";
-import DropDown from "../components/DropDown";
-import DatePickerComponent from "../components/DatePicker";
+import DropDown from "../components/DropDownDailyScore";
+import DatePickerComponent from "../components/DatePickerDailyScore";
 import axios from "axios";
 import Toast from "react-native-toast-message";
 
