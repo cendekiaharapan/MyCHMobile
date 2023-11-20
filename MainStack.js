@@ -45,6 +45,11 @@ import NewAssessment from "./pages/NewAssessment";
 import AssessmentDetail from "./pages/AssessmentDetail";
 import AssessmentList from "./pages/AssessmentList";
 
+// Daily Score
+import Report from "./pages/Report";
+import ListOfReport from "./pages/ListOfReport";
+import DetailReport from "./pages/DetailReport";
+
 const Stack = createNativeStackNavigator();
 
 const MainStack = () => {
@@ -118,6 +123,21 @@ const MainStack = () => {
       <Stack.Screen
         name="ReportCard"
         component={ReportCard}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="DetailReport"
+        component={DetailReport}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="ListOfReport"
+        component={ListOfReport}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Report"
+        component={Report}
         options={{ headerShown: false }}
       />
       <Stack.Screen

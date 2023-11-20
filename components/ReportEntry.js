@@ -4,33 +4,33 @@ import { View, Text, StyleSheet, Pressable } from "react-native";
 import { Color, FontSize, FontFamily } from "../GlobalStyles";
 import { useNavigation } from "@react-navigation/native";
 
-const ReportEntry = ({ 
-  date, 
-  subject, 
-  topic, 
-  comment, 
-  score, 
-  remark, 
+const ReportEntry = ({
+  date,
+  subject,
+  topic,
+  comment,
+  score,
+  remark,
   file_comment,
-  student_id, 
-  start_date, 
-  end_date, 
-  post_data, 
-  selected_student_id, 
-  selected_start_date, 
-  selected_end_date, 
-  student_name, 
-  api_response, 
-  selected_student_name 
+  student_id,
+  start_date,
+  end_date,
+  post_data,
+  selected_student_id,
+  selected_start_date,
+  selected_end_date,
+  student_name,
+  api_response,
+  selected_student_name,
 }) => {
   const navigation = useNavigation();
 
   const handleReportDetail = () => {
     navigation.navigate("DetailReport", {
-      date: date, 
-      subject: subject, 
-      topic: topic, 
-      comment: comment, 
+      date: date,
+      subject: subject,
+      topic: topic,
+      comment: comment,
       score: score,
       remark: remark,
       file_comment: file_comment,
@@ -43,7 +43,7 @@ const ReportEntry = ({
       selected_end_date: selected_end_date,
       student_name: student_name,
       api_response: api_response,
-      selected_student_name: selected_student_name
+      selected_student_name: selected_student_name,
     });
   };
   return (
@@ -74,21 +74,21 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
   },
   frame: {
-    elevation: 5,
-    shadowRadius: 5,
-    borderColor: "white", // Border color
-    borderWidth: 1, // Border width
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowColor: "rgba(0, 0, 0, 0.8)",
-    height: "auto",
-    position: "relative",
-    width: "100%",
-    backgroundColor: Color.colorGray_100,
-    borderRadius: 10,
-    overflow: "hidden",
+    // elevation: 5,
+    // shadowRadius: 5,
+    // borderColor: "white", // Border color
+    // borderWidth: 1, // Border width
+    // shadowOffset: {
+    //   width: 0,
+    //   height: 2,
+    // },
+    // shadowColor: "rgba(0, 0, 0, 0.8)",
+    // height: "auto",
+    // position: "relative",
+    // width: "100%",
+    // backgroundColor: Color.colorGray_100,
+    // borderRadius: 10,
+    // overflow: "hidden",
   },
   cardShadowBox: {
     elevation: 29.56,

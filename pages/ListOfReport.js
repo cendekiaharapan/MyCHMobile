@@ -280,7 +280,7 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
   endTypo: {
-    color: Color.colorSnow,
+    color: "white",
     textAlign: "center",
     fontSize: FontSize.bodyBodyXS_size,
     fontFamily: FontFamily.poppinsBold,
@@ -292,7 +292,7 @@ const styles = StyleSheet.create({
     height: 15,
     width: 62,
     top: 21,
-    color: Color.colorSnow,
+    color: "white",
     fontSize: FontSize.size_3xs,
     textAlign: "center",
     fontFamily: FontFamily.poppinsBold,

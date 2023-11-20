@@ -11,6 +11,9 @@ export const FontFamily = {
 };
 /* font sizes */
 export const FontSize = {
+  size_6xl: 25,
+  size_16xl: 35,
+  bodyBodyXS_size: 12,
   size_xl: 20,
   size_3xs_5: 10,
   size_sm: 14,
@@ -90,6 +93,9 @@ export const Padding = {
   p_3xl: 22,
   p_16xl: 35,
   p_31xl: 50,
+  p_26xl: 45,
+  p_3xs: 10,
+  p_lg: 18,
 };
 /* border radiuses */
 export const Border = {
@@ -108,4 +114,5 @@ export const Border = {
   br_xs: 12,
   br_59xl_6: 79,
   br_3xs_9: 10,
+  br_81xl: 100,
 };

@@ -1,6 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Image } from "expo-image";
-import { TouchableOpacity, StyleSheet, Text, View, TextInput, Pressable, Linking } from "react-native";
+import {
+  TouchableOpacity,
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  Pressable,
+  Linking,
+} from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { Color, FontFamily, FontSize, Border, Padding } from "../GlobalStyles";
 
@@ -8,26 +16,25 @@ const DetailReports = () => {
   const navigation = useNavigation();
   const route = useRoute();
 
-  const { 
-    date, 
-    subject, 
-    topic, 
-    comment, 
-    score, 
-    remark, 
+  const {
+    date,
+    subject,
+    topic,
+    comment,
+    score,
+    remark,
     file_comment,
-    student_id, 
-    start_date, 
-    end_date, 
-    post_data, 
-    selected_student_id, 
-    selected_start_date, 
-    selected_end_date, 
-    student_name, 
-    api_response, 
-    selected_student_name
+    student_id,
+    start_date,
+    end_date,
+    post_data,
+    selected_student_id,
+    selected_start_date,
+    selected_end_date,
+    student_name,
+    api_response,
+    selected_student_name,
   } = route.params;
-  
 
   const [dateData, setDateData] = useState(date);
   const [subjectData, setSubjectData] = useState(subject);
@@ -42,12 +49,16 @@ const DetailReports = () => {
   const [endDate, setEndDate] = useState(end_date);
 
   const [postData, setPostData] = useState(post_data);
-  const [selectedStudentId, setSelectedStudentId] = useState(selected_student_id);
-  const [selectedStartDate, setSelectedStartDate] = useState(selected_start_date);
+  const [selectedStudentId, setSelectedStudentId] =
+    useState(selected_student_id);
+  const [selectedStartDate, setSelectedStartDate] =
+    useState(selected_start_date);
   const [selectedEndDate, setSelectedEndDate] = useState(selected_end_date);
   const [studentName, setStudentName] = useState(student_name);
   const [apiResponse, setApiResponse] = useState(api_response);
-  const [selectedStudentName, setSelectedStudentName] = useState(selected_student_name);
+  const [selectedStudentName, setSelectedStudentName] = useState(
+    selected_student_name
+  );
 
   const [inputText, setInputText] = useState("");
   const [showFile, setShowFile] = useState(true);
@@ -61,17 +72,20 @@ const DetailReports = () => {
 
   const fetchData = async () => {
     try {
-      const response = await fetch("https://www.balichildrenshouse.com/myCHStaging/api/student/scores", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          student_id: studentId,
-          start_date: startDate,
-          end_date: endDate,
-        }),
-      });
+      const response = await fetch(
+        "https://www.balichildrenshouse.com/myCHStaging/api/student/scores",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            student_id: studentId,
+            start_date: startDate,
+            end_date: endDate,
+          }),
+        }
+      );
 
       const data = await response.json();
       if (data && data.length > 0) {
@@ -83,7 +97,6 @@ const DetailReports = () => {
   };
 
   const handleListOfReport = () => {
-
     navigation.navigate("ListOfReport", {
       postData: postData,
       selectedStudentId: selectedStudentId,
@@ -91,7 +104,7 @@ const DetailReports = () => {
       selectedEndDate: selectedEndDate,
       studentName: studentName,
       apiResponse: apiResponse,
-      selectedStudentName: selectedStudentName
+      selectedStudentName: selectedStudentName,
     });
   };
 
@@ -101,10 +114,10 @@ const DetailReports = () => {
         const fileUrl = `https://www.balichildrenshouse.com/myCH/ev-assets/uploads/student-score/${messagefile}`;
         await Linking.openURL(fileUrl);
       } else {
-        console.error('File is not available.');
+        console.error("File is not available.");
       }
     } catch (error) {
-      console.error('Error opening file URL:', error);
+      console.error("Error opening file URL:", error);
     }
   };
 
@@ -114,7 +127,8 @@ const DetailReports = () => {
       <View style={styles.ictwotoneArrowBackParent}>
         <Pressable
           style={styles.ictwotoneArrowBack}
-          onPress={handleListOfReport}>
+          onPress={handleListOfReport}
+        >
           <Image
             style={[styles.icon, styles.iconLayout]}
             contentFit="cover"
@@ -127,105 +141,107 @@ const DetailReports = () => {
           </View>
         </View>
 
-    {/* Hero */}
-    {scoreData && (
-      <View style={styles.mathematicParent}>
-        <Text style={[styles.mathematic, styles.score90Typo]}>{subjectData}</Text>
-        <Text style={[styles.oct2023, styles.oct2023Typo]}>{dateData}</Text>
-        <Text style={[styles.score90, styles.score90Typo]}>Score : {scoreData}</Text>
-      </View>
-    )}
-        
-    {/* Body */}
-    {scoreData && (
-      <View style={styles.inputContainer1}>
-        <Text style={styles.FormTitle}>Topic</Text>
-        <Text style={styles.dataText}>{topicData}</Text>
+        {/* Hero */}
+        {scoreData && (
+          <View style={styles.mathematicParent}>
+            <Text style={[styles.mathematic, styles.score90Typo]}>
+              {subjectData}
+            </Text>
+            <Text style={[styles.oct2023, styles.oct2023Typo]}>{dateData}</Text>
+            <Text style={[styles.score90, styles.score90Typo]}>
+              Score : {scoreData}
+            </Text>
+          </View>
+        )}
 
+        {/* Body */}
+        {scoreData && (
+          <View style={styles.inputContainer1}>
+            <Text style={styles.FormTitle}>Topic</Text>
+            <Text style={styles.dataText}>{topicData}</Text>
+          </View>
+        )}
+        {scoreData && (
+          <View style={styles.inputContainer}>
+            <Text style={styles.FormTitle}>Remark</Text>
+            {remarkData ? (
+              <Text style={styles.dataText}>{remarkData}</Text>
+            ) : (
+              <Text style={styles.placeholderText}>N/A</Text>
+            )}
+          </View>
+        )}
+        {scoreData && (
+          <View style={styles.inputContainer}>
+            <Text style={styles.FormTitle}>Comment</Text>
+            {commentData ? (
+              <Text style={styles.dataText}>{commentData}</Text>
+            ) : (
+              <Text style={styles.placeholderText}>N/A</Text>
+            )}
+          </View>
+        )}
+        {messagefile !== null && messagefile !== "" ? (
+          <View style={styles.inputContainer}>
+            <Text style={styles.FormTitle}>File</Text>
+            {/* Use Button component here */}
+            <TouchableOpacity onPress={openFileUrl}>
+              <Text
+                style={{
+                  fontFamily: FontFamily.poppinsLight,
+                  fontWeight: "300",
+                  color: "#a6a6a6",
+                  fontSize: FontSize.textRegularXs12_size,
+                  marginLeft: 75,
+                }}
+              >
+                Download File
+              </Text>
+            </TouchableOpacity>
+          </View>
+        ) : (
+          <View style={styles.inputContainer}>
+            <Text style={styles.FormTitle}>File</Text>
+            <Text style={styles.dataText}>N/A</Text>
+          </View>
+        )}
       </View>
-    )}
-    {scoreData && (
-      <View style={styles.inputContainer}>
-      <Text style={styles.FormTitle}>Remark</Text>
-      {remarkData ? (
-        <Text style={styles.dataText}>{remarkData}</Text>
-      ) : (
-        <Text style={styles.placeholderText}>N/A</Text>
-      )}
-    </View>    
-    )}
-    {scoreData && (
-      <View style={styles.inputContainer}>
-      <Text style={styles.FormTitle}>Comment</Text>
-      {remarkData ? (
-        <Text style={styles.dataText}>{commentData}</Text>
-      ) : (
-        <Text style={styles.placeholderText}>N/A</Text>
-      )}
-    </View>    
-    )}
-    {messagefile !== null && messagefile !== '' ? (
-  <View style={styles.inputContainer}>
-    <Text style={styles.FormTitle}>File</Text>
-    {/* Use Button component here */}
-    <TouchableOpacity onPress={openFileUrl}>
-      <Text
-        style={{
-          fontFamily: FontFamily.poppinsLight,
-          fontWeight: "300",
-          color: "#a6a6a6",
-          fontSize: FontSize.textRegularXs12_size,
-          marginLeft: 75
-        }}
-      >
-        Download File
-      </Text>
-    </TouchableOpacity>
-  </View>
-) : (
-  <View style={styles.inputContainer}>
-    <Text style={styles.FormTitle}>File</Text>
-    <Text style={styles.dataText}>N/A</Text>
-  </View>
-)}
-
-    </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-    inputContainer1: {
-        marginTop:180,
-      },
-    inputContainer: {
-        marginTop:10,
-      },
-      FormTitle: {
-        fontFamily: FontFamily.poppinsRegular,
-        fontSize: FontSize.size_sm,
-        color: Color.colorBlack,
-      },
-      placeholderText: {
-        fontFamily: FontFamily.poppinsRegular,
-        fontSize: FontSize.size_sm,
-        color: Color.colorBlack,
-        borderWidth: 1,
-        borderColor: Color.colorGrey,
-        borderRadius: Border.br_xs,
-        padding: Padding.p_sm,
-        marginTop: 5,
-      },      
-      dataText: {
-        fontFamily: FontFamily.poppinsRegular,
-        fontSize: FontSize.size_sm,
-        color: Color.colorBlack,
-        borderWidth: 1,
-        borderColor: Color.colorGrey,
-        borderRadius: Border.br_xs,
-        padding: Padding.p_sm,
-        marginTop: 5,
-      },      
+  inputContainer1: {
+    marginTop: 180,
+  },
+  inputContainer: {
+    marginTop: 10,
+  },
+  FormTitle: {
+    fontFamily: FontFamily.poppinsRegular,
+    fontSize: FontSize.size_sm,
+    color: Color.colorBlack,
+  },
+  placeholderText: {
+    fontFamily: FontFamily.poppinsRegular,
+    fontSize: FontSize.size_sm,
+    color: Color.colorBlack,
+    borderWidth: 1,
+    borderColor: Color.colorGrey,
+    borderRadius: Border.br_xs,
+    padding: Padding.p_sm,
+    marginTop: 5,
+  },
+  dataText: {
+    fontFamily: FontFamily.poppinsRegular,
+    fontSize: FontSize.size_sm,
+    color: Color.colorBlack,
+    borderWidth: 1,
+    borderColor: Color.colorGrey,
+    borderRadius: Border.br_xs,
+    padding: Padding.p_sm,
+    marginTop: 5,
+  },
   iconLayout: {
     width: "100%",
     overflow: "hidden",
@@ -577,7 +593,7 @@ const styles = StyleSheet.create({
     height: 542,
   },
   detailNew: {
-    justifyContent: 'center',
+    justifyContent: "center",
     borderRadius: Border.br_xl,
     backgroundColor: Color.colorGray_100,
     height: 800,

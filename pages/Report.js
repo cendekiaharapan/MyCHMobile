@@ -19,6 +19,15 @@ const Report = () => {
   const [studentId, setStudentId] = useState("");
   const [selectedStudentName, setSelectedStudentName] = useState("");
 
+  const showToastErrorRequired = () => {
+    Toast.show({
+      text1: "Please select all required fields!",
+      text1Style: { fontSize: 15 },
+      text2Style: { fontSize: 13 },
+      type: "error",
+    });
+  };
+
   const handlePressSubmit = () => {
     // Check if all required data is available
     if (selectedStudentId && selectedStartDate && selectedEndDate) {
@@ -47,7 +56,7 @@ const Report = () => {
           showToastError();
         });
     } else {
-      console.log("Please select all required data.");
+      showToastErrorRequired();
     }
   };
   const handleSelectStudent = (studentId, studentName) => {
@@ -475,6 +484,7 @@ const styles = StyleSheet.create({
     height: 700,
   },
   report: {
+    top: "10%",
     borderRadius: Border.br_xl,
     flex: 1,
     width: "100%",

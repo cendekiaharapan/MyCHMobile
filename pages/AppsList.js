@@ -41,6 +41,11 @@ const AppsList = () => {
       screen: "NewAssessment", // change this with your screen name
     });
   };
+  const handleDailyScoreButton = () => {
+    navigation.navigate("Main App Stack", {
+      screen: "Report", // change this with your screen name
+    });
+  };
   return (
     <View style={styles.mainContainer}>
       <View style={styles.bodyContainer}>
@@ -57,16 +62,18 @@ const AppsList = () => {
               <Text style={styles.StyleText}>CALL MY CHILD</Text>
             </View>
           </TouchableOpacity>
-          <View style={styles.BoxContainer}>
-            <View style={styles.ImageContainer}>
-              <Image
-                style={styles.StyleImage}
-                source={require("../assets/images/DailyScoreReport.png")}
-                contentFit="cover"
-              />
+          <TouchableOpacity onPress={handleDailyScoreButton}>
+            <View style={styles.BoxContainer}>
+              <View style={styles.ImageContainer}>
+                <Image
+                  style={styles.StyleImage}
+                  source={require("../assets/images/DailyScoreReport.png")}
+                  contentFit="cover"
+                />
+              </View>
+              <Text style={styles.StyleText}>DAILY SCORE REPORT</Text>
             </View>
-            <Text style={styles.StyleText}>DAILY SCORE REPORT</Text>
-          </View>
+          </TouchableOpacity>
         </View>
         <View style={styles.RowContainer}>
           <TouchableOpacity onPress={handleTermAssessmentButton}>
