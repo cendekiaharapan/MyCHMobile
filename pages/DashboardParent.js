@@ -194,10 +194,12 @@ const DashboardParent = () => {
 
                 return (
                   <View style={styles.ChildContainer} key={index}>
-                    <View style={styles.ChildNameContainer}>
-                      <Text style={styles.ChildName}>{child.name}</Text>
-                      <Text style={styles.ChildName1}>'s Dashboard</Text>
-                    </View>
+                    <ScrollView horizontal style={{ flex: 1 }}>
+                      <View style={styles.ChildNameContainer}>
+                        <Text style={styles.ChildName}>{child.name}</Text>
+                        <Text style={styles.ChildName1}>'s Dashboard</Text>
+                      </View>
+                    </ScrollView>
                     <View style={styles.ChildDataContainer}>
                       <View style={styles.ChildDataRow}>
                         <View style={styles.CardData}>
