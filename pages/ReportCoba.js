@@ -5,10 +5,9 @@ import { Image } from "expo-image";
 import { useNavigation } from "@react-navigation/native";
 import { Color, FontFamily, FontSize, Border, Padding } from "../GlobalStyles";
 import { retrieveItem } from "../database/database.js";
-import DropDown from "../components/DropDownDailyScore";
-import DatePickerComponent from "../components/DatePickerDailyScore";
+import DropDown from "../components/DropDown";
+import DatePickerComponent from "../components/DatePicker";
 import axios from "axios";
-import Toast from "react-native-toast-message";
 
 const Report = () => {
   const navigation = useNavigation();
@@ -40,11 +39,11 @@ const Report = () => {
         )
         .then((response) => {
           console.log("Success:", response.data);
+          // setApiResponse(response.data);
           handleNavigateSubmit(response.data);
-          showToastSuccess();
         })
         .catch((error) => {
-          showToastError();
+          console.error("Error:", error);
         });
     } else {
       console.log("Please select all required data.");
@@ -96,19 +95,6 @@ const Report = () => {
     setSelectedEndDate(selected);
   };
 
-  const showToastSuccess = () => {
-    Toast.show({
-      type: "success",
-      text1: "Report submitted successfully",
-    });
-  };
-  const showToastError = () => {
-    Toast.show({
-      type: "error",
-      text1: "Report not found in this range date",
-    });
-  };
-
   useEffect(() => {
     retrieveItem("childData")
       .then((data) => {
@@ -127,6 +113,7 @@ const Report = () => {
   }, []);
 
   // console.log("API Response:", apiResponse);
+
   return (
     <NativeBaseProvider>
       <View style={styles.report}>
@@ -134,27 +121,24 @@ const Report = () => {
           <View style={styles.weeklyReportWrapper}>
             <Text style={styles.weeklyReport}>Score Board</Text>
           </View>
-          <View style={styles.ictwotoneArrowBackParent}>
-            <Pressable
-              style={styles.ictwotoneArrowBack}
-              onPress={() => navigation.navigate("Profile")}
-            >
-              <Image
-                style={[styles.icon, styles.iconLayout]}
-                contentFit="cover"
-                source={require("../assets/ictwotonearrowback.png")}
-              />
-            </Pressable>
-          </View>
+          <Image
+            style={styles.ictwotoneArrowBackIcon}
+            contentFit="cover"
+            source={require("../assets/ictwotonearrowback.png")}
+          />
           <View style={styles.btnprimaryParent}>
             <View style={styles.btnprimary}>
               <Pressable
                 style={styles.btnprimaryChild}
                 onPress={() => navigation.navigate("ListOfReport")}
               />
+              <Text style={styles.submit} onPress={handlePressSubmit}>
+                Submit
+              </Text>
             </View>
             <Text style={styles.selectSubject}>Select Child</Text>
             <DropDown
+              label="Select Child"
               studentNames={studentName?.length ? studentName : []}
               studentIds={studentId?.length ? studentId : []}
               onSelect={(studentId, studentName) =>
@@ -162,19 +146,17 @@ const Report = () => {
               } // Pass the callback function
             />
             <Text style={styles.selectRangeDate}>Select Range Date</Text>
-            <View style={styles.container1}>
+            <View style={styles.container}>
               <DatePickerComponent
                 selectedDate={selectedStartDate}
                 onDateChange={handleStartDateChange}
                 label="Start Date"
               />
-            </View>
-            <View style={styles.container2}>
+
               <DatePickerComponent
                 selectedDate={selectedEndDate}
                 onDateChange={handleEndDateChange}
                 label="End Date"
-                style={styles.datestyle}
               />
             </View>
             <View style={[styles.btnprimary, styles.btnprimaryLayout]}>
@@ -187,7 +169,6 @@ const Report = () => {
                   },
                   styles.btnprimaryChild,
                   styles.btnprimaryLayout,
-                  styles.datepickst,
                 ]}
                 onPress={handlePressSubmit}
               >
@@ -202,17 +183,6 @@ const Report = () => {
 };
 
 const styles = StyleSheet.create({
-  ictwotoneArrowBackParent: {
-    width: 20,
-    height: 20,
-  },
-  iconLayout: {
-    overflow: "hidden",
-    width: "100%",
-  },
-  icon: {
-    height: "100%",
-  },
   frameWrapperPosition: {
     height: 24,
     top: 0,
@@ -223,13 +193,6 @@ const styles = StyleSheet.create({
     width: 320,
     left: 0,
     position: "absolute",
-  },
-  datepickst: {
-    borderColor: "black",
-  },
-  datestyle: {
-    borderColor: "black",
-    FontSize: 20,
   },
   selectTypo: {
     color: Color.colorBlack,
@@ -298,13 +261,13 @@ const styles = StyleSheet.create({
     color: Color.colorMidnightblue,
     textAlign: "left",
     fontFamily: FontFamily.poppinsBold,
+    fontWeight: "700",
   },
   weeklyReportWrapper: {
     marginLeft: -61.5,
     width: 124,
-    alignSelf: "stretch",
     left: "50%",
-    textAlign: "center",
+    top: 0,
     position: "absolute",
   },
   frameWrapper: {
@@ -313,14 +276,14 @@ const styles = StyleSheet.create({
     left: "50%",
   },
   ictwotoneArrowBackIcon: {
-    width: 200,
-    left: -20,
+    width: 24,
+    left: 0,
     overflow: "hidden",
   },
   btnprimaryChild: {
     borderRadius: Border.br_31xl,
     backgroundColor: Color.colorTomato_200,
-    top: -35,
+    top: 0,
   },
   submit: {
     top: 14,
@@ -340,7 +303,7 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.poppinsLight,
     fontWeight: "300",
     left: 10,
-    bottom: -17,
+    top: 0,
   },
   inputChild: {
     backgroundColor: Color.colorWhitesmoke_100,
@@ -388,20 +351,13 @@ const styles = StyleSheet.create({
     left: 0,
     top: 0,
   },
-  container1: {
-    flex: 1,
-    top: 13,
-  },
-  container2: {
-    top: -17,
-  },
   groupWrapper: {
     left: 12,
     top: 26,
   },
   selectRangeDate: {
     marginLeft: -150,
-    top: 6,
+    top: 92,
     fontSize: FontSize.bodyBodyXS_size,
     fontFamily: FontFamily.poppinsLight,
     fontWeight: "300",
@@ -431,6 +387,10 @@ const styles = StyleSheet.create({
   groupContainer: {
     left: 0,
   },
+  start: {
+    marginLeft: -14.54,
+    width: 29,
+  },
   oct2023: {
     marginLeft: -31.16,
     top: 21,
@@ -456,6 +416,11 @@ const styles = StyleSheet.create({
     marginLeft: -11.42,
     width: 30,
   },
+  start: {
+    marginLeft: -16.42,
+    width: 30,
+    marginTop: 3,
+  },
   inputParent: {
     left: 161,
   },
@@ -472,10 +437,11 @@ const styles = StyleSheet.create({
   },
   frameParent: {
     width: 322,
-    height: 700,
+    height: 349,
   },
   report: {
     borderRadius: Border.br_xl,
+    backgroundColor: Color.colorGray_100,
     flex: 1,
     width: "100%",
     height: 800,

@@ -1,45 +1,35 @@
 import React, { useState } from "react";
 import { TouchableOpacity, Text, StyleSheet, Platform } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { FontFamily, FontSize } from "../GlobalStyles";
+import { FontFamily, FontSize, Color } from "../GlobalStyles";
 
-const DatePickerComponent = () => {
-  const [selectedDate, setSelectedDate] = useState(null); // Initialize to null
+const DatePickerComponent = ({ onDateChange, selectedDate, label }) => {
   const [showDatePicker, setShowDatePicker] = useState(false);
 
-  // Function to handle date change
   const handleDateChange = (event, selected) => {
     if (selected !== undefined) {
-      setSelectedDate(selected);
-      setShowDatePicker(Platform.OS === "ios"); // Close the picker on iOS
+      setShowDatePicker(Platform.OS === "ios");
+
+      if (typeof onDateChange === "function") {
+        onDateChange(selected);
+      }
     }
   };
 
-  // Function to show/hide the date picker
   const toggleDatePicker = () => {
     setShowDatePicker((prev) => !prev);
   };
 
-  const months = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
+  const formatDate = (date) => {
+    const day = date.getDate();
+    const month = date.toLocaleString("default", { month: "long" });
+    const year = date.getFullYear();
+    return `${day} ${month} ${year}`;
+  };
 
   const formattedDate = selectedDate
-    ? `${selectedDate.getDate()} ${
-        months[selectedDate.getMonth()]
-      } ${selectedDate.getFullYear()}`
-    : ""; // Use "Select Date" if selectedDate is null
+    ? formatDate(selectedDate)
+    : `Select ${label}`;
 
   return (
     <>
@@ -49,10 +39,11 @@ const DatePickerComponent = () => {
 
       {showDatePicker && (
         <DateTimePicker
-          value={selectedDate || new Date()} // Use selectedDate or current date
+          value={selectedDate || new Date()}
           mode="date"
           display="default"
           onChange={handleDateChange}
+          style={styles.datePicker1}
         />
       )}
     </>
@@ -62,17 +53,23 @@ const DatePickerComponent = () => {
 const styles = StyleSheet.create({
   datePicker: {
     borderWidth: 1,
-    borderColor: "#a6a6a6",
     borderRadius: 5,
     paddingVertical: 10,
     paddingHorizontal: 12,
     borderRadius: 99999,
+    borderColor: "black",
   },
   dateText: {
     fontFamily: FontFamily.poppinsLight,
     fontWeight: "100",
     color: "#292a2a",
-    fontSize: FontSize.textRegularXs5_size,
+    fontSize: FontSize.size_xs,
+  },
+  datePicker1: {
+    fontFamily: FontFamily.poppinsLight,
+    fontWeight: "100",
+    color: Color.colorBlack,
+    fontSize: FontSize.size_xs,
   },
 });
 

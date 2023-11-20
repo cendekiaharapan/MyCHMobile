@@ -1,18 +1,120 @@
-import * as React from "react";
-import { StyleSheet, Pressable, Text, View, Image } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import React, { useState, useEffect } from "react";
+import { Image } from "expo-image";
+import { TouchableOpacity, StyleSheet, Text, View, TextInput, Pressable, Linking } from "react-native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { Color, FontFamily, FontSize, Border, Padding } from "../GlobalStyles";
 
-const DetailReport = () => {
+const DetailReports = () => {
   const navigation = useNavigation();
+  const route = useRoute();
+
+  const { 
+    date, 
+    subject, 
+    topic, 
+    comment, 
+    score, 
+    remark, 
+    file_comment,
+    student_id, 
+    start_date, 
+    end_date, 
+    post_data, 
+    selected_student_id, 
+    selected_start_date, 
+    selected_end_date, 
+    student_name, 
+    api_response, 
+    selected_student_name
+  } = route.params;
+  
+
+  const [dateData, setDateData] = useState(date);
+  const [subjectData, setSubjectData] = useState(subject);
+  const [topicData, setTopicData] = useState(topic);
+  const [commentData, setCommentData] = useState(comment);
+  const [scoreData, setScoreData] = useState(score);
+  const [remarkData, setRemarkData] = useState(remark);
+  const [messagefile, setMessageFile] = useState(file_comment);
+
+  const [studentId, setStudentID] = useState(student_id);
+  const [startDate, setStartDate] = useState(start_date);
+  const [endDate, setEndDate] = useState(end_date);
+
+  const [postData, setPostData] = useState(post_data);
+  const [selectedStudentId, setSelectedStudentId] = useState(selected_student_id);
+  const [selectedStartDate, setSelectedStartDate] = useState(selected_start_date);
+  const [selectedEndDate, setSelectedEndDate] = useState(selected_end_date);
+  const [studentName, setStudentName] = useState(student_name);
+  const [apiResponse, setApiResponse] = useState(api_response);
+  const [selectedStudentName, setSelectedStudentName] = useState(selected_student_name);
+
+  const [inputText, setInputText] = useState("");
+  const [showFile, setShowFile] = useState(true);
+
+  useEffect(() => {
+    if (!messagefile) {
+      setShowFile(false);
+    }
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch("https://www.balichildrenshouse.com/myCHStaging/api/student/scores", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          student_id: studentId,
+          start_date: startDate,
+          end_date: endDate,
+        }),
+      });
+
+      const data = await response.json();
+      if (data && data.length > 0) {
+        setScoreData(data[0]);
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  const handleListOfReport = () => {
+
+    navigation.navigate("ListOfReport", {
+      postData: postData,
+      selectedStudentId: selectedStudentId,
+      selectedStartDate: selectedStartDate,
+      selectedEndDate: selectedEndDate,
+      studentName: studentName,
+      apiResponse: apiResponse,
+      selectedStudentName: selectedStudentName
+    });
+  };
+
+  const openFileUrl = async () => {
+    try {
+      if (messagefile) {
+        const fileUrl = `https://www.balichildrenshouse.com/myCH/ev-assets/uploads/student-score/${messagefile}`;
+        await Linking.openURL(fileUrl);
+      } else {
+        console.error('File is not available.');
+      }
+    } catch (error) {
+      console.error('Error opening file URL:', error);
+    }
+  };
 
   return (
+    // Header
     <View style={[styles.detailNew, styles.iconLayout]}>
       <View style={styles.ictwotoneArrowBackParent}>
         <Pressable
           style={styles.ictwotoneArrowBack}
-          onPress={() => navigation.navigate("ListOfReport")}
-        >
+          onPress={handleListOfReport}>
           <Image
             style={[styles.icon, styles.iconLayout]}
             contentFit="cover"
@@ -24,84 +126,106 @@ const DetailReport = () => {
             <Text style={styles.weeklyReport}>Score Board</Text>
           </View>
         </View>
-        <View style={styles.mathematicParent}>
-          <Text style={[styles.mathematic, styles.score90Typo]}>
-            Mathematic
-          </Text>
-          <Text style={[styles.oct2023, styles.oct2023Typo]}>03 Oct 2023</Text>
-          <Text
-            style={[styles.score90, styles.score90Typo]}
-          >{`Score : 90 `}</Text>
-          <Text style={[styles.topic, styles.fileTypo]}>{`Topic `}</Text>
-          <Text style={[styles.remark, styles.fileTypo]}>Remark</Text>
-          <Text style={[styles.comment, styles.fileTypo]}>{`Comment `}</Text>
-          <Text
-            style={[styles.dailyQuizStatus, styles.fileTypo]}
-          >{`Daily Quiz Status `}</Text>
-          <Text style={[styles.file, styles.fileTypo]}>{`File  `}</Text>
-          <View style={[styles.rectangleParent, styles.groupChildLayout]}>
-            <View style={[styles.groupChild, styles.groupLayout1]} />
-            <Text style={[styles.download, styles.yesTypo]}>Download</Text>
-          </View>
-          <View style={[styles.frame, styles.frameShadowBox]}>
-            <View style={[styles.card, styles.cardShadowBox]} />
-            <Text style={[styles.linearAndNonLinear, styles.loremTypo]}>
-              Linear and Non-Linear Function
-            </Text>
-          </View>
-          <View style={[styles.frame1, styles.frameShadowBox]}>
-            <View style={[styles.card1, styles.cardShadowBox]} />
-            <Text style={[styles.linearAndNonLinear1, styles.loremTypo]}>
-              Linear and Non-Linear Function
-            </Text>
-          </View>
-          <View style={styles.cardParent}>
-            <View style={[styles.card2, styles.cardShadowBox]} />
-            <View style={styles.frameParent}>
-              <View style={[styles.frameContainer, styles.proquirmentPosition]}>
-                <Image
-                  style={styles.frameChild}
-                  contentFit="cover"
-                  source={require("../assets/frame-14.png")}
-                />
-              </View>
-              <View style={[styles.frameView, styles.frameViewLayout]}>
-                <View
-                  style={[
-                    styles.proquirmentTcdocWrapper,
-                    styles.frameViewLayout,
-                  ]}
-                >
-                  <Text
-                    style={[
-                      styles.proquirmentTcdoc,
-                      styles.proquirmentPosition,
-                    ]}
-                  >
-                    proquirment_tc.doc
-                  </Text>
-                </View>
-              </View>
-            </View>
-          </View>
-          <View style={[styles.frame2, styles.frameShadowBox]}>
-            <View style={[styles.card3, styles.cardShadowBox]} />
-            <Text style={[styles.loremIpsumLorem, styles.loremTypo]}>
-              Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem
-              ipsum
-            </Text>
-          </View>
-          <View style={[styles.rectangleGroup, styles.groupLayout]}>
-            <View style={[styles.groupItem, styles.groupLayout]} />
-            <Text style={[styles.yes, styles.yesTypo]}>Yes</Text>
-          </View>
-        </View>
+
+    {/* Hero */}
+    {scoreData && (
+      <View style={styles.mathematicParent}>
+        <Text style={[styles.mathematic, styles.score90Typo]}>{subjectData}</Text>
+        <Text style={[styles.oct2023, styles.oct2023Typo]}>{dateData}</Text>
+        <Text style={[styles.score90, styles.score90Typo]}>Score : {scoreData}</Text>
       </View>
+    )}
+        
+    {/* Body */}
+    {scoreData && (
+      <View style={styles.inputContainer1}>
+        <Text style={styles.FormTitle}>Topic</Text>
+        <Text style={styles.dataText}>{topicData}</Text>
+
+      </View>
+    )}
+    {scoreData && (
+      <View style={styles.inputContainer}>
+      <Text style={styles.FormTitle}>Remark</Text>
+      {remarkData ? (
+        <Text style={styles.dataText}>{remarkData}</Text>
+      ) : (
+        <Text style={styles.placeholderText}>N/A</Text>
+      )}
+    </View>    
+    )}
+    {scoreData && (
+      <View style={styles.inputContainer}>
+      <Text style={styles.FormTitle}>Comment</Text>
+      {remarkData ? (
+        <Text style={styles.dataText}>{commentData}</Text>
+      ) : (
+        <Text style={styles.placeholderText}>N/A</Text>
+      )}
+    </View>    
+    )}
+    {messagefile !== null && messagefile !== '' ? (
+  <View style={styles.inputContainer}>
+    <Text style={styles.FormTitle}>File</Text>
+    {/* Use Button component here */}
+    <TouchableOpacity onPress={openFileUrl}>
+      <Text
+        style={{
+          fontFamily: FontFamily.poppinsLight,
+          fontWeight: "300",
+          color: "#a6a6a6",
+          fontSize: FontSize.textRegularXs12_size,
+          marginLeft: 75
+        }}
+      >
+        Download File
+      </Text>
+    </TouchableOpacity>
+  </View>
+) : (
+  <View style={styles.inputContainer}>
+    <Text style={styles.FormTitle}>File</Text>
+    <Text style={styles.dataText}>N/A</Text>
+  </View>
+)}
+
+    </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+    inputContainer1: {
+        marginTop:180,
+      },
+    inputContainer: {
+        marginTop:10,
+      },
+      FormTitle: {
+        fontFamily: FontFamily.poppinsRegular,
+        fontSize: FontSize.size_sm,
+        color: Color.colorBlack,
+      },
+      placeholderText: {
+        fontFamily: FontFamily.poppinsRegular,
+        fontSize: FontSize.size_sm,
+        color: Color.colorBlack,
+        borderWidth: 1,
+        borderColor: Color.colorGrey,
+        borderRadius: Border.br_xs,
+        padding: Padding.p_sm,
+        marginTop: 5,
+      },      
+      dataText: {
+        fontFamily: FontFamily.poppinsRegular,
+        fontSize: FontSize.size_sm,
+        color: Color.colorBlack,
+        borderWidth: 1,
+        borderColor: Color.colorGrey,
+        borderRadius: Border.br_xs,
+        padding: Padding.p_sm,
+        marginTop: 5,
+      },      
   iconLayout: {
     width: "100%",
     overflow: "hidden",
@@ -110,11 +234,12 @@ const styles = StyleSheet.create({
     height: 22,
     left: "50%",
     position: "absolute",
+    textAlign: "center",
   },
   score90Typo: {
     color: Color.colorBlack,
     top: "3.66%",
-    textAlign: "center",
+    textAlign: "left",
     fontFamily: FontFamily.poppinsBold,
     fontWeight: "700",
     position: "absolute",
@@ -217,7 +342,7 @@ const styles = StyleSheet.create({
     lineHeight: 22,
     color: Color.colorMidnightblue,
     width: 142,
-    textAlign: "left",
+    textAlign: "center",
     fontFamily: FontFamily.poppinsBold,
     fontWeight: "700",
     fontSize: FontSize.size_xl,
@@ -226,6 +351,7 @@ const styles = StyleSheet.create({
   weeklyReportWrapper: {
     marginLeft: -70.5,
     top: 0,
+    textAlign: "center",
   },
   frameWrapper: {
     marginLeft: -35,
@@ -233,25 +359,26 @@ const styles = StyleSheet.create({
     width: 107,
   },
   mathematic: {
-    textAlign: "center",
-    left: "5%",
+    // textAlign: "left",
+    // left: "5%",
     fontSize: FontSize.size_xl,
     top: "3.66%",
+    width: "60%",
   },
   oct2023: {
     height: "3.23%",
-    width: "31.47%",
+    width: "50%",
     fontWeight: "300",
     fontFamily: FontFamily.poppinsLight,
     top: "0%",
     fontSize: FontSize.bodyBodyXS_size,
-    textAlign: "center",
+    textAlign: "left",
     color: Color.colorBlack,
     left: "0%",
   },
   score90: {
     left: "72.94%",
-    fontSize: 17,
+    fontSize: FontSize.size_xl,
     textAlign: "center",
   },
   topic: {
@@ -276,7 +403,7 @@ const styles = StyleSheet.create({
     textAlign: "left",
   },
   file: {
-    top: "85.81%",
+    top: "72%",
     left: "5.59%",
     textAlign: "center",
   },
@@ -375,6 +502,7 @@ const styles = StyleSheet.create({
     fontSize: FontSize.bodyBodyXS_size,
     position: "absolute",
     textAlign: "left",
+    top: "72%",
   },
   proquirmentTcdocWrapper: {
     left: 0,
@@ -449,6 +577,7 @@ const styles = StyleSheet.create({
     height: 542,
   },
   detailNew: {
+    justifyContent: 'center',
     borderRadius: Border.br_xl,
     backgroundColor: Color.colorGray_100,
     height: 800,
@@ -461,4 +590,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DetailReport;
+export default DetailReports;

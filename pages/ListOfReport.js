@@ -1,12 +1,32 @@
-import * as React from "react";
-import { Text, StyleSheet, View, Pressable, Image } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import React, { useState, useCallback, useEffect } from "react";
+import { Text, StyleSheet, View, Pressable } from "react-native";
+import { Image } from "expo-image";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { Color, FontSize, FontFamily, Border, Padding } from "../GlobalStyles";
 import { ScrollView, NativeBaseProvider } from "native-base";
-import DropDown from "../components/DropDown";
+import DropDown from "../components/DropDownDailyScore";
+import ReportEntry from "../components/ReportEntry";
 
 const ListOfReport = () => {
   const navigation = useNavigation();
+  const route = useRoute();
+  const {
+    postData,
+    selectedStudentId,
+    selectedStartDate,
+    selectedEndDate,
+    studentName,
+    apiResponse,
+    selectedStudentName,
+  } = route.params;
+
+  const [studentID, setStudentID] = useState(selectedStudentId);
+  const [startDate, setStartDate] = useState(selectedStartDate);
+  const [endDate, setEndDate] = useState(selectedEndDate);
+
+  // You can now use postData and other parameters in your component
+
+  console.log("reportData:", selectedStudentName);
 
   return (
     <NativeBaseProvider>
@@ -43,12 +63,12 @@ const ListOfReport = () => {
             <View style={styles.groupParent}>
               <View style={styles.selectSubjectParent}>
                 <Text style={[styles.selectSubject, styles.selectTypo]}>
-                  Select Subject
+                  Student
                 </Text>
                 <View style={[styles.inputWrapper, styles.inputLayout]}>
                   <View style={[styles.input, styles.inputLayout]}>
                     <View style={[styles.inputChild, styles.inputPosition]} />
-                    <Text style={[styles.all, styles.allTypo]}>All</Text>
+                    <Text style={[styles.all, styles.allTypo]}></Text>
                   </View>
                 </View>
               </View>
@@ -58,120 +78,23 @@ const ListOfReport = () => {
                     style={[styles.inputContainer, styles.inputGroupLayout]}
                   >
                     <View style={[styles.inputItem, styles.inputGroupLayout]} />
-                    <Text style={[styles.all1, styles.allTypo]}>All</Text>
+                    <Text style={[styles.all1, styles.allTypo]}>
+                      {selectedStudentName}
+                    </Text>
                   </View>
                 </View>
               </View>
               <Text style={[styles.selectRangeDate, styles.selectTypo]}>
-                Select Range Date
+                Range Date
               </Text>
-              <ScrollView contentContainerStyle={styles.scrollContainer}>
-                <View style={[styles.frame, styles.frameShadowBox]}>
-                  <Pressable
-                    style={styles.cardShadowBox}
-                    onPress={() => navigation.navigate("DetailReport")}
-                  />
-                  <Text style={[styles.studentCanExplain, styles.oct2023Typo]}>
-                    Student can explain the different of them
-                  </Text>
-                  <Text style={[styles.oct2023, styles.oct2023Typo]}>
-                    03 Oct 2023
-                  </Text>
-                  <Text style={styles.mathematic}>Mathematic</Text>
-                  <Text style={[styles.linearAndNonLinear, styles.selectTypo]}>
-                    Linear and Non-Linear Function
-                  </Text>
-                  <View style={styles.parent}>
-                    <Text style={[styles.text, styles.textTypo]}>90</Text>
-                    <Text
-                      style={[styles.score, styles.selectTypo]}
-                    >{`Score `}</Text>
-                  </View>
-                  <Text style={[styles.text1, styles.textTypo]}>{`>`}</Text>
-                </View>
-                <View style={[styles.frame1, styles.frameShadowBox]}>
-                  <View style={styles.cardShadowBox} />
-                  <Text style={[styles.studentCanExplain, styles.oct2023Typo]}>
-                    Student can explain the different of them
-                  </Text>
-                  <Text style={[styles.oct2023, styles.oct2023Typo]}>
-                    03 Oct 2023
-                  </Text>
-                  <Text style={styles.mathematic}>Mathematic</Text>
-                  <Text style={[styles.linearAndNonLinear, styles.selectTypo]}>
-                    Linear and Non-Linear Function
-                  </Text>
-                  <View style={styles.parent}>
-                    <Text style={[styles.text, styles.textTypo]}>90</Text>
-                    <Text
-                      style={[styles.score, styles.selectTypo]}
-                    >{`Score `}</Text>
-                  </View>
-                  <Text style={[styles.text1, styles.textTypo]}>{`>`}</Text>
-                </View>
-                <View style={[styles.frame2, styles.frameShadowBox]}>
-                  <View style={styles.cardShadowBox} />
-                  <Text style={[styles.studentCanExplain, styles.oct2023Typo]}>
-                    Student can explain the different of them
-                  </Text>
-                  <Text style={[styles.oct2023, styles.oct2023Typo]}>
-                    03 Oct 2023
-                  </Text>
-                  <Text style={styles.mathematic}>Mathematic</Text>
-                  <Text style={[styles.linearAndNonLinear, styles.selectTypo]}>
-                    Linear and Non-Linear Function
-                  </Text>
-                  <View style={styles.parent}>
-                    <Text style={[styles.text, styles.textTypo]}>90</Text>
-                    <Text
-                      style={[styles.score, styles.selectTypo]}
-                    >{`Score `}</Text>
-                  </View>
-                  <Text style={[styles.text1, styles.textTypo]}>{`>`}</Text>
-                </View>
-                <View style={[styles.frame3, styles.frameShadowBox]}>
-                  <View style={styles.cardShadowBox} />
-                  <Text style={[styles.studentCanExplain, styles.oct2023Typo]}>
-                    Student can explain the different of them
-                  </Text>
-                  <Text style={[styles.oct2023, styles.oct2023Typo]}>
-                    03 Oct 2023
-                  </Text>
-                  <Text style={styles.mathematic}>Mathematic</Text>
-                  <Text style={[styles.linearAndNonLinear, styles.selectTypo]}>
-                    Linear and Non-Linear Function
-                  </Text>
-                  <View style={styles.parent}>
-                    <Text style={[styles.text, styles.textTypo]}>90</Text>
-                    <Text
-                      style={[styles.score, styles.selectTypo]}
-                    >{`Score `}</Text>
-                  </View>
-                  <Text style={[styles.text1, styles.textTypo]}>{`>`}</Text>
-                </View>
-                <View style={[styles.frame4, styles.frameShadowBox]}>
-                  <View style={styles.cardShadowBox} />
-                  <Text style={[styles.studentCanExplain, styles.oct2023Typo]}>
-                    Student can explain the different of them
-                  </Text>
-                  <Text style={[styles.oct2023, styles.oct2023Typo]}>
-                    03 Oct 2023
-                  </Text>
-                  <Text style={styles.mathematic}>Mathematic</Text>
-                  <Text style={[styles.linearAndNonLinear, styles.selectTypo]}>
-                    Linear and Non-Linear Function
-                  </Text>
-                  <View style={styles.parent}>
-                    <Text style={[styles.text, styles.textTypo]}>90</Text>
-                    <Text
-                      style={[styles.score, styles.selectTypo]}
-                    >{`Score `}</Text>
-                  </View>
-                  <Text style={[styles.text1, styles.textTypo]}>{`>`}</Text>
-                </View>
-              </ScrollView>
               <View style={[styles.groupContainer, styles.inputGroupLayout]}>
-                <View style={[styles.groupParent1, styles.inputParentLayout]}>
+                <View
+                  style={[
+                    styles.groupParent1,
+                    styles.inputParentLayout,
+                    { top: "5%" },
+                  ]}
+                >
                   <View style={[styles.groupParent1, styles.inputParentLayout]}>
                     <View
                       style={[styles.groupParent1, styles.inputParentLayout]}
@@ -183,22 +106,73 @@ const ListOfReport = () => {
                   </View>
                   <Text style={[styles.start, styles.endTypo]}>Start</Text>
                   <Text style={[styles.oct20235, styles.octTypo]}>
-                    03 Oct 2023
+                    {startDate
+                      ? `${startDate.getDate()} ${startDate.toLocaleString(
+                          "default",
+                          { month: "short" }
+                        )} ${startDate.getFullYear()}`
+                      : ""}
                   </Text>
                 </View>
-                <View style={[styles.inputParent, styles.inputParentLayout]}>
+                <View
+                  style={[
+                    styles.inputParent,
+                    styles.inputParentLayout,
+                    { top: "5%" },
+                  ]}
+                >
                   <View style={[styles.groupParent1, styles.inputParentLayout]}>
                     <View
                       style={[styles.inputInner, styles.inputParentLayout]}
                     />
                   </View>
                   <Text style={[styles.oct20236, styles.octTypo]}>
-                    04 Oct 2023
+                    {endDate
+                      ? `${endDate.getDate()} ${endDate.toLocaleString(
+                          "default",
+                          { month: "short" }
+                        )} ${endDate.getFullYear()}`
+                      : ""}
                   </Text>
                   <Text style={[styles.end, styles.endTypo]}>End</Text>
                 </View>
               </View>
             </View>
+            <ScrollView
+              contentContainerStyle={styles.scrollContainer}
+              style={{ marginTop: "65%" }}
+            >
+              {apiResponse.map((report) => (
+                <ReportEntry
+                  key={report.id}
+                  date={
+                    report.date
+                      ? `${new Date(report.date).toLocaleDateString("id-ID", {
+                          day: "2-digit",
+                          month: "long",
+                          year: "numeric",
+                        })}`
+                      : ""
+                  }
+                  subject={report.subject.title}
+                  topic={report.topic}
+                  comment={report.comment}
+                  score={report.score}
+                  remark={report.problem}
+                  file_comment={report.file_comment}
+                  student_id={studentID}
+                  start_date={startDate}
+                  end_date={endDate}
+                  post_data={postData}
+                  selected_student_id={selectedStudentId}
+                  selected_start_date={selectedStartDate}
+                  selected_end_date={selectedEndDate}
+                  student_name={studentName}
+                  api_response={apiResponse}
+                  selected_student_name={selectedStudentName}
+                />
+              ))}
+            </ScrollView>
           </View>
         </View>
       </View>
@@ -416,12 +390,12 @@ const styles = StyleSheet.create({
   },
   selectRangeDate: {
     marginLeft: -148.5,
-    top: 95,
+    top: "13%",
     fontFamily: FontFamily.poppinsLight,
     fontWeight: "300",
     color: Color.colorBlack,
     fontSize: FontSize.bodyBodyXS_size,
-    left: "50%",
+    left: "46%",
   },
   cardShadowBox: {
     elevation: 29.56,
@@ -549,19 +523,19 @@ const styles = StyleSheet.create({
     left: 161,
   },
   groupContainer: {
-    top: 126,
+    top: "17%",
     left: 10,
   },
   groupParent: {
     top: 60,
-    left: 5,
+    left: "3%",
     width: "100%",
     height: 628,
     position: "absolute",
   },
   frameParent: {
-    width: 322,
-    height: 719,
+    width: "100%",
+    height: "100%",
   },
   listOfReport: {
     borderRadius: Border.br_xl,
