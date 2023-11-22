@@ -91,7 +91,7 @@ const Password = () => {
           <Text style={styles.resetPassword}>Reset Password</Text>
           <Text
             style={[styles.forgotYourPassword]}
-                      >{`Forgot your password? Please enter your email address. You will receive a link to create a new password via whatsapp.`}
+                      >{`Forgot your password? Please enter your email address. You will receive a link to create a new password via WhatsApp.`}
           </Text>
           <View style={[styles.ifemail, styles.ifemailShadowBox]}>
             <Image
