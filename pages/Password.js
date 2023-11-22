@@ -4,14 +4,17 @@ import { useNavigation } from "@react-navigation/native";
 import { FontSize, Color, FontFamily, Border, Padding } from "../GlobalStyles";
 import { StyleSheet, View, Pressable, Text, TextInput, Image } from "react-native";
 import Toast from "react-native-toast-message";
+import { LoadingModal } from "react-native-loading-modal";
 import axios from "axios";
 
 const Password = () => {
   const navigation = useNavigation();
   const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleChangePass = async () => {
+  const sendRequestPassword = async () => {
     if (email.trim() === "") {
+      setLoading(false);
       Toast.show({
         type: "error",
         position: "top",
@@ -30,7 +33,7 @@ const Password = () => {
     
       if (response.data.message) {
         // Password reset link sent successfully
-        navigation.navigate("SignIn");
+        setLoading(false);
         Toast.show({
           type: "success",
           position: "top",
@@ -38,9 +41,11 @@ const Password = () => {
           visibilityTime: 3000,
           autoHide: true,
         });
+        navigation.navigate("SignIn");
       }
     } catch (error) {
       if (error.response && error.response.status === 400) {
+        setLoading(false);
         Toast.show({
           type: "error",
           position: "top",
@@ -49,7 +54,7 @@ const Password = () => {
           autoHide: true,
         });
       } else {
-        console.log(error);
+        setLoading(false);
         Toast.show({
           type: "error",
           position: "top",
@@ -59,12 +64,18 @@ const Password = () => {
         });
       }
     }
-    
+    };
+
+
+  const handleChangePass = async () => {
+    setLoading(true);
+    sendRequestPassword();
     };
 
 
   return (
     <View style={styles.password}>
+      <LoadingModal modalVisible={loading} color="red" />
       <View style={styles.content}>
         <Pressable
           style={styles.back}
@@ -79,11 +90,8 @@ const Password = () => {
         <View style={styles.resetpassframe}>
           <Text style={styles.resetPassword}>Reset Password</Text>
           <Text
-            style={[styles.forgotYourPassword, styles.resetTypo]}
-                      >{`Forgot your password?
-            Please enter your email address.
-            You will receive a link to create a new
-            password via email.`}
+            style={[styles.forgotYourPassword]}
+                      >{`Forgot your password? Please enter your email address. You will receive a link to create a new password via whatsapp.`}
           </Text>
           <View style={[styles.ifemail, styles.ifemailShadowBox]}>
             <Image
@@ -93,7 +101,7 @@ const Password = () => {
             />
             <TextInput
               style={[styles.emailInput, styles.textTypo]}
-              placeholder="Email"
+              placeholder="Email "
               value={email}
               onChangeText={(text) => setEmail(text)}
               placeholderTextColor="#888"
@@ -101,7 +109,7 @@ const Password = () => {
             />
           </View>
           <Pressable style={styles.btnprimary} onPress={handleChangePass}>
-            <Text style={[styles.reset, styles.resetTypo]}>RESET</Text>
+            <Text style={[styles.reset, styles.resetTypo]}>RESET PASSWORD</Text>
           </Pressable>
         </View>
       </View>
@@ -113,6 +121,9 @@ const styles = StyleSheet.create({
   resetTypo: {
     textAlign: "center",
     fontSize: FontSize.size_sm,
+  },
+  emailInput: {
+    flex: 1,
   },
   ifemailShadowBox: {
     flexDirection: "row",
@@ -140,6 +151,7 @@ const styles = StyleSheet.create({
     height: 23,
   },
   textTypo: {
+
     marginLeft: 10,
     color: Color.colorGray_200,
     fontFamily: FontFamily.poppinsMedium,
@@ -164,6 +176,8 @@ const styles = StyleSheet.create({
     fontWeight: "700",
   },
   forgotYourPassword: {
+
+    width: 280,
     fontWeight: "600",
     fontFamily: FontFamily.poppinsSemiBold,
     marginTop: 30,

@@ -192,7 +192,7 @@ const SignIn = () => {
           />
           <TextInput
             style={[styles.passwordInput, styles.textTypo]}
-            placeholder="Type your password"
+            placeholder="Password"
             placeholderTextColor="#888"
             secureTextEntry={true}
             value={password}
@@ -204,7 +204,7 @@ const SignIn = () => {
           onPress={() => navigation.navigate("Password")}
         >
           <Text style={[styles.text1, styles.text1Typo]}>
-            <Text style={styles.forgetPassword}>{`Forget Password? `}</Text>
+            <Text style={styles.forgetPassword}>{`Forgot Password? `}</Text>
             <Text style={styles.clickHere}>Click Here</Text>
           </Text>
         </Pressable>
