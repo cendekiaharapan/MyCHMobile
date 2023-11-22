@@ -127,7 +127,13 @@ const SignIn = () => {
           // Show an error message to the user that email and password do not match
         } else {
           setLoading(false);
-          console.error("Login Error", error);
+          Toast.show({
+            type: "error",
+            position: "top",
+            text1: "Please enter your email and password",
+            visibilityTime: 3000,
+            autoHide: true,
+          });
           // Show a generic error message
         }
       } else {

@@ -1,11 +1,69 @@
-import * as React from "react";
+import React, { useState } from "react";
 import * as ImagePicker from 'expo-image-picker';
-import { StyleSheet, View, Pressable, Text, TextInput, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { FontSize, Color, FontFamily, Border, Padding } from "../GlobalStyles";
+import { StyleSheet, View, Pressable, Text, TextInput, Image } from "react-native";
+import Toast from "react-native-toast-message";
+import axios from "axios";
 
 const Password = () => {
   const navigation = useNavigation();
+  const [email, setEmail] = useState("");
+
+  const handleChangePass = async () => {
+    if (email.trim() === "") {
+      Toast.show({
+        type: "error",
+        position: "top",
+        text1: "Please enter your email",
+        visibilityTime: 3000,
+        autoHide: true,
+      });
+      return;
+    }
+  
+    try {
+      const response = await axios.post(
+        "https://www.balichildrenshouse.com/myCH/api/request-reset",
+        { email }
+      );
+  
+      if (response.data.message) {
+        // Password reset link sent successfully
+        navigation.navigate("SignIn");
+        Toast.show({
+          type: "success",
+          position: "top",
+          text1: "Password reset link sent successfully",
+          visibilityTime: 3000,
+          autoHide: true,
+        });
+      } else {
+        if (response.status === 400) {
+          // Handle 400 error (User not found)
+          Toast.show({
+            type: "error",
+            position: "top",
+            text1: "User not found",
+            visibilityTime: 3000,
+            autoHide: true,
+          });
+        } else {
+          // Failed to send password reset link (Other error)
+          Toast.show({
+            type: "error",
+            position: "top",
+            text1: "Failed to send password reset link",
+            visibilityTime: 3000,
+            autoHide: true,
+          });
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <View style={styles.password}>
       <View style={styles.content}>
@@ -23,10 +81,11 @@ const Password = () => {
           <Text style={styles.resetPassword}>Reset Password</Text>
           <Text
             style={[styles.forgotYourPassword, styles.resetTypo]}
-          >{`Forgot your password?
-Please enter your email address.
-You will receive a link to create a new
-password via email.`}</Text>
+                      >{`Forgot your password?
+            Please enter your email address.
+            You will receive a link to create a new
+            password via email.`}
+          </Text>
           <View style={[styles.ifemail, styles.ifemailShadowBox]}>
             <Image
               style={styles.emailimgIcon}
@@ -35,15 +94,14 @@ password via email.`}</Text>
             />
             <TextInput
               style={[styles.emailInput, styles.textTypo]}
-              placeholder="Emaill"
+              placeholder="Email"
+              value={email}
+              onChangeText={(text) => setEmail(text)}
               placeholderTextColor="#888"
               keyboardType="email-address"
             />
           </View>
-          <Pressable
-            style={styles.btnprimary}
-            onPress={() => navigation.navigate("AllPost")}
-          >
+          <Pressable style={styles.btnprimary} onPress={handleChangePass}>
             <Text style={[styles.reset, styles.resetTypo]}>RESET</Text>
           </Pressable>
         </View>
