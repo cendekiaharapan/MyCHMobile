@@ -27,7 +27,7 @@ const Password = () => {
         "https://www.balichildrenshouse.com/myCH/api/request-reset",
         { email }
       );
-  
+    
       if (response.data.message) {
         // Password reset link sent successfully
         navigation.navigate("SignIn");
@@ -38,31 +38,30 @@ const Password = () => {
           visibilityTime: 3000,
           autoHide: true,
         });
-      } else {
-        if (response.status === 400) {
-          // Handle 400 error (User not found)
-          Toast.show({
-            type: "error",
-            position: "top",
-            text1: "User not found",
-            visibilityTime: 3000,
-            autoHide: true,
-          });
-        } else {
-          // Failed to send password reset link (Other error)
-          Toast.show({
-            type: "error",
-            position: "top",
-            text1: "Failed to send password reset link",
-            visibilityTime: 3000,
-            autoHide: true,
-          });
-        }
       }
     } catch (error) {
-      console.log(error);
+      if (error.response && error.response.status === 400) {
+        Toast.show({
+          type: "error",
+          position: "top",
+          text1: "User not found",
+          visibilityTime: 3000,
+          autoHide: true,
+        });
+      } else {
+        console.log(error);
+        Toast.show({
+          type: "error",
+          position: "top",
+          text1: "Failed to send password reset link",
+          visibilityTime: 3000,
+          autoHide: true,
+        });
+      }
     }
-  };
+    
+    };
+
 
   return (
     <View style={styles.password}>
@@ -133,7 +132,8 @@ const styles = StyleSheet.create({
     backgroundColor: Color.colorWhite,
   },
   ifemail: {
-    paddingLeft: Padding.p_mini,
+    paddingHorizontal: Padding.p_mini,
+    paddingVertical: 0,
   },
   emailimgIcon: {
     width: 23,
