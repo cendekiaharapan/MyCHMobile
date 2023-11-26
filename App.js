@@ -1,22 +1,34 @@
+const Stack = createNativeStackNavigator();
 import * as React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { useFonts } from "expo-font";
-import PostDetails from "./pages/PostDetails";
-import AllPost from "./pages/AllPost";
-import Password from "./pages/Password";
 import Onboard from "./pages/Onboard";
 import SignIn from "./pages/SignIn";
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import PopUp from "./components/PopUp";
+import CHDollar from "./components/CHDollar";
+import Attendance from "./components/Attendance";
+import AverageDailyScore from "./components/AverageDailyScore";
+import PostDetails from "./pages/PostDetails";
+import Profile from "./pages/Profile";
+import AllPost from "./pages/AllPost";
+import Password from "./pages/Password";
+import Coba from "./components/Coba";
+import LoginStack from "./LoginStack";
+import MainStack from "./MainStack";
+import Toast from "react-native-toast-message";
+import {
+  storeItem,
+  retrieveItem,
+  deleteItem,
+  getAllKeys,
+  saveTokenToSecureStore,
+  getTokenFromSecureStore,
+  saveRespDataSecureStore,
+  getRespDataFromSecureStore,
+} from "./database/database";
+
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { View, Text, Pressable, TouchableOpacity } from "react-native";
-import PageStart from "./pages/PageStart";
-import TopUpForm from "./components/TopUpForm";
-import PaidInvoiceDetails from "./pages/PaidInvoiceDetails";
-import PaymentInvoiceDetails from "./pages/PaymentInvoiceDetails";
-import PaidInvoiceHistory from "./pages/PaidInvoiceHistory";
-import PaymentInvoice from "./pages/PaymentInvoice";
-import PaymentTopup from "./pages/PaymentTopup";
-import PaymentCHDHistory from "./pages/PaymentCHDHistory";
-import PaymentCHDAccount from "./pages/PaymentCHDAccount";
 
 const App = () => {
   const [hideSplashScreen, setHideSplashScreen] = React.useState(false);
@@ -27,79 +39,67 @@ const App = () => {
     "Poppins-SemiBold": require("./assets/fonts/Poppins-SemiBold.ttf"),
     "Poppins-Bold": require("./assets/fonts/Poppins-Bold.ttf"),
     "Poppins-Black": require("./assets/fonts/Poppins-Black.ttf"),
-    "Roboto-Medium": require("./assets/fonts/Roboto-Medium.ttf"),
-    "SpaceGrotesk-Regular": require("./assets/fonts/SpaceGrotesk-Regular.ttf"),
   });
+  const [isUserLoggedIn, setIsUserLoggedIn] = React.useState(true); // Initialize user login state
+
+  const checkIfUserIsLoggedIn = async () => {
+    try {
+      const token = await getTokenFromSecureStore();
+      console.log("this ");
+      if (token) {
+        // User is already logged in
+        console.log("User Already Logged In!");
+        setIsUserLoggedIn(true);
+      } else {
+        // User is not logged in
+        setIsUserLoggedIn(false);
+      }
+    } catch (error) {
+      console.error("Error checking login status:", error);
+      // Handle any error accordingly
+    }
+  };
+
+  React.useEffect(() => {
+    setTimeout(() => {
+      setHideSplashScreen(true);
+    }, 3000);
+  }, []);
+
+  React.useEffect(() => {
+    console.log("checking user log in!");
+    checkIfUserIsLoggedIn();
+  }, []);
+
+  if (!fontsLoaded && !error) {
+    return null;
+  }
 
   return (
-    <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="FrameScreen" component={FrameScreen} />
-        <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name="Onboard" component={Onboard} options={{ headerShown: false }} />
-        <Stack.Screen name="SignIn" component={SignIn} options={{ headerShown: false }} />
-        <Stack.Screen name="PostDetails" component={PostDetails} options={{ headerShown: false }} />
-        <Stack.Screen name="AllPost" component={AllPost} options={{ headerShown: false }} />
-        <Stack.Screen name="Password" component={Password} options={{ headerShown: false }} />
-      </Stack.Navigator>
-    </NavigationContainer>
-
-<>
-<NavigationContainer>
-  {hideSplashScreen ? (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen
-        name="PageStart"
-        component={PageStart}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="PaidInvoiceDetails"
-        component={PaidInvoiceDetails}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="PaymentInvoiceDetails"
-        component={PaymentInvoiceDetails}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="PaidInvoiceHistory"
-        component={PaidInvoiceHistory}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="PaymentInvoice"
-        component={PaymentInvoice}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="PaymentTopup"
-        component={PaymentTopup}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="PaymentCHDHistory"
-        component={PaymentCHDHistory}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="PaymentCHDAccount"
-        component={PaymentCHDAccount}
-        options={{ headerShown: false }}
-      />
-    </Stack.Navigator>
-  ) : null}
-</NavigationContainer>
-</>
-
+    <>
+      <NavigationContainer>
+        {hideSplashScreen ? (
+          <Stack.Navigator
+            screenOptions={{ headerShown: false }}
+            initialRouteName={isUserLoggedIn ? "Main App Stack" : "Login Stack"}
+          >
+            <Stack.Screen
+              name="Login Stack"
+              component={LoginStack}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Main App Stack"
+              component={MainStack}
+              options={{ headerShown: false }}
+            />
+          </Stack.Navigator>
+        ) : (
+          <Onboard />
+        )}
+      </NavigationContainer>
+      <Toast />
+    </>
   );
-
 };
-
-
-const Stack = createNativeStackNavigator();
-
-
 export default App;
-

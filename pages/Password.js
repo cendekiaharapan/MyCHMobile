@@ -1,13 +1,81 @@
-import * as React from "react";
-import { Image } from "expo-image";
-import { StyleSheet, View, Pressable, Text, TextInput } from "react-native";
+import React, { useState } from "react";
+import * as ImagePicker from 'expo-image-picker';
 import { useNavigation } from "@react-navigation/native";
 import { FontSize, Color, FontFamily, Border, Padding } from "../GlobalStyles";
+import { StyleSheet, View, Pressable, Text, TextInput, Image } from "react-native";
+import Toast from "react-native-toast-message";
+import { LoadingModal } from "react-native-loading-modal";
+import axios from "axios";
 
 const Password = () => {
   const navigation = useNavigation();
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const sendRequestPassword = async () => {
+    if (email.trim() === "") {
+      setLoading(false);
+      Toast.show({
+        type: "error",
+        position: "top",
+        text1: "Please enter your email",
+        visibilityTime: 3000,
+        autoHide: true,
+      });
+      return;
+    }
+  
+    try {
+      const response = await axios.post(
+        "https://www.balichildrenshouse.com/myCH/api/request-reset",
+        { email }
+      );
+    
+      if (response.data.message) {
+        // Password reset link sent successfully
+        setLoading(false);
+        Toast.show({
+          type: "success",
+          position: "top",
+          text1: "Password reset link sent successfully",
+          visibilityTime: 3000,
+          autoHide: true,
+        });
+        navigation.navigate("SignIn");
+      }
+    } catch (error) {
+      if (error.response && error.response.status === 400) {
+        setLoading(false);
+        Toast.show({
+          type: "error",
+          position: "top",
+          text1: "User not found",
+          visibilityTime: 3000,
+          autoHide: true,
+        });
+      } else {
+        setLoading(false);
+        Toast.show({
+          type: "error",
+          position: "top",
+          text1: "Failed to send password reset link",
+          visibilityTime: 3000,
+          autoHide: true,
+        });
+      }
+    }
+    };
+
+
+  const handleChangePass = async () => {
+    setLoading(true);
+    sendRequestPassword();
+    };
+
+
   return (
     <View style={styles.password}>
+      <LoadingModal modalVisible={loading} color="red" />
       <View style={styles.content}>
         <Pressable
           style={styles.back}
@@ -16,34 +84,32 @@ const Password = () => {
           <Image
             style={styles.vectorIcon}
             contentFit="cover"
-            source={require("../assets/backicon1.png")}
+            source={require("../assets/images/vector5.png")}
           />
         </Pressable>
         <View style={styles.resetpassframe}>
           <Text style={styles.resetPassword}>Reset Password</Text>
           <Text
-            style={[styles.forgotYourPassword, styles.resetTypo]}
->{`Forgot your password?
-Please enter your email address.
-You will receive a link to create a new
-password via email.`}</Text>
-        <View style={[styles.ifemail, styles.ifemailShadowBox]}>
-        <Image
-            style={styles.emailimgIcon}
-            contentFit="cover"
-            source={require("../assets/emailimg.png")}
-          />
-          <TextInput
-            style={[styles.emailInput, styles.textTypo]} 
-            placeholder="Emaill" 
-            placeholderTextColor="#888" 
-            keyboardType="email-address"/>
+            style={[styles.forgotYourPassword]}
+                      >{`Forgot your password? Please enter your email address. You will receive a link to create a new password via WhatsApp.`}
+          </Text>
+          <View style={[styles.ifemail, styles.ifemailShadowBox]}>
+            <Image
+              style={styles.emailimgIcon}
+              contentFit="cover"
+              source={require("../assets/images/emailimg.png")}
+            />
+            <TextInput
+              style={[styles.emailInput, styles.textTypo]}
+              placeholder="Email "
+              value={email}
+              onChangeText={(text) => setEmail(text)}
+              placeholderTextColor="#888"
+              keyboardType="email-address"
+            />
           </View>
-          <Pressable
-            style={styles.btnprimary}
-            onPress={() => navigation.navigate("AllPost")}
-          >
-            <Text style={[styles.reset, styles.resetTypo]}>RESET</Text>
+          <Pressable style={styles.btnprimary} onPress={handleChangePass}>
+            <Text style={[styles.reset, styles.resetTypo]}>RESET PASSWORD</Text>
           </Pressable>
         </View>
       </View>
@@ -55,6 +121,9 @@ const styles = StyleSheet.create({
   resetTypo: {
     textAlign: "center",
     fontSize: FontSize.size_sm,
+  },
+  emailInput: {
+    flex: 1,
   },
   ifemailShadowBox: {
     flexDirection: "row",
@@ -74,13 +143,15 @@ const styles = StyleSheet.create({
     backgroundColor: Color.colorWhite,
   },
   ifemail: {
-    paddingLeft: Padding.p_mini,
+    paddingHorizontal: Padding.p_mini,
+    paddingVertical: 0,
   },
   emailimgIcon: {
     width: 23,
     height: 23,
   },
   textTypo: {
+
     marginLeft: 10,
     color: Color.colorGray_200,
     fontFamily: FontFamily.poppinsMedium,
@@ -105,6 +176,8 @@ const styles = StyleSheet.create({
     fontWeight: "700",
   },
   forgotYourPassword: {
+
+    width: 280,
     fontWeight: "600",
     fontFamily: FontFamily.poppinsSemiBold,
     marginTop: 30,

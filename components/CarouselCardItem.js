@@ -1,9 +1,9 @@
-import React from 'react';
-import { View, Text, StyleSheet, Dimensions, Image } from 'react-native';
+import React from "react";
+import { View, Text, StyleSheet, Dimensions, Image } from "react-native";
 import { Color, Border, FontSize, FontFamily } from "../GlobalStyles";
 
-export const SLIDER_WIDTH = Dimensions.get('window').width + 80
-export const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.7)
+export const SLIDER_WIDTH = Dimensions.get("window").width + 80;
+export const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.7);
 
 const CarouselCardItem = ({ item, style }) => {
   return (
@@ -38,9 +38,9 @@ const styles = StyleSheet.create({
     color: Color.amberBlack,
   },
   frameChild: {
-    borderRadius: 3,
+    borderRadius: 12,
     width: 100,
-    height: 150,
+    height: "100%",
     position: "absolute",
   },
   textContainer: {
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     color: Color.amberBlack,
   },
   news: {
-    width: 61,
+    width: "100%",
     fontSize: FontSize.size_3xs,
     color: Color.amberBlack,
   },
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     alignSelf: "stretch",
   },
   newsFrame: {
-    borderRadius: Border.br_3xs,
+    borderRadius: 12,
     backgroundColor: Color.colorWhite,
     shadowColor: "rgba(0, 0, 0, 0.5)",
     shadowOffset: {
@@ -98,4 +98,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CarouselCardItem
+export default CarouselCardItem;

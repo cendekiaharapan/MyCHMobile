@@ -1,6 +1,13 @@
 import React, { useState, useCallback } from "react";
-import { Text, StyleSheet, View, Dimensions, Pressable, Modal } from "react-native";
-import { Image } from "expo-image";
+import {
+  Text,
+  StyleSheet,
+  View,
+  Dimensions,
+  Pressable,
+  Modal,
+  Image,
+} from "react-native";
 import CarouselCards from "../components/CarouselCards";
 import Carousel from "react-native-reanimated-carousel";
 import Attendance from "../components/Attendance";
@@ -26,7 +33,6 @@ const HomeStudent = () => {
   const closeMensahContainer1 = useCallback(() => {
     setMensahContainer1Visible(false);
   }, []);
-
 
   return (
     <>
@@ -96,7 +102,7 @@ const HomeStudent = () => {
               </View>
               <View style={[styles.mensah3, styles.mensahShadowBox]}>
                 <View style={[styles.wed29Parent, styles.parentFlexBox]}>
-                <Text style={styles.wedTypo}>{`Wed`}</Text>
+                  <Text style={styles.wedTypo}>{`Wed`}</Text>
                   <Text style={styles.text1Clr}>
                     <Text style={[styles.text2, styles.textTypo2]}>29</Text>
                   </Text>

@@ -5,8 +5,8 @@ import {
   Text,
   ImageBackground,
   Pressable,
+  Image,
 } from "react-native";
-import { Image } from "expo-image";
 import { useNavigation } from "@react-navigation/native";
 import { FontFamily, Color, Border, Padding } from "../GlobalStyles";
 
@@ -18,7 +18,7 @@ const DetailPost = () => {
       <ImageBackground
         style={[styles.borocayScreenIcon, styles.titleFlexBox]}
         resizeMode="cover"
-        source={require("../assets/screen.png")}
+        source={require("../assets/images/screen.png")}
       >
         <View style={styles.titleFlexBox} />
         <View style={styles.bottomDrawer}>
@@ -33,7 +33,7 @@ const DetailPost = () => {
                     <Image
                       style={styles.vectorIcon}
                       contentFit="cover"
-                      source={require("../assets/vector.png")}
+                      source={require("../assets/images/vector.png")}
                     />
                     <Text style={styles.timestamp}>20/09/2023</Text>
                   </View>
@@ -62,7 +62,7 @@ const DetailPost = () => {
         <Image
           style={styles.icon}
           contentFit="cover"
-          source={require("../assets/backicon2.png")}
+          source={require("../assets/images/backicon2.png")}
         />
       </Pressable>
     </View>

@@ -9,24 +9,35 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { Color, FontFamily, FontSize, Border, Padding } from "../GlobalStyles";
 
-const CHDCard = ({ studentName, chdBalance }) => {
+const CHDCard = ({ student_id, student_name, chd_balance }) => {
   const navigation = useNavigation();
+
+  const handleCHDBalance = () => {
+    console.log("Student ID:",student_id);
+    console.log("Student Names:",student_name);
+    console.log("Chd Balances:",chd_balance);
+    navigation.navigate("PaymentTopup", {
+      student_id: student_id,
+      student_name: student_name,
+      chd_balance: chd_balance
+    });
+  };
 
   return (
     <Pressable
       style={styles.chdCard}
-      onPress={() => navigation.navigate("PaymentTopup")}
+      onPress={handleCHDBalance}
     >
       <ImageBackground
         style={styles.icon}
         resizeMode="cover"
         source={require("../assets/chdcard.png")}
       >
-        <Text style={styles.textStudentName}>{studentName}</Text>
+        <Text style={styles.textStudentName}>{student_name}</Text>
         <View style={styles.frame}>
-          <Text style={styles.chdValueTypo}>{chdBalance} </Text>
+          <Text style={styles.chdValueTypo}>{chd_balance} </Text>
           <Text style={[styles.currrentBalance, styles.chdValueTypo]}>
-            CHD  | Current Balance
+            CHD | Current Balance
           </Text>
         </View>
       </ImageBackground>
@@ -45,6 +56,7 @@ const styles = StyleSheet.create({
     textTransform: "uppercase",
   },
   textStudentName: {
+    width: 245,
     fontSize: FontSize.size_mini,
     letterSpacing: -0.1,
     fontFamily: FontFamily.poppinsRegular,
@@ -56,6 +68,9 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   frame: {
+    top: 73,
+    left: 35,
+    position: "absolute",
     width: 300,
     height: 24,
     overflow: "hidden",

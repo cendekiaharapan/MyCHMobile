@@ -40,14 +40,13 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
   itemList: {
-    marginTop:5,
+    marginTop: 5,
     top: 375,
     left: 20,
     borderRadius: Border.br_5xs,
     backgroundColor: Color.colorFloralwhite,
     width: 350,
     height: 33,
-    
   },
 });
 

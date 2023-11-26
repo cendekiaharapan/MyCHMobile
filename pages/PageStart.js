@@ -15,8 +15,8 @@ const PageStart = () => {
         backButtonPosition="unset"
         backButtonTop="unset"
         backButtonLeft="unset"
-        invoicesAlignItems="center"
-        invoicesWidth={96}
+        iNVOICESAlignItems="center"
+        iNVOICESWidth={96}
         onBackButtonPress={() => navigation.navigate("PageStart")}
       />
       <View style={styles.frame}>

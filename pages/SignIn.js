@@ -1,58 +1,214 @@
 import * as React from "react";
+import { useState, useEffect } from "react";
 import { Text, StyleSheet, View, Pressable, TextInput } from "react-native";
 import { Image } from "expo-image";
 import { useNavigation } from "@react-navigation/native";
 import { Border, Color, FontFamily, FontSize, Padding } from "../GlobalStyles";
+import axios from "axios";
+import * as SecureStore from "expo-secure-store";
+import Config from "react-native-config";
+import { APP_TOKEN, APP_SECRET } from "@env";
+import * as SQLite from "expo-sqlite";
+import {
+  storeItem,
+  retrieveItem,
+  deleteItem,
+  getAllKeys,
+  saveTokenToSecureStore,
+  getTokenFromSecureStore,
+  saveRespDataSecureStore,
+  getRespDataFromSecureStore,
+} from "../database/database";
+import Toast from "react-native-toast-message";
+import { LoadingModal } from "react-native-loading-modal";
+import BottomNavbar, { homeName } from "../BottomNavbar";
 
 const SignIn = () => {
+  const [childData, setChildData] = useState(null);
   const navigation = useNavigation();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const sendLoginRequest = async () => {
+    console.log("this is inside send login request function");
+    try {
+      const response = await axios.post(
+        "https://www.balichildrenshouse.com/myCH/api/login",
+        {
+          email: email,
+          password: password,
+          app_secret: APP_SECRET,
+          app_token: APP_TOKEN,
+
+          // Additional data if required (app_token, app_secret, etc.)
+        }
+      );
+
+      if (response.status === 200) {
+        console.log("inside response 200 (send Login Request)");
+        // Handle a successful login response here
+        console.log("Login successful");
+        console.log("(send login Request) response data : ", response.data);
+        const token = response.data.success.token;
+        await saveTokenToSecureStore(token);
+
+        const response_data = response.data;
+        await saveRespDataSecureStore(response_data);
+
+        resp = await getRespDataFromSecureStore();
+
+        if (resp.user.role === "parent") {
+          const parentId = response.data.user.id; // parent id
+
+          const parentStudentsResponse = await axios.get(
+            `https://www.balichildrenshouse.com/myCH/api/parent-students/${parentId}`
+          );
+
+          if (parentStudentsResponse.status === 200) {
+            console.log("parent savechild data");
+            // Handle the parent-students response data here
+            console.log(
+              "parent student response data = ",
+              parentStudentsResponse.data
+            );
+            storeItem("childData", parentStudentsResponse.data);
+            // You can navigate to another screen after successful login
+          } else {
+            // Handle cases where there is no student data
+            if (parentStudentsResponse.status === 401) {
+              console.log("No student found");
+              // You can take additional actions or show a message to the user as needed
+            } else {
+              console.error("Error while fetching parent-students data");
+              // Handle other errors
+            }
+          }
+        }
+        // You can navigate to another screen after successful login
+        // After a successful login
+        navigation.navigate("Main App Stack", { BottomNavbar });
+
+        setLoading(false);
+        Toast.show({
+          type: "success",
+          position: "top",
+          text1: "Login Success",
+          visibilityTime: 3000,
+          autoHide: true,
+        });
+      }
+    } catch (error) {
+      // Check if the error message contains information about invalid email or password
+      if (error.response && error.response.status === 401) {
+        if (error.response.data.error === "email not found") {
+          setLoading(false);
+          Toast.show({
+            type: "error",
+            position: "top",
+            text1: "Email not found",
+            visibilityTime: 3000,
+            autoHide: true,
+          });
+          // console.error("Email not found");
+          // Show an error message to the user that email is not found
+        } else if (
+          error.response.data.error === "email and password do not match"
+        ) {
+          setLoading(false);
+          Toast.show({
+            type: "error",
+            position: "top",
+            text1: "Email and password do not match",
+            visibilityTime: 3000,
+            autoHide: true,
+          });
+          // console.error("Email and password do not match");
+          // Show an error message to the user that email and password do not match
+        } else {
+          setLoading(false);
+          Toast.show({
+            type: "error",
+            position: "top",
+            text1: "Please enter your email and password",
+            visibilityTime: 3000,
+            autoHide: true,
+          });
+          // Show a generic error message
+        }
+      } else {
+        setLoading(false);
+        console.error("Login Error", error);
+        // Show a generic error message
+      }
+    }
+  };
+
+  // Step 3: Define an onChangeText function
+  const handlePasswordChange = (text) => {
+    // Step 3: Update the state variable
+    setPassword(text);
+  };
+
+  const handleButtonClick = () => {
+    sendLoginRequest();
+    setLoading(true);
+  };
+
+  const handleEmailChange = (text) => {
+    setEmail(text);
+  };
+
   return (
     <View style={[styles.signIn, styles.signInFlexBox]}>
+      <LoadingModal modalVisible={loading} color="red" />
       <View style={styles.signInFlexBox}>
         <Text style={styles.login}>LOGIN</Text>
         <Image
           style={styles.loginimgIcon}
           contentFit="cover"
-          source={require("../assets/loginimg.png")}
+          source={require("../assets/images/loginimg.png")}
         />
         <View style={[styles.ifemail, styles.ifemailShadowBox]}>
-        <Image
+          <Image
             style={styles.emailimgIcon}
             contentFit="cover"
-            source={require("../assets/emailimg.png")}
+            source={require("../assets/images/emailimg.png")}
           />
           <TextInput
-            style={[styles.emailInput, styles.textTypo]} 
-            placeholder="Emaill" 
-            placeholderTextColor="#888" 
-            keyboardType="email-address"/>
+            style={[styles.emailInput, styles.textTypo]}
+            placeholder="Email"
+            placeholderTextColor="#888"
+            keyboardType="email-address"
+            value={email}
+            onChangeText={handleEmailChange}
+          />
         </View>
         <View style={[styles.ifpassword, styles.ifemailShadowBox]}>
-        <Image
-          style={styles.emailimgIcon}
-          contentFit="cover"
-          source={require("../assets/pass.png")}
-        />
-        <TextInput
-          style={[styles.passwordInput, styles.textTypo]}
-          placeholder="Type your password" 
-          placeholderTextColor="#888" 
-          secureTextEntry={true} 
-        />
+          <Image
+            style={styles.emailimgIcon}
+            contentFit="cover"
+            source={require("../assets/images/pass.png")}
+          />
+          <TextInput
+            style={[styles.passwordInput, styles.textTypo]}
+            placeholder="Password"
+            placeholderTextColor="#888"
+            secureTextEntry={true}
+            value={password}
+            onChangeText={handlePasswordChange}
+          />
         </View>
         <Pressable
           style={styles.forgetPasswordClickContainer}
           onPress={() => navigation.navigate("Password")}
         >
           <Text style={[styles.text1, styles.text1Typo]}>
-            <Text style={styles.forgetPassword}>{`Forget Password? `}</Text>
+            <Text style={styles.forgetPassword}>{`Forgot Password? `}</Text>
             <Text style={styles.clickHere}>Click Here</Text>
           </Text>
         </Pressable>
-        <Pressable
-          style={styles.btnprimary}
-          onPress={() => navigation.navigate("AllPost")}
-        >
+        <Pressable style={styles.btnprimary} onPress={handleButtonClick}>
           <Text style={[styles.login1, styles.text1Typo]}>LOGIN</Text>
         </Pressable>
       </View>
@@ -61,6 +217,12 @@ const SignIn = () => {
 };
 
 const styles = StyleSheet.create({
+  passwordInput: {
+    flex: 1,
+  },
+  emailInput: {
+    flex: 1,
+  },
   signInFlexBox: {
     justifyContent: "center",
     alignItems: "center",
