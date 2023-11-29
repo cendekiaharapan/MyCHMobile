@@ -11,13 +11,16 @@ const Header = (assessmentData) => {
           <View style={styles.BlueContainer}>
             <View style={styles.TextContainer}>
               <Text style={styles.AcademicStyles}>
+                Student: {assessmentData.assessmentData.studentName}
+              </Text>
+              <Text style={styles.AcademicStyles}>
                 {assessmentData.assessmentData.session}
               </Text>
               <Text style={styles.SubjectTitle}>
                 {assessmentData.assessmentData.title}
               </Text>
               <Text style={styles.SemesterStyles}>
-                {assessmentData.assessmentData.semester}
+                Semester: {assessmentData.assessmentData.semester}
               </Text>
             </View>
             <View style={styles.ScoreContainer}>
@@ -109,7 +112,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     flex: 0.3,
-    bottom: 20,
+    bottom: '3%',
+    right: '22%'
   },
   AcademicStyles: {
     fontSize: 12,

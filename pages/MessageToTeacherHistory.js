@@ -6,6 +6,7 @@ import {
   Text,
   SafeAreaView,
   TouchableOpacity,
+  ActivityIndicator
 } from "react-native";
 import { NativeBaseProvider, StatusBar, ScrollView } from "native-base";
 import { Padding, Color, FontSize, FontFamily, Border } from "../GlobalStyles";
@@ -31,6 +32,7 @@ const MessageToTeacherHistory = () => {
   const [studentName, setStudentName] = useState(null);
   const [parentId, setParentId] = useState(null);
   const [teacherNames, setTeacherNames] = useState({}); // State to store teacher names
+  const [loading, setLoading] = useState(true);
 
   const getRespDataFromSecureStore = async () => {
     try {
@@ -148,8 +150,20 @@ const MessageToTeacherHistory = () => {
       };
 
       fetchTeacherNames();
+      setLoading(false);
     }
   }, [responseData]);
+
+  if (loading) {
+    return (
+      <View style={styles.loadingIndicator}>
+        <ActivityIndicator size="large" color="red" />
+        <Text>
+          Loading...
+        </Text>
+      </View>
+    );
+  }
 
   return (
     <NativeBaseProvider>
@@ -166,12 +180,12 @@ const MessageToTeacherHistory = () => {
                   source={require("../assets/images/buttonback.png")}
                 />
               </TouchableOpacity>
-              <Text style={styles.titleStyles}>History Communication</Text>
+              <Text style={styles.titleStyles}>Message History</Text>
             </View>
             <View style={styles.maincontent}>
               <View style={styles.allHistoryWrapper}>
                 <Text style={[styles.allHistory, styles.messageClr]}>
-                  All History
+                  {/* All History */}
                 </Text>
               </View>
 
@@ -219,23 +233,14 @@ const MessageToTeacherHistory = () => {
                       );
                     })
                   ) : (
-                    <LoadingModal modalVisible={true} color="red" />
+                        {/* <LoadingModal modalVisible={true} color="red" /> */ }
                   )
                 ) : (
-                  <LoadingModal modalVisible={true} color="red" />
+                    {/* <LoadingModal modalVisible={true} color="red" /> */ }
                 )}
               </ScrollView>
             </View>
             {/* End Main Content */}
-            <View style={styles.frame}>
-              <View style={styles.addicon}>
-                {/* <Image
-                  style={styles.addicon1}
-                  contentFit="cover"
-                  source={require("../assets/addicon.png")}
-                /> */}
-              </View>
-            </View>
           </View>
         </View>
       </SafeAreaView>
@@ -244,6 +249,10 @@ const MessageToTeacherHistory = () => {
 };
 
 const styles = StyleSheet.create({
+  loadingIndicator: {
+    flex: 1,
+    justifyContent: 'center', alignItems: 'center'
+  },
   AndroidSafeArea: {
     flex: 1,
     backgroundColor: "white",
@@ -261,6 +270,7 @@ const styles = StyleSheet.create({
   titleStyles: {
     color: "#241856",
     fontFamily: FontFamily.poppinsBold,
+    right: '120%',
     fontSize: 20,
   },
   wrapperFlexBox: {
@@ -310,7 +320,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    top: 50,
     height: 50,
     width: 300,
   },
@@ -497,9 +506,8 @@ const styles = StyleSheet.create({
     width: 330,
   },
   maincontent: {
-    paddingTop: 15,
     width: 330,
-    height: 563,
+    height: '100%',
   },
   addicon1: {
     width: 25,

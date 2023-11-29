@@ -1,18 +1,84 @@
 import * as React from "react";
-import { StyleSheet, Pressable, Text, View, Image } from "react-native";
+
+import { StyleSheet, Pressable, Text, View, Image, Dimensions, ScrollView, ActivityIndicator } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { FontFamily, Color, FontSize, Border, Padding } from "../GlobalStyles";
+import { FontFamily, Color, FontSize, Border, Padding, LoadingIndicator } from "../GlobalStyles";
+import axios from 'axios';
+import Carousel from 'react-native-snap-carousel';
+
+function formatDateTime(dateTimeString) {
+  const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+  const date = new Date(dateTimeString);
+  return date.toLocaleString('en-GB', options);
+}
 
 const AllPost = () => {
+  const [posts, setPosts] = React.useState([]);
+  const [loading, setLoading] = React.useState(true); // State to track loading
   const navigation = useNavigation();
+
+  const handleBackButtonClick = () => {
+    navigation.navigate("Main App Stack", {
+      screen: "BottomNavbar", // change this with your screen name
+    });
+  };
+
+  const SLIDER_WIDTH = Dimensions.get("window").width + 80;
+  const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.7);
+
+  const renderItem = ({ item, index }) => {
+    return (
+      <Pressable
+        style={{top: '10%'}}
+        onPress={() => navigation.navigate("PostDetails", { post: item })}
+      >
+        <Image
+          style={styles.posthimgIcon}
+          source={{ uri: `https://www.balichildrenshouse.com/myCH/ev-assets/uploads/post-images/${item.image}` }}
+        />
+        <View style={styles.overlay} />
+        <Text style={[styles.posthtime, styles.posthtimePosition]}>
+          {formatDateTime(item.created_at)}
+        </Text>
+        <Text style={[styles.posthtittle, styles.posthtittleTypo]}>
+          {item.title}
+        </Text>
+      </Pressable>
+    );
+  };
+
+  React.useEffect(() => {
+    axios.get('https://www.balichildrenshouse.com/myCH/api/all-post')
+      .then(response => {
+        setPosts(response.data.posts);
+        setLoading(false);
+      })
+      .catch(error => {
+        setLoading(false);
+        console.error(error)
+      });
+    setLoading(false);
+  }, []);
+
+  if (loading) {
+    return (
+      <View style={LoadingIndicator}>
+        <ActivityIndicator size="large" color="red" />
+        <Text>
+          Loading...
+        </Text>
+      </View>
+    );
+  }
+
   return (
     <View style={[styles.allPost, styles.allFlexBox1]}>
       <View style={[styles.content, styles.allFlexBox1]}>
-        <View style={[styles.hero, styles.allFlexBox1]}>
+        <View style={[styles.hero, styles.allFlexBox1, {top: '28%'}]}>
           <View style={[styles.backiconParent, styles.allFlexBox1]}>
             <Pressable
               style={styles.backicon}
-              onPress={() => navigation.navigate("SignIn")}
+              onPress={handleBackButtonClick}
             >
               <Image
                 style={[styles.icon, styles.iconLayout1]}
@@ -21,102 +87,40 @@ const AllPost = () => {
               />
             </Pressable>
             <View style={[styles.postWrapper, styles.allFlexBox1]}>
-              <Text style={[styles.post, styles.postTypo]}>Post</Text>
+              <Text style={[styles.post, styles.postTypo]}>Posts</Text>
             </View>
           </View>
-          <Pressable
-            style={styles.allFlexBox}
-            onPress={() => navigation.navigate("PostDetails")}
-          >
-            <Image
-              style={styles.posthimgIcon}
-              contentFit="cover"
-              source={require("../assets/images/posthimg.png")}
-            />
-            <Text style={[styles.posthtime, styles.posthtimePosition]}>
-              28, Sep 2023 at 12:21 pm
-            </Text>
-            <Text style={[styles.posthtittle, styles.posthtittleTypo]}>
-              Massa tortor nibh nulla condimentum imperdiet scelerisque...
-            </Text>
-          </Pressable>
+          <Carousel
+            data={posts.slice(0, 4)} // Taking the first 4 posts
+            renderItem={renderItem}
+            sliderWidth={SLIDER_WIDTH} // Set the slider width
+            itemWidth={ITEM_WIDTH} // Set the item width
+          />
         </View>
-        <View style={styles.allFlexBox}>
+        <View style={[styles.allFlexBox, {top: '28%'}]}>
           <View style={[styles.all1, styles.allFlexBox1]}>
             <Text style={[styles.latestpost, styles.postTypo]}>
-              Latest Post
+              All Posts
             </Text>
-            <View style={[styles.allframes, styles.allframesFlexBox]}>
-              <View style={[styles.frameParent, styles.allframesFlexBox]}>
-                <View style={styles.post1Parent}>
-                  <Pressable
-                    style={styles.post1}
-                    onPress={() => navigation.navigate("PostDetails")}
-                  >
-                    <Text style={[styles.post1time, styles.post1timeTypo]}>
-                      28, Sep 2023 at 12:21 pm
-                    </Text>
-                    <Text style={[styles.post1tittle, styles.post1tittleTypo]}>
-                      News Title Lorems Ipsum Dolor Sit Amet
-                    </Text>
-                    <Image
-                      style={[styles.post1imgIcon, styles.iconLayout]}
-                      contentFit="cover"
-                      source={require("../assets/images/post1img.png")}
-                    />
-                  </Pressable>
-                  <View style={styles.post2}>
-                    <Text style={[styles.post2time, styles.post1timeTypo]}>
-                      28, Sep 2023 at 12:21 pm
-                    </Text>
-                    <Text style={[styles.post2tittle, styles.post1tittleTypo]}>
-                      News Title Lorem Ipsum Dolor Sit Amet
-                    </Text>
-                    <Image
-                      style={[styles.post2imgIcon, styles.iconLayout]}
-                      contentFit="cover"
-                      source={require("../assets/images/post2img.png")}
-                    />
-                  </View>
-                </View>
-                <View style={styles.post3Parent}>
-                  <View>
-                    <Image
-                      style={[styles.post3imgIcon, styles.iconLayout]}
-                      contentFit="cover"
-                      source={require("../assets/images/post3img.png")}
-                    />
-                    <Text
-                      style={[styles.post3tittle, styles.post3timeSpaceBlock]}
-                    >
-                      News Title Lorem Ipsum Dolor Sit Amet
-                    </Text>
-                    <Text
-                      style={[styles.post3time, styles.post3timeSpaceBlock]}
-                    >
-                      28, Sep 2023 at 12:21 pm
-                    </Text>
-                  </View>
-                  <View style={styles.post4}>
-                    <Image
-                      style={[styles.post4imgIcon, styles.iconLayout]}
-                      contentFit="cover"
-                      source={require("../assets/images/post4img.png")}
-                    />
-                    <Text
-                      style={[styles.post4tittle, styles.post3timeSpaceBlock]}
-                    >
-                      News Title Lorem Ipsum Dolor Sit Amet
-                    </Text>
-                    <Text
-                      style={[styles.post4time, styles.post3timeSpaceBlock]}
-                    >
-                      28, Sep 2023 at 12:21 pm
-                    </Text>
-                  </View>
-                </View>
-              </View>
-            </View>
+            <ScrollView style={styles.scrollContainer} contentContainerStyle={styles.gridContainer}>
+              {posts.map((post, index) => (
+                <Pressable
+                  key={post.id}
+                  style={styles.gridItem}
+                  onPress={() => navigation.navigate("PostDetails", { post: post })}
+                >
+                  <Image
+                    style={styles.postImage}
+                    source={{ uri: `https://www.balichildrenshouse.com/myCH/ev-assets/uploads/post-images/${post.image}` }}
+                  />
+                  <Text style={styles.postTitle}>{post.title}</Text>
+                  <Text style={styles.postDate}>
+                    {formatDateTime(post.created_at)}
+                  </Text>
+                </Pressable>
+              ))}
+            </ScrollView>
+            
           </View>
         </View>
       </View>
@@ -125,6 +129,46 @@ const AllPost = () => {
 };
 
 const styles = StyleSheet.create({
+  overlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    borderRadius: 10,
+    backgroundColor: 'rgba(0, 0, 0, 0.2)', // Adjust the opacity as needed
+  },
+  scrollContainer: {
+    // marginTop: '1'
+  },
+  gridContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-around',
+  },
+  gridItem: {
+    width: '45%', // Adjust the width as needed
+    marginVertical: 8,
+    // Add more styling for each grid item
+  },
+  postImage: {
+    width: '100%', // Adjust as needed
+    height: 150, // Adjust as needed
+    borderRadius: 10, // Optional, for rounded corners
+    // Add more styling for the image
+  },
+  postTitle: {
+    // Styling for the post title
+    fontSize: FontSize.size_sm,
+    color: Color.colorMidnightblue,
+    fontFamily: FontFamily.poppinsBold,
+    fontWeight: "700",
+  },
+  postDate: {
+    color: Color.black20,
+    fontSize: FontSize.size_6xs,
+    fontFamily: FontFamily.poppinsRegular,
+  },
   allFlexBox1: {
     justifyContent: "center",
     alignItems: "center",
@@ -344,7 +388,7 @@ const styles = StyleSheet.create({
     alignSelf: "stretch",
   },
   all1: {
-    alignSelf: "stretch",
+    // alignSelf: "stretch",
   },
   content: {
     flex: 1,

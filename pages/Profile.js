@@ -8,9 +8,10 @@ import {
   NativeBaseProvider,
   TextInput,
   TouchableOpacity,
+  ActivityIndicator
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { FontFamily, Color, FontSize, Border, Padding } from "../GlobalStyles";
+import { FontFamily, Color, FontSize, Border, Padding, LoadingIndicator } from "../GlobalStyles";
 import * as Svg from "react-native-svg";
 import { useEffect, useState } from "react";
 import Toast from "react-native-toast-message";
@@ -35,7 +36,7 @@ const AllPost = () => {
   const [emailProfile, setEmailProfile] = useState(null);
   const [nameProfile, setNameProfile] = useState(null);
   const [addressProfile, setAddressProfile] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   useFocusEffect(
     React.useCallback(() => {
       if (hasFocus) {
@@ -72,6 +73,10 @@ const AllPost = () => {
       setEmailProfile(response_data.user.email);
       setNameProfile(response_data.user.name);
       setAddressProfile(response_data.user.address);
+      setTimeout(() => {
+        setLoading(false);
+      }, 100);
+     
     } catch (error) {
       console.error("Error fetching data", error);
     }
@@ -92,7 +97,9 @@ const AllPost = () => {
 
       // Navigate to your login screen or perform any other actions as needed
       navigation.navigate("Login Stack", { screen: "SignIn" }); // Replace "LoginStack" with the actual name of your login screen
-      setLoading(false);
+      setTimeout(() => {
+        setLoading(false);
+      }, 100);
       Toast.show({
         type: "success",
         position: "top",
@@ -117,27 +124,34 @@ const AllPost = () => {
   //   // You may also navigate the user back to the login page or perform any other necessary actions.
   // };
 
+  if (loading) {
+    return (
+      <View style={LoadingIndicator}>
+        <ActivityIndicator size="large" color="red" />
+        <Text>
+          Loading...
+        </Text>
+      </View>
+    );
+  }
+
   const defaultImageUrl =
     "https://www.balichildrenshouse.com/myCH/ev-assets/uploads/avatars/default.png";
 
   return (
     <View style={styles.MainContainer}>
-      <LoadingModal modalVisible={loading} color="red" />
+      {/* <LoadingModal modalVisible={loading} color="red" /> */}
       <View style={styles.HeaderContainer}>
-        {imageProfile != null ? (
-          <View style={styles.TitleContainer}>
-            <Text style={styles.TitleStyle}>Profile</Text>
-            <View style={styles.ImageContainer}>
-              <Image
-                style={styles.ProfileStyle}
-                source={{ uri: imageProfile || defaultImageUrl }}
-                contentFit="cover"
-              />
-            </View>
+        <View style={styles.TitleContainer}>
+          <Text style={styles.TitleStyle}>Profile</Text>
+          <View style={styles.ImageContainer}>
+            <Image
+              style={styles.ProfileStyle}
+              source={{ uri: imageProfile || defaultImageUrl }}
+              contentFit="cover"
+            />
           </View>
-        ) : (
-          <LoadingModal modalVisible={true} color="red" />
-        )}
+        </View>
       </View>
       <View style={styles.BodyContainer}>
         <View style={styles.ContentContainer}>
@@ -166,7 +180,8 @@ const AllPost = () => {
                 />
               </View>
             ) : (
-              <LoadingModal modalVisible={true} color="red" />
+                console.log("Still loading")
+              // <LoadingModal modalVisible={true} color="red" />
             )}
           </View>
           <View style={styles.ButtonContainer}>
@@ -223,6 +238,7 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     width: 120,
     height: 120,
+    top: '90%',
     borderRadius: 300,
     borderColor: "black",
     borderWidth: 2,

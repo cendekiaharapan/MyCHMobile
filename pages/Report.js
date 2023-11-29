@@ -108,7 +108,7 @@ const Report = () => {
   const showToastSuccess = () => {
     Toast.show({
       type: "success",
-      text1: "Report submitted successfully",
+      text1: "Successfully found scores.",
     });
   };
   const showToastError = () => {
@@ -141,12 +141,16 @@ const Report = () => {
       <View style={styles.report}>
         <View style={styles.frameParent}>
           <View style={styles.weeklyReportWrapper}>
-            <Text style={styles.weeklyReport}>Score Board</Text>
+            <Text style={styles.weeklyReport}>Daily Score</Text>
           </View>
           <View style={styles.ictwotoneArrowBackParent}>
             <Pressable
               style={styles.ictwotoneArrowBack}
-              onPress={() => navigation.navigate("Profile")}
+              onPress={() => {
+                navigation.navigate("Main App Stack", {
+                  screen: "BottomNavbar", // change this with your screen name
+                });
+              }}
             >
               <Image
                 style={[styles.icon, styles.iconLayout]}
@@ -178,7 +182,7 @@ const Report = () => {
                 label="Start Date"
               />
             </View>
-            <View style={styles.container2}>
+            <View style={styles.container1}>
               <DatePickerComponent
                 selectedDate={selectedEndDate}
                 onDateChange={handleEndDateChange}
@@ -402,7 +406,7 @@ const styles = StyleSheet.create({
     top: 13,
   },
   container2: {
-    top: -17,
+    top: 10,
   },
   groupWrapper: {
     left: 12,

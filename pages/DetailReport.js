@@ -67,13 +67,13 @@ const DetailReports = () => {
     if (!messagefile) {
       setShowFile(false);
     }
-    fetchData();
+    // fetchData();
   }, []);
 
   const fetchData = async () => {
     try {
       const response = await fetch(
-        "https://www.balichildrenshouse.com/myCHStaging/api/student/scores",
+        "https://www.balichildrenshouse.com/myCH/api/student/scores",
         {
           method: "POST",
           headers: {
@@ -88,6 +88,7 @@ const DetailReports = () => {
       );
 
       const data = await response.json();
+      console.log(data);
       if (data && data.length > 0) {
         setScoreData(data[0]);
       }
@@ -137,7 +138,7 @@ const DetailReports = () => {
         </Pressable>
         <View style={[styles.frameWrapper, styles.wrapperPosition]}>
           <View style={[styles.weeklyReportWrapper, styles.wrapperPosition]}>
-            <Text style={styles.weeklyReport}>Score Board</Text>
+            <Text style={styles.weeklyReport}>Daily Score</Text>
           </View>
         </View>
 
@@ -348,10 +349,9 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
   ictwotoneArrowBack: {
-    left: 18,
     width: 24,
     height: 24,
-    top: 0,
+    top: '1%',
     position: "absolute",
   },
   weeklyReport: {
@@ -365,14 +365,14 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   weeklyReportWrapper: {
-    marginLeft: -70.5,
-    top: 0,
+    marginLeft: '-85%',
+    top: '10%',
     textAlign: "center",
   },
   frameWrapper: {
-    marginLeft: -35,
-    top: 1,
-    width: 107,
+    marginLeft: "-11%",
+    top: '1%',
+    width: '33%',
   },
   mathematic: {
     // textAlign: "left",
@@ -596,7 +596,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderRadius: Border.br_xl,
     backgroundColor: Color.colorGray_100,
-    height: 800,
+    height: '100%',
     paddingHorizontal: Padding.p_3xs,
     paddingVertical: Padding.p_26xl,
     flexDirection: "row",

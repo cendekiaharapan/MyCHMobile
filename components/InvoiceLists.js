@@ -76,7 +76,7 @@ const InvoiceLists = ({
           >
             <View style={[styles.totalRateIcon, styles.iconLayout]}>
               <Text style={[styles.rpTotalRate, styles.dueLayout]}>
-                Rp. {totalRate}
+                {totalRate}
               </Text>
             </View>
             <View style={[styles.unpaidIcon, styles.iconLayout]}>

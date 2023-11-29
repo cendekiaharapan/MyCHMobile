@@ -1,5 +1,6 @@
 import * as React from "react";
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, View, Text, ActivityIndicator } from "react-native";
+import { Image } from "expo-image";
 import { useNavigation } from "@react-navigation/native";
 import Header from "../components/Header";
 import { ScrollView } from "react-native";
@@ -23,6 +24,7 @@ import { LoadingModal } from "react-native-loading-modal";
 
 const PaymentInvoice = () => {
   const navigation = useNavigation();
+  const [loading, setLoading] = useState(true);
   const [studentId, setStudentId] = useState(null);
   const [studentName, setStudentName] = useState(null);
   const [unpaidPayment, setUnpaidPayment] = useState(null);
@@ -59,12 +61,14 @@ const PaymentInvoice = () => {
         ": ",
         response.data
       );
+      
       return response.data; // Assuming the data contains payment histories
     } catch (error) {
       // console.error(
       //   `Error fetching payment histories for student ID ${studentId}:`,
       //   error
       // );
+      
       return null;
     }
   };
@@ -89,6 +93,9 @@ const PaymentInvoice = () => {
       .catch((error) => {
         console.error("Error fetching response data from SQLite:", error);
       });
+    setTimeout(() => {
+      setLoading(false);
+    }, 300);
   };
 
   const getAllPaymentHistories = async (studentId) => {
@@ -121,17 +128,33 @@ const PaymentInvoice = () => {
 
       console.log("Unpaid Payments:", unpaidPayments);
       setUnpaidPayment(unpaidPayments);
+
+      console.log("Is Loading", loading);
     } catch (error) {
       console.error(
         "Error fetching payment histories for all students:",
         error
       );
+
+      console.log("Is Loading", loading);
       return null;
     }
   };
 
+  if (loading) {
+    return (
+      <View style={styles.loadingIndicator}>
+        <ActivityIndicator size="large" color="red" />
+        <Text>
+          Loading...
+        </Text>
+      </View>
+    );
+  }
+
   return (
     <View style={[styles.paymentInvoice, styles.footerFlexBox]}>
+      {/* <LoadingModal modalVisible={loading} color="red" /> */}
       <Header
         invoiceTitle="INVOICES"
         onBackButtonPress={() => navigation.navigate("BottomNavbar")}
@@ -169,10 +192,16 @@ const PaymentInvoice = () => {
                 );
               })
             ) : (
-              <Text>No unpaid payments</Text>
+                <View style={styles.emptyContainer}>
+                  <Image
+                    source={require('../assets/nounpaidpayments.png')} // Replace with your image path
+                    style={styles.emptyImage}
+                  />
+                  <Text style={styles.emptyText}>No outstanding payments.</Text>
+                </View>
             )
           ) : (
-            <LoadingModal modalVisible={true} color="red" />
+            console.log("Not loaded yet..")
           )}
         </View>
       </ScrollView>
@@ -188,6 +217,25 @@ const PaymentInvoice = () => {
 };
 
 const styles = StyleSheet.create({
+  emptyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: '50%',
+  },
+  emptyImage: {
+    width: 150,
+    height: 160, // Adjust size as needed
+    marginBottom: 10,
+  },
+  emptyText: {
+    fontSize: 16,
+    color: 'gray', // Adjust color as needed
+  },
+  loadingIndicator: {
+    flex: 1,
+    justifyContent: 'center', alignItems: 'center'
+  },
   footerFlexBox: {
     justifyContent: "center",
     backgroundColor: Color.singleToneWhite,

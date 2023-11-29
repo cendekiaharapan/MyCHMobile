@@ -172,12 +172,12 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.poppinsSemiBold,
     color: "#211B3D",
     height: 18,
-    width: 240,
+    width: '70%',
     fontSize: FontSize.textRegularXs12_size,
     textAlign: "left",
   },
   excused: {
-    width: 51,
+    width: '100%',
   },
   line1: {
     width: 240,

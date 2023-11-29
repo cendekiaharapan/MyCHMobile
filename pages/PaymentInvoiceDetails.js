@@ -1,10 +1,10 @@
 import * as React from "react";
-import { Text, StyleSheet, View } from "react-native";
+import { Text, StyleSheet, View, ActivityIndicator } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Header from "../components/Header";
 import InvoiceDetailItems from "../components/InvoiceDetailItems";
 import Button from "../components/Button";
-import { Color, FontFamily, FontSize, Padding } from "../GlobalStyles";
+import { Color, FontFamily, FontSize, Padding, LoadingIndicator } from "../GlobalStyles";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { retrieveItem } from "../database/database";
@@ -105,26 +105,31 @@ const PaymentInvoiceDetails = ({ route }) => {
 
   useEffect(() => {
     fetchDescription(paymentId).finally(() => {
-      setLoading(false);
+      setTimeout(() => {
+        setLoading(false);
+      }, 100);
     });
   }, [paymentId]);
-
-  if (loading) {
-    return (
-      <View>
-        {/* Render a loading indicator or placeholder while data is being fetched */}
-        <LoadingModal modalVisible={true} color="red" />
-      </View>
-    );
-  }
 
   const formattedTotal = parseFloat(total).toLocaleString(undefined, {
     minimumFractionDigits: 0,
     maximumFractionDigits: 3,
   });
 
+  if (loading) {
+    return (
+      <View style={LoadingIndicator}>
+        <ActivityIndicator size="large" color="red" />
+        <Text>
+          Loading...
+        </Text>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.paymentInvoiceDetails}>
+      {/* <LoadingModal modalVisible={loading} color="red" /> */}
       <View style={styles.header}>
         <Header
           invoiceTitle="INVOICE DETAILS"

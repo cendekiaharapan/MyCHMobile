@@ -1,5 +1,5 @@
 import React, { forwardRef, useEffect } from "react";
-import { Image, StyleSheet, Text, View, Dimensions } from "react-native";
+import { Image, StyleSheet, Text, View, Dimensions, ScrollView } from "react-native";
 import { FontFamily, Color } from "../GlobalStyles";
 import { TouchableOpacity } from "react-native";
 import { Picker } from "@react-native-picker/picker"; // Import the Picker component
@@ -11,6 +11,7 @@ import {
 } from "../database/database";
 import Toast from "react-native-toast-message";
 import { LoadingModal } from "react-native-loading-modal";
+// import { ScrollView } from "react-native-gesture-handler";
 
 const CallMyChild = forwardRef(({ navigation }, ref) => {
   const { width } = Dimensions.get("window");
@@ -22,7 +23,7 @@ const CallMyChild = forwardRef(({ navigation }, ref) => {
   const [selectedChild, setSelectedChild] = React.useState("");
   const [selectedLanguage, setSelectedLanguage] = React.useState(null);
   const [selectedPlace, setSelectedPlace] = React.useState(null);
-  const [loading, setLoading] = React.useState(true);
+  const [loading, setLoading] = React.useState(false);
   useEffect(() => {
     // This code will run after the component renders
     retrieveItem("childData")
@@ -113,7 +114,7 @@ const CallMyChild = forwardRef(({ navigation }, ref) => {
     "zh-TW": "Chinese (Traditional)",
   };
 
-  const places = ["Jineng", "Parent Lounge", "Parking Lot"];
+  const places = ["Jineng", "Parent's Lounge", "Parking Lot"];
   const showToastErrorRequired = () => {
     Toast.show({
       text1: "Please select all required fields!",
@@ -130,7 +131,7 @@ const CallMyChild = forwardRef(({ navigation }, ref) => {
       return;
     }
     const apiUrl =
-      "https://www.balichildrenshouse.com/myCHStaging/api/call-my-child";
+      "https://www.balichildrenshouse.com/myCH/api/call-my-child";
     const requestData = {
       student_id: selectedChild,
       call_to: selectedPlace,
@@ -167,7 +168,7 @@ const CallMyChild = forwardRef(({ navigation }, ref) => {
   };
   const showToastSuccess = () => {
     Toast.show({
-      text1: "Successfully, call your child!",
+      text1: "Successfully called your child!",
       text1Style: { fontSize: 15 },
       text2Style: { fontSize: 13 },
       type: "success",
@@ -175,7 +176,7 @@ const CallMyChild = forwardRef(({ navigation }, ref) => {
   };
   const showToastError = () => {
     Toast.show({
-      text1: "Failed, call your child!",
+      text1: "Failed to call your child!",
       text1Style: { fontSize: 15 },
       text2Style: { fontSize: 13 },
       type: "error",
@@ -210,13 +211,8 @@ const CallMyChild = forwardRef(({ navigation }, ref) => {
           CALL MY CHILD
         </Text>
       </View>
-      <Image
-        style={styles.image3Icon}
-        contentFit="cover"
-        source={require("../assets/image-31.png")}
-      />
       <View style={styles.basicPlan}>
-        <View style={[styles.basecards, styles.basecardsFlexBox]}>
+        <ScrollView style={[styles.basecards, styles.basecardsFlexBox]}>
           <View style={[styles.basecardsbody, styles.basecardsFlexBox]}>
             <View style={styles.titleSubtitleWrapper}>
               <View style={[styles.titleSubtitle, styles.callMyChildFlexBox]}>
@@ -292,14 +288,15 @@ const CallMyChild = forwardRef(({ navigation }, ref) => {
               </Picker>
             </View>
           </View>
-        </View>
-        <TouchableOpacity
-          ref={ref}
-          style={styles.btnprimary}
-          onPress={handleCallButton}
-        >
-          <Text style={[styles.call, styles.callTypo]}>CALL</Text>
-        </TouchableOpacity>
+          <TouchableOpacity
+            ref={ref}
+            style={styles.btnprimary}
+            onPress={handleCallButton}
+          >
+            <Text style={[styles.call, styles.callTypo]}>CALL</Text>
+          </TouchableOpacity>
+        </ScrollView>
+        
       </View>
     </View>
   );
@@ -420,7 +417,7 @@ const styles = StyleSheet.create({
   },
   dropdown: {
     marginTop: 13,
-    width: 272,
+    width: '100%',
     minWidth: 162.5,
     paddingVertical: 11,
     paddingHorizontal: 17,
@@ -473,7 +470,7 @@ const styles = StyleSheet.create({
   },
   basecards: {
     borderRadius: 4,
-    height: 350,
+    height: '100%',
     overflow: "hidden",
   },
   call: {
@@ -488,7 +485,7 @@ const styles = StyleSheet.create({
   btnprimary: {
     backgroundColor: Color.colorTomato_100,
     height: 53,
-    marginTop: 0,
+    marginBottom: 100,
     borderRadius: 54,
     width: 316,
   },
@@ -496,7 +493,7 @@ const styles = StyleSheet.create({
     shadowColor: "rgba(0, 0, 0, 0.04)",
     shadowRadius: 17.33,
     elevation: 17.33,
-    height: 512,
+    height: '100%',
     width: 316,
     shadowOpacity: 1,
     shadowOffset: {

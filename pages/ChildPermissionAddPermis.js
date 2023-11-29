@@ -49,7 +49,7 @@ const ChildPermissionAddPermis = () => {
   const [fromDate, setFromDate] = React.useState(null);
   const [toDate, setToDate] = React.useState(null);
   const [note, setNote] = React.useState("");
-  const [loading, setLoading] = React.useState(true);
+  const [loading, setLoading] = React.useState(false);
 
   const showToastSuccess = () => {
     Toast.show({
@@ -85,11 +85,14 @@ const ChildPermissionAddPermis = () => {
           // Log the retrieved student_ids and student_names
           console.log("Student IDssss:", studentIds);
           console.log("Student Names:", studentNames);
+          setLoading(false);
         } else {
+          setLoading(false);
           console.log("No data found in SQLite.");
         }
       })
       .catch((error) => {
+        setLoading(false);
         console.error("Error fetching response data from SQLite:", error);
       })
       .finally(() => {

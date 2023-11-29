@@ -6,6 +6,7 @@ import {
   View,
   Text,
   Linking,
+  ActivityIndicator
 } from "react-native";
 import { Image } from "expo-image";
 import { Color, FontFamily, FontSize, Padding, Border } from "../GlobalStyles";
@@ -35,6 +36,7 @@ const MessageToTeacherViewHis = ({ route, navigation }) => {
   const [imageUrlPath, setImageUrlPath] = useState(imageUrl);
   const [showFile, setShowFile] = useState(true);
   const [formattedTimestamp, setFormattedTimestamp] = useState("");
+  const [loading, setLoading] = useState(true);
 
   const formatTimestamp = (timestamp) => {
     const date = new Date(timestamp);
@@ -65,6 +67,7 @@ const MessageToTeacherViewHis = ({ route, navigation }) => {
     if (!messagefile) {
       setShowFile(false);
     }
+    setLoading(false);
   }, [
     messageID,
     messagefile,
@@ -94,6 +97,17 @@ const MessageToTeacherViewHis = ({ route, navigation }) => {
       screen: "MessageToTeacherHistory", // change this with your screen name
     });
   };
+
+  if (loading) {
+    return (
+      <View style={styles.loadingIndicator}>
+        <ActivityIndicator size="large" color="red" />
+        <Text>
+          Loading...
+        </Text>
+      </View>
+    );
+  }
 
   return (
     <NativeBaseProvider>
@@ -187,6 +201,10 @@ const MessageToTeacherViewHis = ({ route, navigation }) => {
 };
 
 const styles = StyleSheet.create({
+  loadingIndicator: {
+    flex: 1,
+    justifyContent: 'center', alignItems: 'center'
+  },
   timestampContainer: {
     width: 285,
     height: 20, // Adjust height as needed

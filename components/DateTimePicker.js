@@ -94,7 +94,7 @@ const DateTimePicker = ({ onDateChange, dateTime }) => {
         <DateTime
           value={selectedDate || new Date()}
           mode="date"
-          display="default"
+          display="inline"
           onChange={handleDateChange}
           style={styles.dateMode}
         />
@@ -106,7 +106,7 @@ const DateTimePicker = ({ onDateChange, dateTime }) => {
             selectedTime ? new Date(`2000-01-01T${selectedTime}`) : new Date()
           }
           mode="time"
-          display="default"
+          display="spinner"
           onChange={handleTimeChange}
         />
       )}

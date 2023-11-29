@@ -47,7 +47,7 @@ const ListOfReport = () => {
               <View
                 style={[styles.weeklyReportWrapper, styles.wrapperPosition]}
               >
-                <Text style={styles.weeklyReport}>Score Board</Text>
+                <Text style={styles.weeklyReport}>Daily Score</Text>
               </View>
             </View>
             <Pressable
@@ -257,7 +257,7 @@ const styles = StyleSheet.create({
   },
   ictwotoneArrowBackParent: {
     width: 340,
-    height: 600,
+    height: '90%',
   },
   oct2023Typo: {
     fontSize: FontSize.size_3xs,
@@ -311,8 +311,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   weeklyReportWrapper: {
-    marginLeft: -70.5,
-    top: 0,
+    marginLeft: '-78%',
+    top: '1%',
   },
   frameWrapper: {
     marginLeft: -28,
@@ -540,7 +540,7 @@ const styles = StyleSheet.create({
   listOfReport: {
     borderRadius: Border.br_xl,
     backgroundColor: Color.colorGray_100,
-    height: 800,
+    height: '100%',
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",

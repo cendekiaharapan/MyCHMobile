@@ -10,15 +10,21 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { FontFamily, Color, Border, Padding } from "../GlobalStyles";
 
-const DetailPost = () => {
-  const navigation = useNavigation();
+function formatDateTime(dateTimeString) {
+  const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+  const date = new Date(dateTimeString);
+  return date.toLocaleString('en-GB', options);
+}
+
+const DetailPost = ({ route, navigation }) => {
+  const post = route?.params?.post;
 
   return (
     <View style={styles.detailPost}>
       <ImageBackground
         style={[styles.borocayScreenIcon, styles.titleFlexBox]}
         resizeMode="cover"
-        source={require("../assets/images/screen.png")}
+        source={{ uri: `https://www.balichildrenshouse.com/myCH/ev-assets/uploads/post-images/${post.image}` }}
       >
         <View style={styles.titleFlexBox} />
         <View style={styles.bottomDrawer}>
@@ -27,7 +33,7 @@ const DetailPost = () => {
               <View style={styles.titleInner}>
                 <View>
                   <Text style={[styles.loremIpsumDolor, styles.loremFlexBox]}>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing eli
+                    {post.title}
                   </Text>
                   <View style={styles.authortimestamp}>
                     <Image
@@ -35,21 +41,14 @@ const DetailPost = () => {
                       contentFit="cover"
                       source={require("../assets/images/vector.png")}
                     />
-                    <Text style={styles.timestamp}>20/09/2023</Text>
+                    <Text style={styles.timestamp}>{formatDateTime(post.created_at)}</Text>
                   </View>
                 </View>
               </View>
             </View>
             <View style={styles.overviewText}>
               <Text style={[styles.loremIpsumDolor1, styles.loremFlexBox]}>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore Lorem ipsum dolor sit amet,
-                consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-                labore Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                sed do eiusmod tempor incididunt ut labore Lorem ipsum dolor sit
-                amet, consectetur adipiscing elit, sed do eiusmod tempor
-                incididunt ut labore Lorem ipsum dolor sit amet, consectetur
-                adipislllllll.
+                {post.body}
               </Text>
             </View>
           </View>

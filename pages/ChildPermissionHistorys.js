@@ -9,9 +9,10 @@ import {
   Platform,
   StatusBar,
   TouchableOpacity,
+  ActivityIndicator
 } from "react-native";
 import { Button, NativeBaseProvider } from "native-base";
-import { Color, Padding, FontFamily, FontSize, Border } from "../GlobalStyles";
+import { Color, Padding, FontFamily, FontSize, Border, LoadingIndicator } from "../GlobalStyles";
 import PermissionHistory from "../components/PermissionHistory";
 import { useNavigation, useFocusEffect } from "@react-navigation/native"; // Updated import
 import AddButton from "../components/AddButton";
@@ -145,9 +146,20 @@ const ChildPermissionHistorys = () => {
 
   const imageUrl = `https://www.balichildrenshouse.com/myCH/ev-assets/uploads/avatars/`;
 
+  if (loading) {
+    return (
+      <View style={LoadingIndicator}>
+        <ActivityIndicator size="large" color="red" />
+        <Text>
+          Loading...
+        </Text>
+      </View>
+    );
+  }
+
   return (
     <NativeBaseProvider>
-      <LoadingModal modalVisible={loading} color="red" />
+      {/* <LoadingModal modalVisible={loading} color="red" /> */}
       <View style={styles.contact}>
         <View style={[styles.herocontainerParent, styles.herocontainerLayout]}>
           <View style={[styles.herocontainer, styles.herocontainerLayout]}>
@@ -175,7 +187,7 @@ const ChildPermissionHistorys = () => {
           {/* End Main Content */}
 
           {/* Add Button */}
-          <AddButton style={styles.addbuttonstyle} />
+          {/* <AddButton style={styles.addbuttonstyle} /> */}
           {/* End Add Button */}
           <View style={styles.content}>
             <View style={[styles.frameGroup, styles.frameGroupLayout]}>
@@ -207,10 +219,12 @@ const ChildPermissionHistorys = () => {
                         );
                       })
                     ) : (
-                      <LoadingModal modalVisible={true} color="red" />
+                      console.log("Still loading")
+                      // <LoadingModal modalVisible={true} color="red" />
                     )
                   ) : (
-                    <LoadingModal modalVisible={true} color="red" />
+                    console.log("Still loading")
+                    // <LoadingModal modalVisible={true} color="red" />
                   )}
                 </ScrollView>
               </View>
@@ -419,7 +433,7 @@ const styles = StyleSheet.create({
   },
   content: {
     top: 5,
-    height: 543,
+    height: '100%',
     width: 352,
   },
   childPermissionHistory: {

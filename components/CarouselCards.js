@@ -19,7 +19,7 @@ import { useState, useCallback, useEffect } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 // import data from '../data';
 
-const CarouselCards = () => {
+const CarouselCards = (navigation) => {
   const isCarousel = React.useRef(null);
   const [postData, setPostData] = useState(null);
   const ImgUrl =
@@ -68,9 +68,22 @@ const CarouselCards = () => {
     postData?.map((post) => ({
       title: post.title,
       body: post.body,
+      image: post.image,
+      created_at: post.created_at,
       imgUrl: ImgUrl + post.image,
       date: formatDate(post.updated_at),
     })) ?? [];
+  
+  const renderItemWithNavigation = ({ item, index }) => {
+    return (
+      <CarouselCardItem
+        item={item}
+        index={index}
+        style={{}} // Your custom style or leave empty if none
+        navigation={navigation} // Passing the navigation prop to CarouselCardItem
+      />
+    );
+  };
 
   return (
     <View>
@@ -79,7 +92,7 @@ const CarouselCards = () => {
         layoutCardOffset={9}
         ref={isCarousel}
         data={data}
-        renderItem={CarouselCardItem}
+        renderItem={renderItemWithNavigation}
         sliderWidth={SLIDER_WIDTH}
         itemWidth={ITEM_WIDTH}
       />

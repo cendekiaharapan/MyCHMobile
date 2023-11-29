@@ -23,15 +23,19 @@ const AssessmentList = ({ route, navigation }) => {
     selectedStudentName,
     selectedSemesterName,
     selectedSemester,
+    chosenStudentData,
   } = route.params || {};
   const [assessmentData, setAssessmentData] = useState([]);
   const navigateToAssessmentDetail = (subject) => {
     subject.session = selectedSessionName;
     subject.semester = selectedSemesterName;
+    subject.student = selectedStudent;
+    subject.studentName = selectedStudentName;
     console.log(
       "AssessmentData being passed to AssessmentDetail.js:",
       assessmentData
     );
+    console.log("selected student data", chosenStudentData);
     console.log("Subject being passed to AssessmentDetail.js:", subject);
     navigation.navigate("AssessmentDetail", {
       subject,
@@ -42,6 +46,7 @@ const AssessmentList = ({ route, navigation }) => {
       selectedStudentName,
       selectedSemesterName,
       selectedSemester,
+      chosenStudentData,
     });
   };
 

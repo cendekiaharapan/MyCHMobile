@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Image, Linking } from "react-native";
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity, ActivityIndicator } from "react-native";
 import { Button, NativeBaseProvider, Box, Select, Center } from "native-base";
 import { LinearGradient } from "expo-linear-gradient";
 import axios from "axios"; // Import Axios
@@ -48,8 +48,11 @@ const ReportCard = () => {
         console.error("Error fetching response data from SQLite:", error);
       })
       .finally(() => {
-        setLoading(false);
+        setTimeout(() => {
+          setLoading(false);
+        }, 100);
       });
+    
   }, []);
 
   const showToast = () => {
@@ -87,6 +90,9 @@ const ReportCard = () => {
       .catch((error) => {
         console.error("Error fetching academic sessions: ", error);
       });
+    setTimeout(() => {
+      setLoading(false);
+    }, 100);
   }, []);
 
   function clearSelectedSemester() {
@@ -99,6 +105,7 @@ const ReportCard = () => {
     console.log("inside ftech and set term session id : ", selectedSession);
     if (selectedSession) {
       console.log("SELECTED ACADEMIC SESSION NOT NULL!");
+      setLoading(true);
       axios
         .get(
           `https://www.balichildrenshouse.com/myCH/api/get_session_terms/${selectedSession}`
@@ -115,10 +122,12 @@ const ReportCard = () => {
           }
         })
         .catch((error) => {
-          setLoading(false);
           showToast();
           clearSelectedSemester();
         });
+      setTimeout(() => {
+        setLoading(false);
+      }, 100);
     }
   }
 
@@ -135,29 +144,30 @@ const ReportCard = () => {
   };
 
   const handleViewReportCard = () => {
-    setLoading(true);
     // You can change this to your desired student ID
     const url = `https://www.balichildrenshouse.com/myCH/api/getacademicreport/${selectedStudent}/${selectedSession}/${selectedSemester}`;
+    console.log(url);
 
-    axios
-      .get(url)
-      .then((response) => {
-        // Handle the response data as needed
-        setLoading(false);
-        showToastSuccess();
-        // Open the URL in the default web browser
-        Linking.openURL(url); // Replace 'url' with the actual response field that contains the URL
-      })
-      .catch((error) => {
-        setLoading(false);
-        showToastError();
-        // console.error('Error fetching academic report: ', error);
-      });
+    // Open the URL in the default web browser
+    Linking.openURL(url); // Replace 'url' with the actual response field that contains the URL
+    
   };
+
+  if (loading) {
+    return (
+      <View style={styles.loadingIndicator}>
+        <ActivityIndicator size="large" color="red" />
+        <Text>
+          Loading...
+        </Text>
+      </View>
+    );
+  }
+
   return (
     <NativeBaseProvider>
+      {/* <LoadingModal modalVisible={loading} color="red" /> */}
       <View style={styles.reportCard}>
-        <LoadingModal modalVisible={loading} color="red" />
         <View style={styles.frame}>
           <View style={styles.frame1}>
             <TouchableOpacity onPress={handleBackButton}>
@@ -181,6 +191,7 @@ const ReportCard = () => {
                 minWidth="100%"
                 accessibilityLabel="Choose Student"
                 placeholder="Choose Student"
+                defaultValue={selectedStudent}
                 onValueChange={(studentId) => {
                   setSelectedStudent(studentId);
                 }}
@@ -201,6 +212,7 @@ const ReportCard = () => {
                   minWidth="100%"
                   accessibilityLabel="Choose Session"
                   placeholder="Choose Session"
+                  defaultValue={selectedSession}
                   onValueChange={(itemId) => {
                     // console.log("set selected session id : ",itemId);
                     // console.log("value of selected session id : ",selectedSession);
@@ -228,6 +240,7 @@ const ReportCard = () => {
                     minWidth="100%"
                     accessibilityLabel="Choose Semester"
                     placeholder="Choose Semester"
+                    defaultValue={selectedSemester}
                     onValueChange={(itemValue) => {
                       setSelectedSemester(itemValue);
                       console.log("Selected Semester:", itemValue);
@@ -260,6 +273,10 @@ const ReportCard = () => {
 };
 
 const styles = StyleSheet.create({
+  loadingIndicator: {
+    flex: 1,
+    justifyContent: 'center', alignItems: 'center'
+  },
   buttonContainer: {
     marginTop: 30,
     height: 50,

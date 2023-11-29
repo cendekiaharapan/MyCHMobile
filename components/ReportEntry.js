@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
   scoreContainer: {
     flexDirection: "column",
     position: "absolute",
-    top: "20%",
+    top: "15%",
     left: "70%",
     alignItems: "center",
   },

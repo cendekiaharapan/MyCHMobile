@@ -16,6 +16,7 @@ import { Color, FontFamily, FontSize, Border, Padding } from "../GlobalStyles";
 import AsessmentComponent from "../components/AsessmentComponent";
 import Header from "../components/HeaderTerm";
 import Criteria from "../components/Criteria";
+import axios from "axios";
 
 const AssessmentDetail = ({ route, navigation }) => {
   const {
@@ -25,7 +26,10 @@ const AssessmentDetail = ({ route, navigation }) => {
     selectedStudentName,
     selectedSemesterName,
     selectedSemester,
+    chosenStudentData
   } = route.params || {};
+  const [loading, setLoading] = useState(true);
+  const [scoring, setScoring] = useState(null);
 
   const assessmentData = route.params.subject;
 
@@ -37,8 +41,26 @@ const AssessmentDetail = ({ route, navigation }) => {
       selectedSessionName,
       selectedSemesterName,
       selectedSemester,
+      chosenStudentData
     });
   };
+
+  useEffect(() => {
+    console.log("selectedStudentData", chosenStudentData)
+    if (chosenStudentData) {
+      axios.get(`https://www.balichildrenshouse.com/myCH/api/scoring/${chosenStudentData.class_id}`)
+        .then(response => {
+          console.log(`https://www.balichildrenshouse.com/myCH/api/scoring/${chosenStudentData.class_id}`, "response", response)
+          setScoring(response.data.data);
+          setLoading(false);
+        })
+        .catch(error => {
+          setLoading(false);
+          console.error(error)
+        });
+        setLoading(false);
+    }
+  }, [selectedStudent]);
 
   return (
     <NativeBaseProvider>
@@ -56,7 +78,7 @@ const AssessmentDetail = ({ route, navigation }) => {
             </TouchableOpacity>
             <View style={styles.titleContainer}>
               {assessmentData && (
-                <Text style={styles.titleStyle}>{assessmentData.title}</Text>
+                <Text style={styles.titleStyle}>Term Asessment</Text>
               )}
             </View>
           </View>
@@ -64,48 +86,46 @@ const AssessmentDetail = ({ route, navigation }) => {
           {assessmentData && (
             <Header
               assessmentData={assessmentData}
-              title={assessmentData.title}
-              score={assessmentData.avg_score}
             />
           )}
 
           <View style={styles.mainContainer}>
             <View style={styles.container}>
               <View style={[styles.column]}>
-                <AsessmentComponent
+                {scoring && scoring.booklet > 0 && (<AsessmentComponent
                   Text_Criteria="Booklet"
                   score={assessmentData?.booklet}
-                />
-                <AsessmentComponent
+                />)}
+                {scoring && scoring.subject_integration > 0 && (<AsessmentComponent
                   Text_Criteria="Subject Integration"
                   score={assessmentData?.subject_integration}
-                />
-                <AsessmentComponent
+                />)}
+                {scoring && scoring.progression_test > 0 && (<AsessmentComponent
                   Text_Criteria="Progression Test"
                   score={assessmentData?.progress_test}
-                />
-                <AsessmentComponent
+                />)}
+                {scoring && scoring.final_block_assessment > 0 && (<AsessmentComponent
                   Text_Criteria="Final Block Assessment"
                   score={assessmentData?.final_block_assessment}
-                />
+                />)}
               </View>
               <View style={[styles.column, styles.marginBottom]}>
-                <AsessmentComponent
+                {scoring && scoring.presentation > 0 && (<AsessmentComponent
                   Text_Criteria="Presentation"
                   score={assessmentData?.presentation}
-                />
-                <AsessmentComponent
+                />)}
+                {scoring && scoring.mock_test > 0 && (<AsessmentComponent
                   Text_Criteria="Mock Test"
                   score={assessmentData?.mock_test}
-                />
-                <AsessmentComponent
+                />)}
+                {scoring && Number(scoring.daily_post) > 0 && (<AsessmentComponent
                   Text_Criteria="Average Daily Score"
                   score={assessmentData?.avg_score}
-                />
-                <AsessmentComponent
+                />)}
+                {scoring && Number(scoring.mid_block_assessment) > 0 && (<AsessmentComponent
                   Text_Criteria="Mid Block Assessment"
                   score={assessmentData?.mid_block_assessment}
-                />
+                />)}
               </View>
             </View>
           </View>
@@ -120,7 +140,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   container: {
-    paddingLeft: 20,
+    paddingLeft: '3%',
     flexDirection: "row",
   },
   column: {

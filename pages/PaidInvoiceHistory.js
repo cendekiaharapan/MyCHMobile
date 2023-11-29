@@ -1,5 +1,5 @@
 import * as React from "react";
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, View, Text, ActivityIndicator } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Header from "../components/Header";
 import InvoiceLists from "../components/InvoiceLists";
@@ -24,6 +24,7 @@ const PaidInvoiceHistory = () => {
   const [studentId, setStudentId] = useState(null);
   const [studentName, setStudentName] = useState(null);
   const [unpaidPayment, setUnpaidPayment] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -32,6 +33,10 @@ const PaidInvoiceHistory = () => {
 
       // For example, you might want to fetch data
       fetchDataStudent();
+
+      setTimeout(() => {
+        setLoading(false);
+      }, 300);
 
       return () => {
         // Optional cleanup function when the component is unmounted or loses focus
@@ -127,8 +132,21 @@ const PaidInvoiceHistory = () => {
       return null;
     }
   };
+
+  if (loading) {
+    return (
+      <View style={styles.loadingIndicator}>
+        <ActivityIndicator size="large" color="red" />
+        <Text>
+          Loading...
+        </Text>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.PaidInvoiceHistory}>
+      {/* <LoadingModal modalVisible={loading} color="red" /> */}
       <Header
         invoiceTitle="INVOICE HISTORY"
         backButtonPosition="unset"
@@ -173,7 +191,8 @@ const PaidInvoiceHistory = () => {
               <Text>No Paid Payments</Text>
             )
           ) : (
-            <LoadingModal modalVisible={true} color="red" />
+              console.log("Still loading")
+            // <LoadingModal modalVisible={true} color="red" />
           )}
         </View>
       </ScrollView>
@@ -182,6 +201,10 @@ const PaidInvoiceHistory = () => {
 };
 
 const styles = StyleSheet.create({
+  loadingIndicator: {
+    flex: 1,
+    justifyContent: 'center', alignItems: 'center'
+  },
   PaidInvoiceHistory: {
     backgroundColor: Color.singleToneWhite,
     flex: 1,

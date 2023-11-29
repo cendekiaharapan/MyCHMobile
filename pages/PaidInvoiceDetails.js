@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Text, StyleSheet, View } from "react-native";
+import { Text, StyleSheet, View, ActivityIndicator } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Header from "../components/Header";
 import InvoiceDetailItems from "../components/InvoiceDetailItems";
@@ -15,6 +15,7 @@ const PaidInvoiceDetails = ({ route }) => {
   const navigation = useNavigation();
   const [studentIds, setStudentIds] = React.useState([]);
   const [studentNames, setStudentNames] = React.useState([]);
+  const [selectedPayment, setSelectedPayment] = React.useState(null);
   const [description, setDescription] = useState("");
   const [date, setDate] = useState("");
   const [dueDate, setDueDate] = useState("");
@@ -63,6 +64,7 @@ const PaidInvoiceDetails = ({ route }) => {
         );
 
         if (selectedPayment) {
+          setSelectedPayment(selectedPayment);
           setDescription(selectedPayment.description);
           setDate(selectedPayment.date);
           setDueDate(selectedPayment.due_date);
@@ -98,6 +100,19 @@ const PaidInvoiceDetails = ({ route }) => {
     }
   };
 
+  const openReceiptUrl = async () => {
+    try {
+      // Fetch the payment ID from the first payment in the response
+
+      // Open the payment URL with the dynamic payment ID
+      const paymentUrl = `https://www.balichildrenshouse.com/myCH/ev-assets/uploads/invoices/${selectedPayment.receipt_name}`;
+      // Use Linking to open the URL in the device's default browser
+      await Linking.openURL(paymentUrl);
+    } catch (error) {
+      console.error("Error opening payment URL:", error);
+    }
+  };
+
   const handlePayNowPress = () => {
     // Call the function to open the payment URL
     openPaymentUrl();
@@ -111,9 +126,11 @@ const PaidInvoiceDetails = ({ route }) => {
 
   if (loading) {
     return (
-      <View>
-        {/* Render a loading indicator or placeholder while data is being fetched */}
-        <LoadingModal modalVisible={true} color="red" />
+      <View style={styles.loadingIndicator}>
+        <ActivityIndicator size="large" color="red" />
+        <Text>
+          Loading...
+        </Text>
       </View>
     );
   }
@@ -188,13 +205,17 @@ const PaidInvoiceDetails = ({ route }) => {
         </Text>
       </View>
       <View style={[styles.footer, styles.footerFlexBox]}>
-        <Button ButtonType={3} actionButtonText="PAID" />
+        <Button ButtonType={3} actionButtonText="DOWNLOAD RECEIPT" onButtonPress={openReceiptUrl}/>
       </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  loadingIndicator: {
+    flex: 1,
+    justifyContent: 'center', alignItems: 'center'
+  },
   header: {
     position: "absolute",
     top: 0,

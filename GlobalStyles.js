@@ -116,3 +116,8 @@ export const Border = {
   br_3xs_9: 10,
   br_81xl: 100,
 };
+
+export const LoadingIndicator = {
+  flex: 1,
+  justifyContent: 'center', alignItems: 'center'
+};

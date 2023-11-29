@@ -42,6 +42,81 @@ import { VerticalBarChart } from "chart-react-native";
 import { ProgressSteps, ProgressStep } from "react-native-progress-steps";
 import { useFocusEffect } from "@react-navigation/native";
 import { LoadingModal } from "react-native-loading-modal";
+import { VictoryBar, VictoryChart, VictoryAxis, VictoryGroup, VictoryLabel, VictoryLegend } from 'victory-native';
+
+function formatDateTime(dateTimeString) {
+  const options = { year: 'numeric', month: 'long', day: 'numeric' };
+  const date = new Date(dateTimeString);
+  return date.toLocaleString('en-GB', options);
+}
+
+const GroupedBarChart = ({ data }) => {
+  // Calculate the necessary left padding dynamically based on the longest label
+  const longestLabelLength = Math.max(...data.map(d => d.subject.length));
+  const leftPadding = longestLabelLength * 5; // Approximate width per character
+
+  return (
+    <VictoryChart horizontal domainPadding={{ x: [10, 10], y: 20 }} padding={{ top: 50, bottom: 20, left: leftPadding, right: 50 }}>
+
+      <VictoryLegend
+        x={80}
+        y={20}
+        marginBottom={10}
+        paddingBottom={10}
+        orientation="horizontal"
+        gutter={20}
+        style={{ title: { fontSize: 14 }}}
+        data={[
+          { name: "My Score", symbol: { fill: "#c43a31" } },
+          { name: "Class Average", symbol: { fill: "#4f8ef7" } }
+        ]}
+      />
+      <VictoryAxis dependentAxis
+        style={{
+          axis: { stroke: "transparent" },
+          ticks: { stroke: "transparent" },
+          tickLabels: { fontSize: 12, padding: 5, angle: 0, textAnchor: 'end' }
+        }}
+        tickLabelComponent={<VictoryLabel style={{ fontSize: 10 }} textWrap={true} />} // Wrap text for long titles
+      />
+      <VictoryAxis
+        style={{
+          axis: { stroke: "#756f6a" },
+          axisLabel: { fontSize: 20, padding: 30 },
+          ticks: { stroke: "grey", size: 5 },
+          tickLabels: { fontSize: 12, padding: 5 }
+        }}
+        tickLabelComponent={<VictoryLabel style={{ fontSize: 10 }} textWrap={true} />} // Wrap text for long titles
+      />
+      <VictoryGroup offset={10}>
+        <VictoryBar
+          data={data}
+          x="subject"
+          y="studentScore"
+          labels={({ datum }) => datum.studentScore}
+          labelComponent={<VictoryLabel dx={'1%'} />}
+          style={{
+            data: { fill: "#c43a31" },
+            labels: { fill: "#c43a31", fontSize: 10, fontWeight: 'bold' }
+          }}
+          barWidth={10}
+        />
+        <VictoryBar
+          data={data}
+          x="subject"
+          y="classAverage"
+          labels={({ datum }) => datum.classAverage}
+          labelComponent={<VictoryLabel dx={'1%'} />}
+          style={{
+            data: { fill: "#4f8ef7" },
+            labels: { fill: "#4f8ef7", fontSize: 10, fontWeight: 'bold' }
+          }}
+          barWidth={10}
+        />
+      </VictoryGroup>
+    </VictoryChart>
+  );
+};
 
 const DashboardParent = () => {
   const [parentName, setParentName] = useState(null);
@@ -83,6 +158,7 @@ const DashboardParent = () => {
           const childrensArray = response.data.data.childrens;
           const postArray = response.data.data.posts;
           storeItem("postData", postArray);
+          console.log("Childrens array", childrensArray);
           setChildrenData(childrensArray);
           setLoading(false);
         })
@@ -118,17 +194,25 @@ const DashboardParent = () => {
     setModalDailyScoreVisible(true);
   };
 
+  const getGreetingBasedOnTime = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return 'Good Morning';
+    if (hour < 18) return 'Good Afternoon';
+    return 'Good Evening';
+  };
+
   return (
     <View style={styles.MainContainer}>
       <LoadingModal modalVisible={loading} color="red" />
       <View style={styles.HeaderContainer}>
         <Image
-          style={{ width: 75, height: 75 }}
+          style={{ width: 75, height: 75, right: '6%' }}
           // contentFit="cover"
           source={require("../assets/images/logo.png")}
         />
-        <Text style={styles.GreetStyles2}>Welcome to MyCH!</Text>
-        <Text style={styles.GreetStyles}>Hello {parentName} ,</Text>
+        {/* <Text style={styles.GreetStyles2}>Welcome to MyCH!</Text> */}
+        <Text style={styles.GreetStyles2}>{getGreetingBasedOnTime()},</Text>
+        <Text style={styles.GreetStyles}>{parentName}</Text>
       </View>
       <View style={styles.BodyContainer}>
         <View style={styles.CarouselContainer}>
@@ -182,9 +266,9 @@ const DashboardParent = () => {
                 console.log("No upcoming events.");
               }
 
-              const stepsArray = Object.entries(child.booklet.parsed_steps).map(
+              const stepsArray = child?.booklet?.parsed_steps ? Object.entries(child?.booklet?.parsed_steps).map(
                 ([label, date]) => ({ label, date })
-              );
+              ) : null;
 
               let targetLabel = null;
               let indexArray = 0;
@@ -230,7 +314,7 @@ const DashboardParent = () => {
                               style={{
                                 fontSize: 70,
                                 color: "#03a9f3",
-                                bottom: 12,
+                                bottom: '2%',
                               }}
                             >
                               &cent;
@@ -329,10 +413,18 @@ const DashboardParent = () => {
                           </View>
                           <View style={styles.CardItem}>
                             <Image
-                              style={{ width: 103, height: 103 }}
+                              style={{ width: '40%', height: '60%' }}
                               source={require("../assets/images/DailyScore.png")}
                               contentFit="cover"
                             />
+                            <Text
+                              style={{
+                                fontSize: 13,
+                                fontFamily: FontFamily.poppinsRegular,
+                              }}
+                            >
+                              Tap to View
+                            </Text>
                           </View>
                         </View>
                       </TouchableOpacity>
@@ -342,20 +434,25 @@ const DashboardParent = () => {
                     <Text>Booklet Progress</Text>
                   </View>
                   <ScrollView horizontal style={{ flex: 1 }}>
-                    <ProgressSteps activeStep={indexArray + 1}>
-                      {stepsArray.map((parse, index) => {
-                        return (
-                          <ProgressStep
-                            key={index} // Add a unique key prop for each ProgressStep
-                            nextBtnDisabled
-                            previousBtnDisabled
-                            removeBtnRow
-                            scrollViewProps
-                            label={parse.label}
-                          ></ProgressStep>
-                        );
-                      })}
-                    </ProgressSteps>
+                    {stepsArray ?
+                      <ProgressSteps activeStep={indexArray + 1}>
+                        {stepsArray.map((parse, index) => {
+                          console.log(parse, index)
+                          return (
+                            <ProgressStep
+                              key={index} // Add a unique key prop for each ProgressStep
+                              nextBtnDisabled
+                              previousBtnDisabled
+                              removeBtnRow
+                              scrollViewProps
+                              label={`${parse.label} - Due: ${formatDateTime(parse.date)}`}
+                            ></ProgressStep>
+                          );
+                        })}
+                      </ProgressSteps>
+                      :
+                      <Text>No booklet progress.</Text>
+                      }
                   </ScrollView>
                 </View>
               );
@@ -433,7 +530,7 @@ const DashboardParent = () => {
                   {/* Uncomment the PieChart component if needed */}
 
                   {/* Add a button to close the modal */}
-                  <Pressable onPress={() => setModalVisible(!modalVisible)}>
+                  <Pressable  onPress={() => setModalVisible(!modalVisible)}>
                     <Text style={styles.closeButton}>Close</Text>
                   </Pressable>
                 </View>
@@ -504,14 +601,10 @@ const DashboardParent = () => {
       </Modal>
       {(() => {
         if (modalDailyScoreVisible) {
-          const dataAverageScore = allDailyScore.map((score, index) => ({
-            label: score.title,
-            length: score.avg_score,
-          }));
-
-          const dataAverageScoreClass = allDailyScore.map((score, index) => ({
-            label: score.title,
-            length: score.class_avg,
+          const data = allDailyScore.map(score => ({
+            subject: score.title,
+            studentScore: score.avg_score,
+            classAverage: score.class_avg
           }));
 
           return (
@@ -526,7 +619,7 @@ const DashboardParent = () => {
               <View style={styles.modalContainer1}>
                 <View
                   style={{
-                    height: 500,
+                    height: '42%',
                     width: 350,
                     backgroundColor: "white",
                     borderRadius: 15,
@@ -535,55 +628,7 @@ const DashboardParent = () => {
                   {/* Uncomment the PieChart component if needed */}
                   <View style={styles.container}>
                     <ScrollView>
-                      <View style={{ flex: 1 }}>
-                        <View
-                          style={{
-                            height: 250,
-                            width: 350,
-                          }}
-                        >
-                          <Text
-                            style={{
-                              fontSize: 15,
-                              fontFamily: FontFamily.poppinsSemiBold,
-                            }}
-                          >
-                            My Score
-                          </Text>
-                          <HorizontalBarChart
-                            data={dataAverageScore}
-                            style={{
-                              borderBottomWidth: 1,
-                              borderColor: "#bdbdbd",
-                            }}
-                          />
-                        </View>
-                      </View>
-
-                      <View style={{ flex: 1 }}>
-                        <View
-                          style={{
-                            height: 250,
-                            width: 350,
-                          }}
-                        >
-                          <Text
-                            style={{
-                              fontSize: 15,
-                              fontFamily: FontFamily.poppinsSemiBold,
-                            }}
-                          >
-                            Class Average
-                          </Text>
-                          <HorizontalBarChart
-                            data={dataAverageScoreClass}
-                            style={{
-                              borderBottomWidth: 1,
-                              borderColor: "#bdbdbd",
-                            }}
-                          />
-                        </View>
-                      </View>
+                      <GroupedBarChart data={data} />
                     </ScrollView>
                   </View>
                   {/* Add a button to close the modal */}
@@ -668,6 +713,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     color: "blue",
     textAlign: "center",
+    marginBottom: 10
   },
   CardItem: {
     flex: 0.7,

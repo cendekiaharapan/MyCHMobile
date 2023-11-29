@@ -6,6 +6,7 @@ import {
   SafeAreaView,
   StatusBar,
   TouchableOpacity,
+  ActivityIndicator
 } from "react-native";
 import { Image } from "expo-image";
 import { Color, FontFamily, FontSize, Border, Padding } from "../GlobalStyles";
@@ -48,7 +49,7 @@ const MessageToTeacherSendMes = () => {
   const [studentId, setStudentId] = React.useState("");
   const [studentName, setStudentName] = React.useState("");
   const [childData, setChildData] = React.useState("");
-  const [loading, setLoading] = React.useState(false);
+  const [loading, setLoading] = React.useState(true);
 
   const showToastSuccess = () => {
     Toast.show({
@@ -69,6 +70,7 @@ const MessageToTeacherSendMes = () => {
   };
 
   useEffect(() => {
+    setLoading(true);
     getRespDataFromSecureStore().then((data) => {
       if (data) {
         setParentId(data.user.id);
@@ -98,6 +100,9 @@ const MessageToTeacherSendMes = () => {
         console.error("Error fetching response data from SQLite:", error);
       });
     console.log("use effect finished!");
+    setTimeout(() => {
+            setLoading(false);
+          }, 100);
   }, []);
 
   const fetchChildData = (studentId, studentName) => {
@@ -127,7 +132,9 @@ const MessageToTeacherSendMes = () => {
     console.log("Selected child:", selectedChild);
     if (!selectedChild) {
       showToastErrorRequired("Please select your child!");
-      setLoading(false);
+      setTimeout(() => {
+            setLoading(false);
+          }, 100);
       return;
     }
 
@@ -141,6 +148,8 @@ const MessageToTeacherSendMes = () => {
         sender_id: parentId,
         message: note,
       };
+      
+      console.log("Data", data);
 
       axios
         .post(
@@ -148,17 +157,23 @@ const MessageToTeacherSendMes = () => {
           data
         )
         .then((response) => {
-          setLoading(false);
+          setTimeout(() => {
+            setLoading(false);
+          }, 100);
           showToastSuccess();
           navigation.navigate("MessageToTeacherHistory");
         })
         .catch((error) => {
           if (error.response) {
+            setTimeout(() => {
             setLoading(false);
+          }, 100);
             showToastErrorRequired("Please make sure note field is filled!");
             console.error("API response error:", error.response.data);
           } else {
+            setTimeout(() => {
             setLoading(false);
+          }, 100);
             showToastErrorRequired(error.message);
             console.error("API request error:", error.message);
           }
@@ -168,9 +183,20 @@ const MessageToTeacherSendMes = () => {
     }
   };
 
+  if (loading) {
+    return (
+      <View style={styles.loadingIndicator}>
+        <ActivityIndicator size="large" color="red" />
+        <Text>
+          Loading...
+        </Text>
+      </View>
+    );
+  }
+
   return (
     <NativeBaseProvider>
-      <LoadingModal modalVisible={loading} color="red" />
+      {/* <LoadingModal modalVisible={loading} color="red" /> */}
       <SafeAreaView style={styles.AndroidSafeArea}>
         <View style={styles.messageToTeacherSendMes}>
           <View style={styles.content}>
@@ -183,7 +209,7 @@ const MessageToTeacherSendMes = () => {
                   source={require("../assets/images/buttonback.png")}
                 />
               </TouchableOpacity>
-              <Text style={styles.titleStyles}>Communication</Text>
+              <Text style={styles.titleStyles}>Message to Teacher</Text>
               <TouchableOpacity onPress={handleHistoryButton}>
                 <Image
                   style={styles.historyicon}
@@ -201,17 +227,17 @@ const MessageToTeacherSendMes = () => {
                 isReadOnly
               />
 
-              <View style={styles.inputfield2}>
+              {/* <View style={styles.inputfield2}>
                 <FormControl>
                   <FormControl.Label>Letter (Optional)</FormControl.Label>
                   <DocumentPick />
                 </FormControl>
-              </View>
+              </View> */}
               <FormControl mb="3">
-                <FormControl.Label>Note</FormControl.Label>
+                <FormControl.Label>Message</FormControl.Label>
                 <TextArea
                   h={40}
-                  placeholder="Leave a note"
+                  placeholder="Leave a message"
                   onChangeText={(text) => setNote(text)}
                   value={note}
                 />
@@ -233,6 +259,10 @@ const MessageToTeacherSendMes = () => {
 };
 
 const styles = StyleSheet.create({
+  loadingIndicator: {
+    flex: 1,
+    justifyContent: 'center', alignItems: 'center'
+  },
   AndroidSafeArea: {
     flex: 1,
     backgroundColor: "white",
@@ -465,8 +495,8 @@ const styles = StyleSheet.create({
   },
   maincontent: {
     width: 285,
-    height: 375,
-    marginTop: 71,
+    height: '40%',
+    marginTop: '30%',
   },
   HeroContent: {
     justifyContent: "space-between",

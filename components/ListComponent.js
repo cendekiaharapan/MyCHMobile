@@ -10,8 +10,8 @@ const ListComponent = ({ subject, score }) => {
         contentFit="cover"
         source={require("../assets/frame-27.png")}
       />
-      <Text style={[styles.textSubject, styles.textTypo1]}>{subject}</Text>
-      <Text style={[styles.text, styles.textTypo2]}>{score}</Text>
+      <Text style={[styles.textSubject, styles.textTypo1]} numberOfLines={1}>{subject}</Text>
+      <Text style={[styles.text, styles.textTypo2]}>{parseFloat(score).toFixed(1)}</Text>
     </View>
   );
 };
@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
   },
   listComponentChild: {
     top: 0,
-    left: 0,
+    left: '-3%',
     borderRadius: 1,
     position: "absolute",
     height: 80,
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
   },
   text: {
     top: "20%",
-    left: "75%",
+    left: "72%",
     fontSize: 30,
     textAlign: "center",
   },

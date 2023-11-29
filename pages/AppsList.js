@@ -46,6 +46,11 @@ const AppsList = () => {
       screen: "Report", // change this with your screen name
     });
   };
+  const handleAllPostButton = () => {
+    navigation.navigate("Main App Stack", {
+      screen: "AllPost", // change this with your screen name
+    });
+  };
   return (
     <View style={styles.mainContainer}>
       <View style={styles.bodyContainer}>
@@ -55,7 +60,7 @@ const AppsList = () => {
               <View style={styles.ImageContainer}>
                 <Image
                   style={styles.StyleImage}
-                  source={require("../assets/images/callMyChild.png")}
+                  source={require("../assets/images/callmychildicon.png")}
                   contentFit="cover"
                 />
               </View>
@@ -67,11 +72,11 @@ const AppsList = () => {
               <View style={styles.ImageContainer}>
                 <Image
                   style={styles.StyleImage}
-                  source={require("../assets/images/DailyScoreReport.png")}
+                  source={require("../assets/images/DailyScoreIcon.png")}
                   contentFit="cover"
                 />
               </View>
-              <Text style={styles.StyleText}>DAILY SCORE REPORT</Text>
+              <Text style={styles.StyleText}>DAILY SCORE</Text>
             </View>
           </TouchableOpacity>
         </View>
@@ -79,18 +84,22 @@ const AppsList = () => {
           <TouchableOpacity onPress={handleTermAssessmentButton}>
             <View style={styles.BoxContainer}>
               <Image
-                style={styles.StyleImage}
-                source={require("../assets/images/TermAssessmentReport.png")}
+                style={{
+                  overflow: "show",
+                  width: 70,
+                  height: 103,
+                }}
+                source={require("../assets/images/TermAssessmentReportIcon.png")}
                 contentFit="cover"
               />
-              <Text style={styles.StyleText}>TERM ASSESSMENT REPORT</Text>
+              <Text style={styles.StyleText}>TERM ASSESSMENT</Text>
             </View>
           </TouchableOpacity>
           <TouchableOpacity onPress={handleReportCardButton}>
             <View style={styles.BoxContainer}>
               <Image
                 style={styles.StyleImage}
-                source={require("../assets/images/ReportCard.png")}
+                source={require("../assets/images/ReportCardIcon.png")}
                 contentFit="cover"
               />
               <Text style={styles.StyleText}>REPORT CARD</Text>
@@ -101,21 +110,25 @@ const AppsList = () => {
           <TouchableOpacity onPress={handleExcuseButton}>
             <View style={styles.BoxContainer}>
               <Image
-                style={styles.StyleImage}
-                source={require("../assets/images/excuse.png")}
+                style={{
+                  overflow: "show",
+                  width: 70,
+                  height: 103,
+                }}
+                source={require("../assets/images/PermissionIcon.png")}
                 contentFit="cover"
               />
-              <Text style={styles.StyleText}>EXCUSE</Text>
+              <Text style={styles.StyleText}>PERMISSION</Text>
             </View>
           </TouchableOpacity>
           <TouchableOpacity onPress={handleCommunicationButton}>
             <View style={styles.BoxContainer}>
               <Image
                 style={styles.StyleImage}
-                source={require("../assets/images/Communication.png")}
+                source={require("../assets/images/CommunicationIcon.png")}
                 contentFit="cover"
               />
-              <Text style={styles.StyleText}>COMMUNICATION</Text>
+              <Text style={styles.StyleText}>MESSAGE TO TEACHER</Text>
             </View>
           </TouchableOpacity>
         </View>
@@ -124,17 +137,17 @@ const AppsList = () => {
             <View style={styles.BoxContainer}>
               <Image
                 style={styles.StyleImage}
-                source={require("../assets/images/Payment.png")}
+                source={require("../assets/images/InvoicesIcon.png")}
                 contentFit="cover"
               />
-              <Text style={styles.StyleText}>PAYMENT</Text>
+              <Text style={styles.StyleText}>INVOICES</Text>
             </View>
           </TouchableOpacity>
           <TouchableOpacity onPress={handleCHDollarButton}>
             <View style={styles.BoxContainer}>
               <Image
                 style={styles.StyleImage}
-                source={require("../assets/images/CHDollar.png")}
+                source={require("../assets/images/CHDollarIcon.png")}
                 contentFit="cover"
               />
               <Text style={styles.StyleText}>CH DOLLAR</Text>
@@ -152,9 +165,10 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    paddingTop: '7%'
   },
   bodyContainer: {
-    height: 645,
+    height: '100%',
     width: 336,
   },
   RowContainer: {
@@ -175,13 +189,13 @@ const styles = StyleSheet.create({
     textAlign: "center",
     lineHeight: 13.96,
     fontFamily: FontFamily.poppinsBold,
-    fontSize: 8.31,
+    fontSize: 10,
     color: Color.colorMidnightblue,
     alignItems: "center",
   },
   StyleImage: {
-    overflow: "hidden",
-    width: 103,
+    overflow: "show",
+    width: 100,
     height: 103,
   },
   ImageContainer: {

@@ -1,13 +1,16 @@
 import React from "react";
-import { View, Text, StyleSheet, Dimensions, Image } from "react-native";
+import { View, Text, StyleSheet, Dimensions, Image, TouchableOpacity } from "react-native";
 import { Color, Border, FontSize, FontFamily } from "../GlobalStyles";
+import { useNavigation } from "@react-navigation/native";
 
 export const SLIDER_WIDTH = Dimensions.get("window").width + 80;
 export const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.7);
 
 const CarouselCardItem = ({ item, style }) => {
+  const navigation = useNavigation();
+  console.log(item)
   return (
-    <View style={[styles.newsFrameParent, style]}>
+    <TouchableOpacity style={[styles.newsFrameParent, style]} onPress={() => navigation.navigate("AllPost", { post: item })}>
       <View style={styles.newsFrame}>
         <View style={styles.rectangleParent}>
           <Image
@@ -24,7 +27,7 @@ const CarouselCardItem = ({ item, style }) => {
           </View>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

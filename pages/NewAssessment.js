@@ -7,11 +7,12 @@ import {
   Modal,
   Image,
   TouchableOpacity,
+  ActivityIndicator
 } from "react-native";
 import { Button, NativeBaseProvider, Box, Select, Center } from "native-base";
 import { useNavigation } from "@react-navigation/native";
 import DropDown from "../components/DropDownTerm";
-import { Color, FontFamily, FontSize, Border, Padding } from "../GlobalStyles";
+import { Color, FontFamily, FontSize, Border, Padding, LoadingIndicator } from "../GlobalStyles";
 import { retrieveItem } from "../database/database";
 import Toast from "react-native-toast-message";
 import { LoadingModal } from "react-native-loading-modal";
@@ -31,7 +32,9 @@ const NewAssessment = () => {
   const [selectedStudentName, setSelectedStudentName] = useState("");
   const [selectedSemesterName, setSelectedSemesterName] = useState("");
   const [selectedSessionName, setSelectedSessionName] = useState("");
-  const [loading, setLoading] = React.useState(false);
+  const [studentData, setStudentData] = useState(null);
+  // const [chosenStudentData, setSelectedStudentData] = useState(null);
+  const [loading, setLoading] = React.useState(true);
 
   const handleBackButton = () => {
     navigation.navigate("Main App Stack", {
@@ -80,6 +83,12 @@ const NewAssessment = () => {
         return; // Exit early to avoid further processing
       }
 
+      const chosenStudentData = studentData.find(
+        (student) => student.id === selectedStudent
+      );
+
+      // setSelectedStudentData(selectStudentData);
+
       setLoading(true);
 
       // Prepare data for the post request
@@ -97,7 +106,6 @@ const NewAssessment = () => {
         )
         .then((response) => {
           console.log("XXXXXXXXXXXXXX", selectedSemesterName);
-          setLoading(false);
           showToastSuccess();
           // Navigate to AssessmentList and pass parameters
           navigation.navigate("AssessmentList", {
@@ -107,19 +115,19 @@ const NewAssessment = () => {
             selectedSessionName,
             selectedSemesterName,
             selectedSemester,
+            chosenStudentData,
           });
         })
         .catch((error) => {
-          setLoading(false);
           showToastError();
         });
     } catch (error) {
       console.error("An unexpected error occurred:", error);
-      setLoading(false);
       showToastError();
     }
   };
   useEffect(() => {
+    setLoading(true);
     // Fetch semester name based on selectedSemester
     const selectedSemesterData = termSessions.find(
       (semester) => semester.id === selectedSemester
@@ -128,9 +136,11 @@ const NewAssessment = () => {
       setSelectedSemesterName(selectedSemesterData.name);
     } else {
     }
+    setLoading(false);
   }, [selectedSemester, termSessions]);
 
   React.useEffect(() => {
+    setLoading(true);
     // Retrieve student data from storage
     retrieveItem("childData")
       .then((data) => {
@@ -139,6 +149,7 @@ const NewAssessment = () => {
           const studentNames = data.map((item) => item.name);
           setStudentIds(studentIds);
           setStudentNames(studentNames);
+          setStudentData(data);
 
           // Assuming that the response structure is { name: "StudentName" }
           const selectedStudentData = data.find(
@@ -155,10 +166,12 @@ const NewAssessment = () => {
       .catch((error) => {
         console.error("Error fetching response data from SQLite:", error);
       });
+    setLoading(false);
   }, [selectedStudent]);
 
   useFocusEffect(
     React.useCallback(() => {
+      setLoading(true);
       const fetchData = async () => {
         try {
           const response = await axios.get(
@@ -180,7 +193,7 @@ const NewAssessment = () => {
       };
 
       fetchData(); // Call fetchData when the screen is focused
-
+      setLoading(false);
       return () => {
         // Cleanup function, if needed
       };
@@ -226,9 +239,20 @@ const NewAssessment = () => {
     console.log("set selected section (itemId) = ", itemId);
   };
 
+  if (loading) {
+    return (
+      <View style={LoadingIndicator}>
+        <ActivityIndicator size="large" color="red" />
+        <Text>
+          Loading...
+        </Text>
+      </View>
+    );
+  }
+
   return (
     <NativeBaseProvider>
-      <LoadingModal modalVisible={loading} color="red" />
+      {/* <LoadingModal modalVisible={loading} color="red" /> */}
       <View style={styles.mainContainer}>
         <View style={styles.bodyContainer}>
           <View style={styles.headerContainer}>
@@ -255,6 +279,7 @@ const NewAssessment = () => {
                     minWidth="100%"
                     accessibilityLabel="Choose Student"
                     placeholder="Choose Student"
+                    defaultValue={selectedStudent}
                     onValueChange={(studentId) => {
                       setSelectedStudent(studentId);
                     }}
@@ -276,6 +301,7 @@ const NewAssessment = () => {
                       minWidth="100%"
                       accessibilityLabel="Choose Session"
                       placeholder="Choose Session"
+                      defaultValue={selectedSession}
                       onValueChange={(itemId) => {
                         // console.log("set selected session id : ",itemId);
                         // console.log("value of selected session id : ",selectedSession);
@@ -303,6 +329,7 @@ const NewAssessment = () => {
                         minWidth="100%"
                         accessibilityLabel="Choose Semester"
                         placeholder="Choose Semester"
+                        defaultValue={selectedSemester}
                         onValueChange={(itemValue) => {
                           setSelectedSemester(itemValue);
                           console.log("Selected Semester:", itemValue);
@@ -381,7 +408,7 @@ const styles = StyleSheet.create({
     // justifyContent: "center",
   },
   imageContainer: {
-    marginLeft: 5,
+    marginLeft: '1%',
     height: 24,
     width: 24,
   },
