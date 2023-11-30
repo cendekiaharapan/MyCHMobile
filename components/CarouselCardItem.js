@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   newsFrameParent: {
-    width: 330,
+    width: '100%',
     justifyContent: "center",
     alignItems: "center",
   },

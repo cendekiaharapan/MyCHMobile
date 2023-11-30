@@ -198,12 +198,12 @@ const MessageToTeacherHistory = () => {
                       const studentId_index = studentId.indexOf(
                         message.student_id
                       );
-                      console.log(
-                        "Teacher Id : ",
-                        teacherNames,
-                        " index : ",
-                        index
-                      );
+                      // console.log(
+                      //   "Teacher Id : ",
+                      //   teacherNames,
+                      //   " index : ",
+                      //   index
+                      // );
 
                       return (
                         <MessageHistory
@@ -321,7 +321,8 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     height: 50,
-    width: 300,
+    marginTop: '7%',
+    width: '80%',
   },
   vectorIcon: {
     width: 16,
@@ -503,7 +504,7 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
   },
   maincontent1: {
-    width: 330,
+    width: '100%',
   },
   maincontent: {
     width: 330,

@@ -375,7 +375,7 @@ const styles = StyleSheet.create({
     textAlign: "left",
   },
   selectSessionParent: {
-    width: 330,
+    width: '90%',
     flexDirection: "column",
 
     marginTop: 13,
@@ -394,7 +394,7 @@ const styles = StyleSheet.create({
   bodyContainer: {
     flex: 0.53,
     marginTop: 50,
-    marginLeft: 30,
+    marginLeft: '7%',
     marginRight: 30,
   },
   headerContainer: {
@@ -404,6 +404,7 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     flex: 0.9,
+    left: "7%"
     // alignItems: "center",
     // justifyContent: "center",
   },
@@ -442,6 +443,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     height: 50,
+    width: '86%'
   },
 });
 

@@ -233,8 +233,8 @@ const styles = StyleSheet.create({
   },
   btnprimaryLayout: {
     height: 50,
-    width: 320,
-    left: 0,
+    width: '100%',
+    left: '0%',
     position: "absolute",
   },
   datepickst: {
@@ -313,10 +313,9 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.poppinsBold,
   },
   weeklyReportWrapper: {
-    marginLeft: -61.5,
-    width: 124,
+    width: '100%',
     alignSelf: "stretch",
-    left: "50%",
+    left: "45%",
     textAlign: "center",
     position: "absolute",
   },
@@ -337,7 +336,7 @@ const styles = StyleSheet.create({
   },
   submit: {
     top: 14,
-    left: 135,
+    left: '40%',
     fontSize: FontSize.size_sm,
     color: Color.colorWhite,
     textAlign: "center",
@@ -346,7 +345,7 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
   btnprimary: {
-    top: 300,
+    top: '110%',
   },
   selectSubject: {
     fontSize: FontSize.bodyBodyXS_size,
@@ -413,7 +412,7 @@ const styles = StyleSheet.create({
     top: 26,
   },
   selectRangeDate: {
-    marginLeft: -150,
+    marginLeft: '-49%',
     top: 6,
     fontSize: FontSize.bodyBodyXS_size,
     fontFamily: FontFamily.poppinsLight,
@@ -477,15 +476,14 @@ const styles = StyleSheet.create({
     left: 10,
   },
   btnprimaryParent: {
-    top: 70,
-    left: 2,
-    height: 258,
-    width: 320,
-    position: "absolute",
+    top: "7%",
+    left: '15%',
+    height: 300,
+    width: '100%'
   },
   frameParent: {
-    width: 322,
-    height: 700,
+    width: '80%',
+    height: '100%',
   },
   report: {
     top: "10%",

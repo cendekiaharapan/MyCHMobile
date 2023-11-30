@@ -85,7 +85,7 @@ const AppsList = () => {
             <View style={styles.BoxContainer}>
               <Image
                 style={{
-                  overflow: "show",
+                  overflow: "visible",
                   width: 70,
                   height: 103,
                 }}
@@ -111,7 +111,7 @@ const AppsList = () => {
             <View style={styles.BoxContainer}>
               <Image
                 style={{
-                  overflow: "show",
+                  overflow: "visible",
                   width: 70,
                   height: 103,
                 }}
@@ -194,7 +194,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   StyleImage: {
-    overflow: "show",
+    overflow: "visible",
     width: 100,
     height: 103,
   },

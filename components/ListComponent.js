@@ -38,9 +38,8 @@ const styles = StyleSheet.create({
     top: 0,
     left: '-3%',
     borderRadius: 1,
-    position: "absolute",
     height: 80,
-    width: 360,
+    width: '120%',
   },
   textDescription: {
     width: "66.56%",
@@ -63,13 +62,14 @@ const styles = StyleSheet.create({
   },
   text: {
     top: "20%",
-    left: "72%",
+    left: "85%",
     fontSize: 30,
     textAlign: "center",
   },
   listComponent: {
     height: 80,
-    width: 360,
+    width: '85%',
+    borderRadius: 10,
     
     marginBottom:10,
   },

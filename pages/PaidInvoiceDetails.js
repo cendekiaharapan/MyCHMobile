@@ -225,7 +225,7 @@ const styles = StyleSheet.create({
   dateLayout: {
     height: 35,
     position: "absolute",
-    width: 350,
+    width: '100%',
     left: 20,
     backgroundColor: Color.singleToneWhite,
   },
@@ -259,7 +259,7 @@ const styles = StyleSheet.create({
     fontSize: FontSize.size_xs,
     lineHeight: 13,
     fontFamily: FontFamily.poppinsRegular,
-    marginTop: 5,
+    marginTop: '1%',
   },
   studentName: {
     top: 140,
@@ -277,10 +277,10 @@ const styles = StyleSheet.create({
     left: 0,
   },
   qty: {
-    left: 190,
+    left: '45%',
   },
   rateRp: {
-    left: 248,
+    left: '65%',
   },
   itemListTitles: {
     top: 346,
@@ -295,7 +295,7 @@ const styles = StyleSheet.create({
     color: Color.colorDarkslategray,
   },
   rpTotalRate: {
-    marginLeft: 130,
+    marginLeft: '55%',
     fontFamily: FontFamily.poppinsMedium,
     fontWeight: "500",
     lineHeight: 17,
@@ -303,7 +303,7 @@ const styles = StyleSheet.create({
     color: Color.colorDarkslategray,
   },
   totalAmounts: {
-    top: 680,
+    top: '85%',
     height: 50,
     flexDirection: "row",
     paddingHorizontal: 0,
@@ -313,7 +313,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   footer: {
-    top: 720,
+    top: '90%',
     shadowColor: "rgba(0, 0, 0, 0.25)",
     shadowOffset: {
       width: 0,
@@ -322,7 +322,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 4,
     shadowOpacity: 1,
-    width: 390,
+    width: '100%',
     height: 86,
     justifyContent: "center",
     left: 0,
@@ -330,7 +330,7 @@ const styles = StyleSheet.create({
   paymentInvoiceDetails: {
     flex: 1,
     width: "100%",
-    height: 844,
+    height: '100%',
     backgroundColor: Color.singleToneWhite,
   },
 });

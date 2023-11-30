@@ -50,16 +50,18 @@ function formatDateTime(dateTimeString) {
   return date.toLocaleString('en-GB', options);
 }
 
+const DEVICE_WIDTH = Dimensions.get("window").width;
+
 const GroupedBarChart = ({ data }) => {
   // Calculate the necessary left padding dynamically based on the longest label
   const longestLabelLength = Math.max(...data.map(d => d.subject.length));
-  const leftPadding = longestLabelLength * 5; // Approximate width per character
+  const leftPadding = longestLabelLength * 6; // Approximate width per character
 
   return (
     <VictoryChart horizontal domainPadding={{ x: [10, 10], y: 20 }} padding={{ top: 50, bottom: 20, left: leftPadding, right: 50 }}>
 
       <VictoryLegend
-        x={80}
+        x={leftPadding - 120}
         y={20}
         marginBottom={10}
         paddingBottom={10}
@@ -314,7 +316,7 @@ const DashboardParent = () => {
                               style={{
                                 fontSize: 70,
                                 color: "#03a9f3",
-                                bottom: '2%',
+                                bottom: '4%',
                               }}
                             >
                               &cent;
@@ -620,7 +622,7 @@ const DashboardParent = () => {
                 <View
                   style={{
                     height: '42%',
-                    width: 350,
+                    width: '95%',
                     backgroundColor: "white",
                     borderRadius: 15,
                   }}
@@ -751,7 +753,7 @@ const styles = StyleSheet.create({
   },
   CardData: {
     borderRadius: 20,
-    width: 165,
+    width: DEVICE_WIDTH - DEVICE_WIDTH * 0.57,
     height: 165,
     justifyContent: "center",
     alignItems: "center",

@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
     color: Color.singleToneWhite,
     textAlign: "center",
     display: "flex",
-    width: 28,
+    width: '100%',
     marginTop: -32,
     height: 32,
     justifyContent: "center",

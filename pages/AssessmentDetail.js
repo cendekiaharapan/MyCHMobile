@@ -109,7 +109,7 @@ const AssessmentDetail = ({ route, navigation }) => {
                   score={assessmentData?.final_block_assessment}
                 />)}
               </View>
-              <View style={[styles.column, styles.marginBottom]}>
+              <View style={[styles.column, styles.marginBottom, {left: '5%'}]}>
                 {scoring && scoring.presentation > 0 && (<AsessmentComponent
                   Text_Criteria="Presentation"
                   score={assessmentData?.presentation}

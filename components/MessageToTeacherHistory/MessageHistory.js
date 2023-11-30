@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
     borderColor: Color.colorDarkgray_100,
     borderTopWidth: 1,
     width: 243,
-    height: 1,
+    height: '0.1%',
     marginTop: 6,
     borderStyle: "solid",
   },
@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
   },
   rufusStewart: {
     width: 88,
-    height: 13,
+    height: '100%',
     marginLeft: 30,
     textAlign: "right",
     fontSize: FontSize.size_3xs,

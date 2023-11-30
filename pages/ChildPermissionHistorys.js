@@ -144,6 +144,12 @@ const ChildPermissionHistorys = () => {
     }
   };
 
+  function formatDateTime(dateTimeString) {
+    const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+    const date = new Date(dateTimeString);
+    return date.toLocaleString('en-GB', options);
+  }
+
   const imageUrl = `https://www.balichildrenshouse.com/myCH/ev-assets/uploads/avatars/`;
 
   if (loading) {
@@ -213,7 +219,7 @@ const ChildPermissionHistorys = () => {
                                 ? "Sick"
                                 : "Excused"
                             }
-                            time={leave.created_at}
+                            time={formatDateTime(leave.created_at)}
                             leave={leave}
                           />
                         );

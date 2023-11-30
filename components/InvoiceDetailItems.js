@@ -26,10 +26,10 @@ const styles = StyleSheet.create({
     left: 10,
   },
   rate1: {
-    left: 248,
+    left: '72%',
   },
   qty1: {
-    left: 190,
+    left: '50%',
     textAlign: "center",
     width: 28,
     color: Color.colorDarkslategray,
@@ -45,8 +45,8 @@ const styles = StyleSheet.create({
     left: 20,
     borderRadius: Border.br_5xs,
     backgroundColor: Color.colorFloralwhite,
-    width: 350,
-    height: 33,
+    width: '90%',
+    height: '4%',
   },
 });
 

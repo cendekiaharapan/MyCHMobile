@@ -85,7 +85,7 @@ const PaymentTopup = ({ route, navigation }) => {
       />
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.chdDetails}>
-          <Balance chdBalance={chd_balance} />
+          <Balance chdBalance={chd_balance} studentName={student_name} />
           <TopupAmount onAmountChange={setTopUpAmount} />
         </View>
       </ScrollView>
@@ -129,8 +129,9 @@ const styles = StyleSheet.create({
   },
   footer: {
     width: "100%",
-    paddingHorizontal: Padding.p_xl,
+    paddingLeft: Padding.p_xl,
     paddingBottom: Padding.p_xl,
+    alignItems: "center"
   },
 });
 

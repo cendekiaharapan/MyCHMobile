@@ -2,11 +2,11 @@ import * as React from "react";
 import { Text, StyleSheet, View } from "react-native";
 import { FontSize, FontFamily, Color } from "../GlobalStyles";
 
-const Balance = ({ chdBalance }) => {
+const Balance = ({ chdBalance, studentName }) => {
   return (
     <View style={[styles.balance, styles.framePosition]}>
       <View style={[styles.frame, styles.framePosition]}>
-        <Text style={styles.balances}>Balances:</Text>
+        <Text style={styles.balances}>{studentName}'s Balance:</Text>
         <View style={styles.balanceForm}>
           <Text style={styles.balanceText}>{chdBalance}</Text>
         </View>

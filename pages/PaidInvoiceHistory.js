@@ -5,6 +5,7 @@ import Header from "../components/Header";
 import InvoiceLists from "../components/InvoiceLists";
 import { Color } from "../GlobalStyles";
 import { useState, useEffect } from "react";
+import { Image } from "expo-image";
 import {
   storeItem,
   retrieveItem,
@@ -188,7 +189,13 @@ const PaidInvoiceHistory = () => {
                 );
               })
             ) : (
-              <Text>No Paid Payments</Text>
+                <View style={styles.emptyContainer}>
+                  <Image
+                    source={require('../assets/nounpaidpayments.png')} // Replace with your image path
+                    style={styles.emptyImage}
+                  />
+                  <Text style={styles.emptyText}>No payments made yet.</Text>
+                </View>
             )
           ) : (
               console.log("Still loading")
@@ -201,6 +208,21 @@ const PaidInvoiceHistory = () => {
 };
 
 const styles = StyleSheet.create({
+  emptyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: '50%',
+  },
+  emptyImage: {
+    width: 150,
+    height: 160, // Adjust size as needed
+    marginBottom: 10,
+  },
+  emptyText: {
+    fontSize: 16,
+    color: 'gray', // Adjust color as needed
+  },
   loadingIndicator: {
     flex: 1,
     justifyContent: 'center', alignItems: 'center'

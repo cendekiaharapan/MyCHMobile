@@ -242,7 +242,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   invoicelistarea: {
-    width: 350,
+    width: '100%',
     paddingHorizontal: 0,
     justifyContent: "center",
   },

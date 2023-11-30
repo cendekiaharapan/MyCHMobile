@@ -188,7 +188,7 @@ const styles = StyleSheet.create({
     fontWeight: "300",
     fontFamily: FontFamily.poppinsLight,
     width: 123,
-    height: 11,
+    height: '100%',
     color: Color.colorDarkgray_100,
     textAlign: "left",
   },

@@ -598,13 +598,13 @@ const styles = StyleSheet.create({
   content: {
     top: 50,
     height: "100%",
-    maxHeight: 750,
+    maxHeight: '90%',
     flex: 1,
   },
   childPermissionAddPermis: {
     backgroundColor: Color.colorGray_100,
     width: "100%",
-    height: 844,
+    height: '100%',
     paddingHorizontal: Padding.p_lgi,
     paddingVertical: Padding.p_23xl,
     flexDirection: "row",

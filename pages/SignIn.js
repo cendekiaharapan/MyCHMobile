@@ -93,7 +93,7 @@ const SignIn = () => {
         Toast.show({
           type: "success",
           position: "top",
-          text1: "Login Success",
+          text1: `Welcome back, ${response.data.user.name}.`,
           visibilityTime: 3000,
           autoHide: true,
         });
@@ -134,6 +134,7 @@ const SignIn = () => {
             visibilityTime: 3000,
             autoHide: true,
           });
+          console.error("Error", error)
           // Show a generic error message
         }
       } else {

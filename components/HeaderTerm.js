@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
     marginTop: 30,
     marginBottom: 25,
     height: 100,
-    width: 350,
+    width: '100%',
   },
   BlueContainer: {
     flex: 1,

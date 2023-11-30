@@ -282,7 +282,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   hero: {
-    height: 246,
+    height: 260,
     alignSelf: "stretch",
   },
   latestpost: {
@@ -395,7 +395,7 @@ const styles = StyleSheet.create({
   },
   allPost: {
     backgroundColor: Color.colorGray_100,
-    height: 800,
+    height: '100%',
     paddingHorizontal: Padding.p_xl,
     paddingVertical: 40,
     flexDirection: "row",

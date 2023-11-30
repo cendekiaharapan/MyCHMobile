@@ -208,7 +208,7 @@ const CallMyChild = forwardRef(({ navigation }, ref) => {
           />
         </TouchableOpacity>
         <Text style={[styles.callMyChild1, styles.callTypo]}>
-          CALL MY CHILD
+          Call My Child
         </Text>
       </View>
       <View style={styles.basicPlan}>
@@ -240,7 +240,6 @@ const CallMyChild = forwardRef(({ navigation }, ref) => {
                 </Picker>
               )}
             </View>
-
             <View style={styles.titleSubtitleContainer}>
               <View style={[styles.titleSubtitle, styles.callMyChildFlexBox]}>
                 <Text style={[styles.selectLanguage, styles.selectTypo]}>
@@ -393,7 +392,7 @@ const styles = StyleSheet.create({
     marginTop: 21.67,
   },
   selectChild: {
-    width: 90,
+    width: '100%',
   },
   titleSubtitle: {
     top: 0,
@@ -430,7 +429,7 @@ const styles = StyleSheet.create({
     backgroundColor: Color.colorsLight,
   },
   selectLanguage: {
-    width: 127,
+    width: '100%',
   },
   titleSubtitleContainer: {
     width: 127,
