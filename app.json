@@ -23,7 +23,8 @@
         "foregroundImage": "./assets/images/appicon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.cendekiaharapan.MyCHMobile"
+      "package": "com.cendekiaharapan.MyCHMobile",
+      "versionCode": 2
     },
     "web": {
       "favicon": "./assets/images/favicon.png"
