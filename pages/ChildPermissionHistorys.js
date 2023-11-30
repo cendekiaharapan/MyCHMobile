@@ -301,7 +301,7 @@ const styles = StyleSheet.create({
   excusedTypo: {
     marginTop: 4,
     color: Color.colorDarkgray_100,
-    height: 18,
+    height: 21,
     fontFamily: FontFamily.textMediumSm14,
     fontWeight: "500",
     fontSize: FontSize.textRegularXs12_size,
@@ -462,7 +462,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     overflow: "hidden",
     flex: 1,
-    height: 844,
+    height: '100%',
     width: "100%",
   },
 

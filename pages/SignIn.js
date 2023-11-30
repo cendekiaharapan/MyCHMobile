@@ -316,7 +316,7 @@ const styles = StyleSheet.create({
   btnprimary: {
     borderRadius: Border.br_31xl,
     backgroundColor: Color.colorTomato,
-    width: 320,
+    width: '100%',
     height: 50,
     alignItems: "flex-end",
     paddingHorizontal: 137,
