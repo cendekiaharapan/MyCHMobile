@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
     shadowRadius: 1,
     elevation: 20,
     shadowOpacity: 1,
-    width: 390,
+    width: '100%',
     height: 120,
     flexDirection: "row",
     alignItems: "center",

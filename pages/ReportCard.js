@@ -280,7 +280,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     marginTop: 30,
     height: 50,
-    width: 330,
+    width: '80%',
   },
   buttonText: {
     fontSize: 14,
@@ -297,8 +297,8 @@ const styles = StyleSheet.create({
   frameIcon: {
     width: 24,
     height: 24,
-    overflow: "hidden",
-    right: 80,
+    overflow: "visible",
+    right: '900%',
   },
   reportCard1: {
     position: "relative",
@@ -326,7 +326,7 @@ const styles = StyleSheet.create({
   },
   frame: {
     marginTop: 25,
-    width: 360,
+    width: '100%',
     height: 50,
     overflow: "hidden",
     flexDirection: "column",
@@ -386,7 +386,7 @@ const styles = StyleSheet.create({
     textAlign: "left",
   },
   selectSessionParent: {
-    width: 330,
+    width: '80%',
     flexDirection: "column",
     marginTop: 13,
   },

@@ -19,34 +19,34 @@ import { useState, useCallback, useEffect } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 // import data from '../data';
 
-const CarouselCards = (navigation) => {
+const CarouselCards = ({ navigation, postData }) => {
   const isCarousel = React.useRef(null);
-  const [postData, setPostData] = useState(null);
+  // const [postData, setPostData] = useState(null);
   const ImgUrl =
     "https://www.balichildrenshouse.com/myCH/ev-assets/uploads/post-images/";
-  useFocusEffect(
-    React.useCallback(() => {
-      console.log("this is inside carousel!");
-      retrieveItem("postData")
-        .then((data) => {
-          if (data && data.length > 0) {
-            setPostData(data);
-            console.log("post data saved!", data);
-          } else {
-            console.log("No data found in SQLite.");
-          }
-        })
-        .catch((error) => {
-          console.error("Error fetching response data from SQLite:", error);
-        });
-      // Your code here that should run when the screen is focused
+  // useFocusEffect(
+  //   React.useCallback(() => {
+  //     console.log("this is inside carousel!");
+  //     retrieveItem("postData")
+  //       .then((data) => {
+  //         if (data && data.length > 0) {
+  //           setPostData(data);
+  //           console.log("post data saved!", data);
+  //         } else {
+  //           console.log("No data found in SQLite.");
+  //         }
+  //       })
+  //       .catch((error) => {
+  //         console.error("Error fetching response data from SQLite:", error);
+  //       });
+  //     // Your code here that should run when the screen is focused
 
-      return () => {
-        console.log("Screen is unfocused");
-        // Your cleanup code here (if needed)
-      };
-    }, [])
-  );
+  //     return () => {
+  //       console.log("Screen is unfocused");
+  //       // Your cleanup code here (if needed)
+  //     };
+  //   }, [])
+  // );
 
   const formatDate = (dateString) => {
     const options = {
@@ -63,16 +63,17 @@ const CarouselCards = (navigation) => {
     );
     return formattedDate.replace(/\:\d{2} [APap][Mm] UTC/, "").replace(",", "");
   };
+  // console.log("sampai disini", navigation, postData);
 
-  const data =
-    postData?.map((post) => ({
+  const data = postData ?
+    postData.map((post) => ({
       title: post.title,
       body: post.body,
       image: post.image,
       created_at: post.created_at,
       imgUrl: ImgUrl + post.image,
       date: formatDate(post.updated_at),
-    })) ?? [];
+    })) : [];
   
   const renderItemWithNavigation = ({ item, index }) => {
     return (

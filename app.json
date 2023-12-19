@@ -2,7 +2,7 @@
   "expo": {
     "name": "MyCHMobile",
     "slug": "MyCHMobile",
-    "version": "1.0.2",
+    "version": "1.0.4",
     "orientation": "portrait",
     "icon": "./assets/images/appicon.png",
     "userInterfaceStyle": "light",
@@ -24,7 +24,7 @@
         "backgroundColor": "#ffffff"
       },
       "package": "com.cendekiaharapan.MyCHMobile",
-      "versionCode": 2
+      "versionCode": 4
     },
     "web": {
       "favicon": "./assets/images/favicon.png"

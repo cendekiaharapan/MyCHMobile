@@ -24,6 +24,8 @@ import {
   getTokenFromSecureStore,
   saveRespDataSecureStore,
   getRespDataFromSecureStore,
+  clearTokenFromSecureStore,
+  clearResponseDataFromSecureStore,
 } from "../database/database";
 import axios from "axios";
 import Icon from "react-native-vector-icons/FontAwesome";
@@ -42,6 +44,7 @@ import { VerticalBarChart } from "chart-react-native";
 import { ProgressSteps, ProgressStep } from "react-native-progress-steps";
 import { useFocusEffect } from "@react-navigation/native";
 import { LoadingModal } from "react-native-loading-modal";
+import { useNavigation } from "@react-navigation/native";
 import { VictoryBar, VictoryChart, VictoryAxis, VictoryGroup, VictoryLabel, VictoryLegend } from 'victory-native';
 
 function formatDateTime(dateTimeString) {
@@ -121,6 +124,7 @@ const GroupedBarChart = ({ data }) => {
 };
 
 const DashboardParent = () => {
+  const navigation = useNavigation();
   const [parentName, setParentName] = useState(null);
   const [parentId, setParentId] = useState(null);
   const [responseData, setResponseData] = useState(null);
@@ -142,6 +146,35 @@ const DashboardParent = () => {
     try {
       // Assuming getRespDataFromSecureStore is an asynchronous function
       resp = await getRespDataFromSecureStore();
+      if (resp.user.role !== "parent") {
+          try {
+            // Clear the user tokenr
+            setLoading(true);
+            await clearTokenFromSecureStore();
+            await clearResponseDataFromSecureStore();
+            console.log("User token cleared from SecureStore.");
+
+            // Clear any other data you want to remove
+            // Example: await SecureStore.deleteItemAsync("some_other_key");
+
+            // Other logout-related actions
+
+            // Navigate to your login screen or perform any other actions as needed
+            navigation.navigate("Login Stack", { screen: "SignIn" }); // Replace "LoginStack" with the actual name of your login screen
+            setTimeout(() => {
+              setLoading(false);
+            }, 100);
+            Toast.show({
+              type: "error",
+              position: "top",
+              text1: "Please login with a parent's account.",
+              visibilityTime: 3000,
+              autoHide: true,
+            });
+          } catch (error) {
+            console.error("Error during logout:", error);
+          }
+      }
 
       // Assuming parentId is retrieved from resp.user.parent_id
       const parentName = resp.user.name;
@@ -159,6 +192,7 @@ const DashboardParent = () => {
 
           const childrensArray = response.data.data.childrens;
           const postArray = response.data.data.posts;
+          setPostData(postArray);
           storeItem("postData", postArray);
           console.log("Childrens array", childrensArray);
           setChildrenData(childrensArray);
@@ -208,7 +242,7 @@ const DashboardParent = () => {
       <LoadingModal modalVisible={loading} color="red" />
       <View style={styles.HeaderContainer}>
         <Image
-          style={{ width: 75, height: 75, right: '6%' }}
+          style={{ width: '10%', height: '50%', left: '0%' }}
           // contentFit="cover"
           source={require("../assets/images/logo.png")}
         />
@@ -218,7 +252,7 @@ const DashboardParent = () => {
       </View>
       <View style={styles.BodyContainer}>
         <View style={styles.CarouselContainer}>
-          <CarouselCards />
+          <CarouselCards navigation={navigation}  postData={postData} />
         </View>
         <ScrollView style={styles.ScrollContainer}>
           {childrenData !== null ? (
@@ -283,6 +317,8 @@ const DashboardParent = () => {
                 indexArray = stepsArray.findIndex(
                   (item) => item.label === targetLabel
                 );
+
+                // console.log("Target Label", targetLabel, stepsArray, indexArray)
               } else {
                 indexArray = -1;
                 targetLabel = "booklet student null";
@@ -437,9 +473,10 @@ const DashboardParent = () => {
                   </View>
                   <ScrollView horizontal style={{ flex: 1 }}>
                     {stepsArray ?
-                      <ProgressSteps activeStep={indexArray + 1}>
+                      <ProgressSteps activeStep={indexArray}>
                         {stepsArray.map((parse, index) => {
-                          console.log(parse, index)
+                          // console.log("masuk kesini bosku", parse, index)
+                          // console.log(parse, index)
                           return (
                             <ProgressStep
                               key={index} // Add a unique key prop for each ProgressStep

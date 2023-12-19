@@ -29,7 +29,6 @@ const styles = StyleSheet.create({
   framePosition: {
     width: 350,
     left: 0,
-    position: "absolute",
   },
   topUpAmountChd: {
     fontSize: FontSize.size_sm,

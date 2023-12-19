@@ -58,6 +58,18 @@ const SignIn = () => {
 
         resp = await getRespDataFromSecureStore();
 
+        if (resp.user.role !== "parent") {
+          setLoading(false);
+          Toast.show({
+            type: "error",
+            position: "top",
+            text1: "Please login with a parent's account.",
+            visibilityTime: 3000,
+            autoHide: true,
+          });
+          return;
+        }
+
         if (resp.user.role === "parent") {
           const parentId = response.data.user.id; // parent id
 

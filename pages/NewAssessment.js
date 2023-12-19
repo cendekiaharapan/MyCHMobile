@@ -87,6 +87,16 @@ const NewAssessment = () => {
         (student) => student.id === selectedStudent
       );
 
+      if (chosenStudentData?.grade?.category === 'preschool') {
+        Toast.show({
+          text1: "Term assessment not available for preschool students!",
+          text1Style: { fontSize: 15 },
+          text2Style: { fontSize: 13 },
+          type: "error",
+        });
+        return;
+      }
+
       // setSelectedStudentData(selectStudentData);
 
       setLoading(true);

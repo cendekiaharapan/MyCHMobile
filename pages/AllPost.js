@@ -15,6 +15,9 @@ function formatDateTime(dateTimeString) {
 const AllPost = () => {
   const [posts, setPosts] = React.useState([]);
   const [loading, setLoading] = React.useState(true); // State to track loading
+  const [isFetchingMore, setIsFetchingMore] = React.useState(false);
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const [lastPage, setLastPage] = React.useState(null);
   const navigation = useNavigation();
 
   const handleBackButtonClick = () => {
@@ -47,18 +50,59 @@ const AllPost = () => {
     );
   };
 
-  React.useEffect(() => {
-    axios.get('https://www.balichildrenshouse.com/myCH/api/all-post')
+  // React.useEffect(() => {
+  //   axios.get('https://www.balichildrenshouse.com/myCH/api/all-post')
+  //     .then(response => {
+  //       setPosts(response.data.posts);
+  //       setLoading(false);
+  //     })
+  //     .catch(error => {
+  //       setLoading(false);
+  //       console.error(error)
+  //     });
+  //   setLoading(false);
+  // }, []);
+
+  // Function to fetch posts
+  const fetchPosts = (page) => {
+    const isLoadingFirstPage = page === 1;
+    if (isLoadingFirstPage) setLoading(true);
+    else setIsFetchingMore(true);
+
+    axios.get(`https://www.balichildrenshouse.com/myCH/api/all-post?page=${page}`)
       .then(response => {
-        setPosts(response.data.posts);
+        const fetchedPosts = response.data.data;
+        const updatedPosts = isLoadingFirstPage ? fetchedPosts : [...posts, ...fetchedPosts];
+        setPosts(updatedPosts);
+        setLastPage(response.data.last_page);
+        setCurrentPage(page);
         setLoading(false);
+        setIsFetchingMore(false);
       })
       .catch(error => {
+        console.error(error);
         setLoading(false);
-        console.error(error)
+        setIsFetchingMore(false);
       });
-    setLoading(false);
+  };
+
+  // Initial load
+  React.useEffect(() => {
+    fetchPosts(1);
   }, []);
+
+  // Function to handle loading more posts
+  const handleLoadMore = () => {
+    if (currentPage < lastPage && !isFetchingMore) {
+      fetchPosts(currentPage + 1);
+    }
+  };
+
+  // Helper function to determine if the scroll is close to the bottom
+  const isCloseToBottom = ({ layoutMeasurement, contentOffset, contentSize }) => {
+    const paddingToBottom = 20;
+    return layoutMeasurement.height + contentOffset.y >= contentSize.height - paddingToBottom;
+  };
 
   if (loading) {
     return (
@@ -102,7 +146,12 @@ const AllPost = () => {
             <Text style={[styles.latestpost, styles.postTypo]}>
               All Posts
             </Text>
-            <ScrollView style={styles.scrollContainer} contentContainerStyle={styles.gridContainer}>
+            <ScrollView style={styles.scrollContainer} contentContainerStyle={styles.gridContainer} onScroll={({ nativeEvent }) => {
+              if (isCloseToBottom(nativeEvent)) {
+                handleLoadMore();
+              }
+            }}
+              scrollEventThrottle={400}>
               {posts.map((post, index) => (
                 <Pressable
                   key={post.id}
@@ -119,6 +168,7 @@ const AllPost = () => {
                   </Text>
                 </Pressable>
               ))}
+              {isFetchingMore && <ActivityIndicator />}
             </ScrollView>
             
           </View>

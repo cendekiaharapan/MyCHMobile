@@ -22,6 +22,12 @@ import {
 import { useFocusEffect } from "@react-navigation/native";
 import { LoadingModal } from "react-native-loading-modal";
 
+function formatDateTime(dateTimeString) {
+  const options = { year: 'numeric', month: 'long', day: 'numeric' };
+  const date = new Date(dateTimeString);
+  return date.toLocaleString('en-GB', options);
+}
+
 const PaymentInvoice = () => {
   const navigation = useNavigation();
   const [loading, setLoading] = useState(true);
@@ -186,7 +192,7 @@ const PaymentInvoice = () => {
                     }
                     studentName={studentName[studentIdIndex]} // Assuming studentName is based on the student_id
                     description={payment.description}
-                    dueDate={payment.due_date}
+                    dueDate={formatDateTime(payment.due_date)}
                     totalRate={formattedTotalRate} // Convert total to string if it's not already
                   />
                 );

@@ -12,6 +12,7 @@ const ReportEntry = ({
   score,
   remark,
   file_comment,
+  category,
   student_id,
   start_date,
   end_date,
@@ -22,6 +23,7 @@ const ReportEntry = ({
   student_name,
   api_response,
   selected_student_name,
+  report,
 }) => {
   const navigation = useNavigation();
 
@@ -34,6 +36,7 @@ const ReportEntry = ({
       score: score,
       remark: remark,
       file_comment: file_comment,
+      category: category,
       student_id: student_id,
       start_date: start_date,
       end_date: end_date,
@@ -44,6 +47,7 @@ const ReportEntry = ({
       student_name: student_name,
       api_response: api_response,
       selected_student_name: selected_student_name,
+      report: report,
     });
   };
   return (
@@ -57,10 +61,16 @@ const ReportEntry = ({
             <Text style={styles.topic}>{topic}</Text>
             <Text style={styles.comment}>{comment}</Text>
           </View>
-          <View style={styles.scoreContainer}>
+          {score ? (
+            <View style={styles.scoreContainer}>
+              <Text style={styles.scoreLabel}>{`Score `}</Text>
+              <Text style={styles.scoreText}>{score ? score : category}</Text>
+            </View>
+          ) : <View style={styles.categoryContainer}>
             <Text style={styles.scoreLabel}>{`Score `}</Text>
-            <Text style={styles.scoreText}>{score}</Text>
-          </View>
+            <Text style={styles.categoryText}>{score ? score : category}</Text>
+          </View>}
+          
           <Text style={styles.arrow}>{`>`}</Text>
         </View>
       </View>
@@ -152,12 +162,25 @@ const styles = StyleSheet.create({
   scoreContainer: {
     flexDirection: "column",
     position: "absolute",
-    top: "15%",
+    top: "23%",
     left: "70%",
     alignItems: "center",
   },
   scoreText: {
     fontSize: 50,
+    color: Color.colorBlack,
+    fontFamily: FontFamily.poppinsBold,
+    fontWeight: "700",
+  },
+  categoryContainer: {
+    flexDirection: "column",
+    position: "absolute",
+    top: "33%",
+    left: "62%",
+    alignItems: "center",
+  },
+  categoryText: {
+    fontSize: 20,
     color: Color.colorBlack,
     fontFamily: FontFamily.poppinsBold,
     fontWeight: "700",

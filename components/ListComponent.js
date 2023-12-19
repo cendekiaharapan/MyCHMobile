@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     top: 0,
     left: '-3%',
     borderRadius: 1,
-    height: 80,
+    height: '120%',
     width: '120%',
   },
   textDescription: {
@@ -67,10 +67,9 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   listComponent: {
-    height: 80,
+    height: '70%',
     width: '85%',
     borderRadius: 10,
-    
     marginBottom:10,
   },
 });

@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { FontFamily, Color, Border, Padding } from "../GlobalStyles";
+import { Linking } from 'react-native';
 
 function formatDateTime(dateTimeString) {
   const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
@@ -16,9 +17,24 @@ function formatDateTime(dateTimeString) {
   return date.toLocaleString('en-GB', options);
 }
 
+const openAttachment = (filename) => {
+  const url = `https://www.balichildrenshouse.com/myCH/ev-assets/uploads/post-attachments/${filename}`;
+  Linking.canOpenURL(url)
+    .then((supported) => {
+      if (!supported) {
+        console.log("Can't handle url: " + url);
+      } else {
+        return Linking.openURL(url);
+      }
+    })
+    .catch((err) => console.error('An error occurred', err));
+};
+
 const DetailPost = ({ route, navigation }) => {
   const post = route?.params?.post;
-
+  if (typeof(post.attachment) === 'string') {
+    post.attachment = JSON.parse(post.attachment);
+  }
   return (
     <View style={styles.detailPost}>
       <ImageBackground
@@ -51,6 +67,16 @@ const DetailPost = ({ route, navigation }) => {
                 {post.body}
               </Text>
             </View>
+            <View style={styles.attachmentsContainer}>
+              <Text style={[styles.loremIpsumDolor, styles.loremFlexBox]}>
+                Attachments
+              </Text>
+              {post.attachment.map((attachment, index) => (
+                <Pressable key={index} onPress={() => openAttachment(attachment)}>
+                  <Text style={styles.attachmentLink}>{attachment}</Text>
+                </Pressable>
+              ))}
+            </View>
           </View>
         </View>
       </ImageBackground>
@@ -69,6 +95,15 @@ const DetailPost = ({ route, navigation }) => {
 };
 
 const styles = StyleSheet.create({
+  attachmentsContainer: {
+    // Other styles if needed
+  },
+  attachmentLink: {
+    color: Color.blue2, // Use your theme's color for links
+    textDecorationLine: 'underline',
+    marginVertical: 5, // Space out the attachments
+    // Other styles if needed
+  },
   titleFlexBox: {
     justifyContent: "space-between",
     alignSelf: "stretch",

@@ -13,6 +13,8 @@ import Toast from "react-native-toast-message";
 import { LoadingModal } from "react-native-loading-modal";
 // import { ScrollView } from "react-native-gesture-handler";
 
+const DEVICE_WIDTH = Dimensions.get("window").width;
+
 const CallMyChild = forwardRef(({ navigation }, ref) => {
   const { width } = Dimensions.get("window");
   const isSmallScreen = width <= 375;
@@ -377,11 +379,11 @@ const styles = StyleSheet.create({
     fontSize: 22,
     textTransform: "uppercase",
     color: Color.colorDarkslateblue,
-    marginLeft: 60,
+    left: "50%",
     textAlign: "left",
   },
   ictwotoneArrowBackParent: {
-    width: 347,
+    width: '100%',
     flexDirection: "row",
     alignItems: "center",
   },
@@ -432,13 +434,13 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   titleSubtitleContainer: {
-    width: 127,
+    width: '100%',
     marginTop: 13,
     height: 17,
   },
   dropdown1: {
     marginTop: 13,
-    width: 272,
+    width: '100%',
     minWidth: 162.5,
     paddingVertical: 11,
     paddingHorizontal: 17,
@@ -451,7 +453,7 @@ const styles = StyleSheet.create({
     backgroundColor: Color.colorsLight,
   },
   dropdown2: {
-    width: 273,
+    width: '100%',
     marginTop: 13,
     minWidth: 162.5,
     paddingVertical: 11,
@@ -474,10 +476,9 @@ const styles = StyleSheet.create({
   },
   call: {
     top: 15,
-    left: 50,
     color: "white",
     textAlign: "center",
-    width: 202,
+    width: '100%',
     fontSize: 15,
     position: "absolute",
   },
@@ -486,14 +487,14 @@ const styles = StyleSheet.create({
     height: 53,
     marginBottom: 100,
     borderRadius: 54,
-    width: 316,
+    width: '100%',
   },
   basicPlan: {
     shadowColor: "rgba(0, 0, 0, 0.04)",
     shadowRadius: 17.33,
     elevation: 17.33,
     height: '100%',
-    width: 316,
+    width: '100%',
     shadowOpacity: 1,
     shadowOffset: {
       width: 0,

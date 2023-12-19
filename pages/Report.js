@@ -18,6 +18,8 @@ const Report = () => {
   const [selectedStudentId, setSelectedStudentId] = useState(null);
   const [studentId, setStudentId] = useState("");
   const [selectedStudentName, setSelectedStudentName] = useState("");
+  const [selectedStudent, setSelectedStudent] = useState(null);
+  const [studentData, setStudentData] = useState(null);
 
   const showToastErrorRequired = () => {
     Toast.show({
@@ -88,6 +90,14 @@ const Report = () => {
       selectedStudentName
     );
 
+    const selectedStudentData = studentData.find(
+      (student) => student.id === selectedStudentId
+    );
+
+    if (selectedStudentData) {
+      setSelectedStudent(selectedStudentData);
+    }
+
     navigation.navigate("ListOfReport", {
       postData,
       selectedStudentId,
@@ -96,6 +106,7 @@ const Report = () => {
       studentName,
       apiResponse,
       selectedStudentName, // Include selectedStudentName in the navigation params
+      selectedStudentData,
     });
   };
 
@@ -122,6 +133,7 @@ const Report = () => {
     retrieveItem("childData")
       .then((data) => {
         if (data && Array.isArray(data)) {
+          setStudentData(data);
           const student_names = data.map((item) => item.name);
           const student_ids = data.map((item) => item.id);
           setStudentName(student_names);
@@ -140,6 +152,7 @@ const Report = () => {
     <NativeBaseProvider>
       <View style={styles.report}>
         <View style={styles.frameParent}>
+          <View>
           <View style={styles.weeklyReportWrapper}>
             <Text style={styles.weeklyReport}>Daily Score</Text>
           </View>
@@ -158,6 +171,7 @@ const Report = () => {
                 source={require("../assets/ictwotonearrowback.png")}
               />
             </Pressable>
+            </View>
           </View>
           <View style={styles.btnprimaryParent}>
             <View style={styles.btnprimary}>
@@ -216,8 +230,9 @@ const Report = () => {
 
 const styles = StyleSheet.create({
   ictwotoneArrowBackParent: {
-    width: 20,
-    height: 20,
+    left: "3%",
+    width: 24,
+    height: 24,
   },
   iconLayout: {
     overflow: "hidden",
@@ -315,7 +330,7 @@ const styles = StyleSheet.create({
   weeklyReportWrapper: {
     width: '100%',
     alignSelf: "stretch",
-    left: "45%",
+    left: "50%",
     textAlign: "center",
     position: "absolute",
   },
@@ -495,6 +510,28 @@ const styles = StyleSheet.create({
     paddingHorizontal: Padding.p_lg,
     paddingVertical: Padding.p_26xl,
     overflow: "hidden",
+  },
+  headerContainer: {
+    flex: 0.1,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  imageContainer: {
+    marginLeft: '1%',
+    height: 24,
+    width: 24,
+  },
+  ictwotoneArrowBackIcon: {
+    height: 24,
+    width: 24,
+  },
+  titleContainer: {
+    flex: 1,
+  },
+  titleStyle: {
+    textAlign: "center",
+    fontSize: 20,
+    fontFamily: FontFamily.poppinsBold,
   },
 });
 

@@ -20,6 +20,13 @@ import axios from "axios";
 import { useFocusEffect } from "@react-navigation/native";
 import { ScrollView } from "react-native";
 import { LoadingModal } from "react-native-loading-modal";
+
+function formatDateTime(dateTimeString) {
+  const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+  const date = new Date(dateTimeString);
+  return date.toLocaleString('en-GB', options);
+}
+
 const PaidInvoiceHistory = () => {
   const navigation = useNavigation();
   const [studentId, setStudentId] = useState(null);
@@ -170,7 +177,7 @@ const PaidInvoiceHistory = () => {
                 const formattedTotalRate = formatter.format(payment.total);
                 const studentIdIndex = studentId.indexOf(payment.student_id);
                 const paymentId = payment.id;
-                console.log(payment.student_id);
+                console.log(payment);
                 console.log(studentName[studentIdIndex]);
                 return (
                   <InvoiceLists
@@ -184,6 +191,7 @@ const PaidInvoiceHistory = () => {
                     studentName={studentName[studentIdIndex]} // Assuming studentName is based on the student_id
                     description={payment.description}
                     dueDate={payment.due_date}
+                    paidDate={formatDateTime(payment.paid_at)}
                     totalRate={formattedTotalRate}
                   />
                 );

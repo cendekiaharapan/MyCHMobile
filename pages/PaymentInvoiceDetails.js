@@ -283,7 +283,7 @@ const styles = StyleSheet.create({
     color: Color.colorDarkslategray,
   },
   rpTotalRate: {
-    marginLeft: '35%',
+    // left: '35%',
     fontFamily: FontFamily.poppinsMedium,
     fontWeight: "500",
     lineHeight: 17,
@@ -296,9 +296,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     paddingHorizontal: 0,
     paddingVertical: Padding.p_5xs,
-    width: '100%',
-    left: 20,
+    // alignItems: "center",
+    justifyContent: 'space-between', // Aligns children to each end
+    paddingHorizontal: 20, // Add some padding on both sides
     alignItems: "center",
+    width: '100%', // Full width of the parent
   },
   footer: {
     top: '90%',

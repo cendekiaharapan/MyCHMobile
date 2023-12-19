@@ -8,6 +8,7 @@ import {
   TextInput,
   Pressable,
   Linking,
+  ScrollView
 } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { Color, FontFamily, FontSize, Border, Padding } from "../GlobalStyles";
@@ -34,7 +35,10 @@ const DetailReports = () => {
     student_name,
     api_response,
     selected_student_name,
+    report
   } = route.params;
+
+  console.log("REPORTTT DATA", report);
 
   const [dateData, setDateData] = useState(date);
   const [subjectData, setSubjectData] = useState(subject);
@@ -67,6 +71,23 @@ const DetailReports = () => {
     if (!messagefile) {
       setShowFile(false);
     }
+    console.log("Data DATAAAAAAA ===== HELLO DATA", date,
+      subject,
+      topic,
+      comment,
+      score,
+      remark,
+      file_comment,
+      student_id,
+      start_date,
+      end_date,
+      post_data,
+      selected_student_id,
+      selected_start_date,
+      selected_end_date,
+      student_name,
+      api_response,
+      selected_student_name);
     // fetchData();
   }, []);
 
@@ -143,45 +164,60 @@ const DetailReports = () => {
         </View>
 
         {/* Hero */}
-        {scoreData && (
-          <View style={styles.mathematicParent}>
-            <Text style={[styles.mathematic, styles.score90Typo]}>
-              {subjectData}
-            </Text>
-            <Text style={[styles.oct2023, styles.oct2023Typo]}>{dateData}</Text>
-            <Text style={[styles.score90, styles.score90Typo]}>
-              Score : {scoreData}
-            </Text>
-          </View>
-        )}
+        <View style={styles.mathematicParent}>
+          <Text style={[styles.mathematic, styles.score90Typo]}>
+            {subject}
+          </Text>
+          <Text style={[styles.oct2023, styles.oct2023Typo]}>{date}</Text>
+          {report.is_category ? (
+            <>
+              <Text style={[styles.categoryScore, {
+                color: Color.colorBlack,
+                textAlign: "left",
+                fontFamily: FontFamily.poppinsBold,
+                fontWeight: "700",
+                position: "absolute",
+              }]}>
+                Score:
+              </Text>
+            <Text style={[styles.categoryScore, styles.score90Typo]}>
+              {report.is_category ? report.category : score}
+              </Text>
+            </>
+          ) : (
+              <Text style={[styles.score90, styles.score90Typo]}>
+                Score: {report.is_category ? report.category : score}
+              </Text>
+          )}
+        </View>
 
         {/* Body */}
-        {scoreData && (
-          <View style={styles.inputContainer1}>
-            <Text style={styles.FormTitle}>Topic</Text>
-            <Text style={styles.dataText}>{topicData}</Text>
-          </View>
-        )}
-        {scoreData && (
-          <View style={styles.inputContainer}>
-            <Text style={styles.FormTitle}>Remark</Text>
-            {remarkData ? (
-              <Text style={styles.dataText}>{remarkData}</Text>
-            ) : (
-              <Text style={styles.placeholderText}>N/A</Text>
-            )}
-          </View>
-        )}
-        {scoreData && (
-          <View style={styles.inputContainer}>
-            <Text style={styles.FormTitle}>Comment</Text>
-            {commentData ? (
-              <Text style={styles.dataText}>{commentData}</Text>
-            ) : (
-              <Text style={styles.placeholderText}>N/A</Text>
-            )}
-          </View>
-        )}
+        <View style={styles.inputContainer1}>
+          
+          <Text style={styles.FormTitle}>Topic</Text>
+          {/* <ScrollView> */}
+            <Text style={styles.dataText}>{topic}</Text>
+          {/* </ScrollView> */}
+        </View>
+
+        <View style={styles.inputContainer}>
+          <Text style={styles.FormTitle}>Remark</Text>
+          {remark ? (
+            <Text style={styles.dataText}>{remark}</Text>
+          ) : (
+            <Text style={styles.placeholderText}>N/A</Text>
+          )}
+        </View>
+        
+        <View style={styles.inputContainer}>
+          <Text style={styles.FormTitle}>Comment</Text>
+          {comment ? (
+            <Text style={styles.dataText}>{comment}</Text>
+          ) : (
+            <Text style={styles.placeholderText}>N/A</Text>
+          )}
+        </View>
+        
         {messagefile !== null && messagefile !== "" ? (
           <View style={styles.inputContainer}>
             <Text style={styles.FormTitle}>File</Text>
@@ -394,6 +430,11 @@ const styles = StyleSheet.create({
   },
   score90: {
     left: "72.94%",
+    fontSize: FontSize.size_xl,
+    textAlign: "center",
+  },
+  categoryScore: {
+    left: "70%",
     fontSize: FontSize.size_xl,
     textAlign: "center",
   },

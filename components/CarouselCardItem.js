@@ -20,7 +20,7 @@ const CarouselCardItem = ({ item, style }) => {
           />
           <View style={styles.textContainer}>
             <Text style={styles.title}>{item.title}</Text>
-            <Text style={styles.text}>{item.body}</Text>
+            <Text style={styles.text} numberOfLines={3}>{item.body}</Text>
             <View style={styles.dateContainer}>
               <Text style={styles.news}>{item.date}</Text>
             </View>
@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
     elevation: 2,
     shadowOpacity: 1,
-    height: 175,
+    height: '100%',
     flexDirection: "row",
     alignSelf: "stretch",
     alignItems: "center",

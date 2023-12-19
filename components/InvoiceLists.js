@@ -26,13 +26,16 @@ const InvoiceLists = ({
           <View
             style={[styles.textStudentNameWrapper, styles.dueWrapperSpaceBlock]}
           >
-            <Text style={styles.textStudentName}>{studentName}</Text>
+            <Text style={styles.textStudentName}>Student: {studentName}</Text>
           </View>
           <View
             style={[styles.textDescriptionWrapper, styles.dueWrapperSpaceBlock]}
           >
             <Text style={[styles.textDescription, styles.dueClr]}>
-              {description}
+              Paid On: {paidDate}
+            </Text>
+            <Text style={[styles.textDescription, styles.dueClr]}>
+              Invoice: {description}
             </Text>
           </View>
           <View
@@ -54,14 +57,17 @@ const InvoiceLists = ({
             style={[styles.textStudentNameWrapper, styles.dueWrapperSpaceBlock]}
           >
             <Text style={[styles.textStudentName, styles.unpaidTypo]}>
-              {studentName}
+              Student: {studentName}
             </Text>
           </View>
           <View
             style={[styles.textDescriptionWrapper, styles.dueWrapperSpaceBlock]}
           >
             <Text style={[styles.textDescription, styles.dueClr]}>
-              {description}
+              Due: {dueDate}
+            </Text>
+            <Text style={[styles.textDescription, styles.dueClr]}>
+              Invoice: {description}
             </Text>
           </View>
           <View
@@ -123,7 +129,7 @@ const styles = StyleSheet.create({
     height: 47,
   },
   textDescription: {
-    marginTop: 10,
+    marginTop: 5,
     fontFamily: FontFamily.poppinsMedium,
     fontWeight: "500",
     lineHeight: 17,

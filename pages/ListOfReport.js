@@ -18,6 +18,7 @@ const ListOfReport = () => {
     studentName,
     apiResponse,
     selectedStudentName,
+    selectedStudentData,
   } = route.params;
 
   const [studentID, setStudentID] = useState(selectedStudentId);
@@ -44,9 +45,7 @@ const ListOfReport = () => {
           </Pressable>
           <View style={styles.frameParent}>
             <View style={[styles.frameWrapper, styles.wrapperPosition]}>
-              <View
-                style={[styles.weeklyReportWrapper, styles.wrapperPosition]}
-              >
+              <View style={[styles.weeklyReportWrapper, styles.wrapperPosition]}>
                 <Text style={styles.weeklyReport}>Daily Score</Text>
               </View>
             </View>
@@ -65,12 +64,6 @@ const ListOfReport = () => {
                 <Text style={[styles.selectSubject, styles.selectTypo]}>
                   Student
                 </Text>
-                <View style={[styles.inputWrapper, styles.inputLayout]}>
-                  <View style={[styles.input, styles.inputLayout]}>
-                    <View style={[styles.inputChild, styles.inputPosition]} />
-                    <Text style={[styles.all, styles.allTypo]}></Text>
-                  </View>
-                </View>
               </View>
               <View style={[styles.groupWrapper, styles.inputGroupLayout]}>
                 <View style={[styles.inputContainer, styles.inputGroupLayout]}>
@@ -140,7 +133,7 @@ const ListOfReport = () => {
             </View>
             <ScrollView
               contentContainerStyle={styles.scrollContainer}
-              style={{ marginTop: "65%" }}
+              style={{ top: "30%" }}
             >
               {apiResponse.map((report) => (
                 <ReportEntry
@@ -148,10 +141,10 @@ const ListOfReport = () => {
                   date={
                     report.date
                       ? `${new Date(report.date).toLocaleDateString("id-ID", {
-                          day: "2-digit",
-                          month: "long",
-                          year: "numeric",
-                        })}`
+                        day: "2-digit",
+                        month: "long",
+                        year: "numeric",
+                      })}`
                       : ""
                   }
                   subject={report.subject.title}
@@ -160,6 +153,7 @@ const ListOfReport = () => {
                   score={report.score}
                   remark={report.problem}
                   file_comment={report.file_comment}
+                  category={report.category}
                   student_id={studentID}
                   start_date={startDate}
                   end_date={endDate}
@@ -170,6 +164,7 @@ const ListOfReport = () => {
                   student_name={studentName}
                   api_response={apiResponse}
                   selected_student_name={selectedStudentName}
+                  report={report}
                 />
               ))}
             </ScrollView>
@@ -198,7 +193,7 @@ const styles = StyleSheet.create({
   },
   inputLayout: {
     height: 40,
-    width: 285,
+    width: '100%',
     position: "absolute",
   },
   inputPosition: {
@@ -226,7 +221,7 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
   inputGroupLayout: {
-    width: 296,
+    width: '98%',
     height: 40,
     position: "absolute",
   },
@@ -256,7 +251,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
   ictwotoneArrowBackParent: {
-    width: 340,
+    width: '100%',
     height: '90%',
   },
   oct2023Typo: {
@@ -358,7 +353,7 @@ const styles = StyleSheet.create({
     left: 6,
   },
   selectSubjectParent: {
-    width: 291,
+    width: '100%',
     height: 66,
     left: 10,
     top: 0,
@@ -389,13 +384,12 @@ const styles = StyleSheet.create({
     left: 11,
   },
   selectRangeDate: {
-    marginLeft: -148.5,
     top: "13%",
     fontFamily: FontFamily.poppinsLight,
     fontWeight: "300",
     color: Color.colorBlack,
     fontSize: FontSize.bodyBodyXS_size,
-    left: "46%",
+    left: "1%",
   },
   cardShadowBox: {
     elevation: 29.56,

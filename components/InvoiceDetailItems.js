@@ -6,8 +6,8 @@ const InvoiceDetailItems = ({ itemName, rate, qty }) => {
   return (
     <View style={styles.itemList}>
       <Text style={[styles.itemName1, styles.rate1Typo]}>{itemName}</Text>
-      <Text style={[styles.rate1, styles.rate1Typo]}>Rp. {rate}</Text>
       <Text style={styles.qty1}>{qty}</Text>
+      <Text style={[styles.rate1, styles.rate1Typo]}>Rp. {rate}</Text>
     </View>
   );
 };
@@ -21,6 +21,7 @@ const styles = StyleSheet.create({
     fontSize: FontSize.size_xs,
     top: 10,
     position: "absolute",
+    width: "40%"
   },
   itemName1: {
     left: 10,
@@ -46,7 +47,7 @@ const styles = StyleSheet.create({
     borderRadius: Border.br_5xs,
     backgroundColor: Color.colorFloralwhite,
     width: '90%',
-    height: '4%',
+    height: '6%',
   },
 });
 
